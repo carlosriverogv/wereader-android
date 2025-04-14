@@ -1,10 +1,10 @@
-package tfg.carlos.wereaderapp.data.network
+package tfg.carlos.wereaderapp.data.remote.api
 
 import retrofit2.Response
-import retrofit2.http.POST
+import retrofit2.http.GET
 import tfg.carlos.wereaderapp.data.model.user.User
 
 interface UserService {
-    @POST("user/profile")
+    @GET("user/profile")
     suspend fun myProfile(): Response<User>
 }

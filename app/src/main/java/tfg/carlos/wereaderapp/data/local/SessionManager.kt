@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.data.network
+package tfg.carlos.wereaderapp.data.local
 
 import android.content.Context
 import android.content.SharedPreferences

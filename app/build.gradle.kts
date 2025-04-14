@@ -71,4 +71,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
+
+    // JWT Decoder
+    implementation(libs.auth0.jwt)
 }

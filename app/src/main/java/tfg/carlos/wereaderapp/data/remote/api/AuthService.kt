@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.data.network
+package tfg.carlos.wereaderapp.data.remote.api
 
 import retrofit2.Response
 import retrofit2.http.Body

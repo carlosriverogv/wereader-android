@@ -1,16 +1,15 @@
-package tfg.carlos.wereaderapp.data
+package tfg.carlos.wereaderapp.data.remote
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import tfg.carlos.wereaderapp.WeReaderApplication
-import tfg.carlos.wereaderapp.data.network.AuthInterceptor
-import tfg.carlos.wereaderapp.data.network.AuthService
-import tfg.carlos.wereaderapp.data.network.SessionManager
-import tfg.carlos.wereaderapp.data.network.UserService
+import tfg.carlos.wereaderapp.data.remote.api.AuthService
+import tfg.carlos.wereaderapp.data.local.SessionManager
+import tfg.carlos.wereaderapp.data.remote.api.UserService
 
 object Retrofit2Api  {
-    private const val BASE_URL = "http://10.0.2.2:3000/"
+    private const val BASE_URL = "http://192.168.1.132:3000/"
 
     private val sessionManager: SessionManager = WeReaderApplication.sessionManager
 

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">WeReaderApp</string>
+    <string name="title_app">WeReader</string>
+    <string name="title_login">INICIA SESIÓN</string>
+    <string name="email_hint">Correo Electrónico</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="register_link">¿No tienes cuenta? Regístrate</string>
+    <string name="loading_text">Cargando…</string>
+    <string name="welcome_text">¡Bienvenido a WeReader!</string>
 </resources>

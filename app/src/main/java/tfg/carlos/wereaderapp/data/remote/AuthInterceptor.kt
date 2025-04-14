@@ -1,6 +1,5 @@
-package tfg.carlos.wereaderapp.data.network
+package tfg.carlos.wereaderapp.data.remote
 
-import android.content.Context
 import okhttp3.Interceptor
 import okhttp3.Response
 

@@ -1,7 +1,7 @@
 package tfg.carlos.wereaderapp
 
 import android.app.Application
-import tfg.carlos.wereaderapp.data.network.SessionManager
+import tfg.carlos.wereaderapp.data.local.SessionManager
 
 class WeReaderApplication: Application() {
     companion object {
