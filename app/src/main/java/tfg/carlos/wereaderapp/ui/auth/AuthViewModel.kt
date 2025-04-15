@@ -42,6 +42,42 @@ class AuthViewModel(val repository: AuthRepository): ViewModel() {
         // Guardar el token en el SessionManager
         sessionManager.saveToken(loginResponse.token.token)
     }
+
+    suspend fun register(request: RegisterRequest) {
+        // Validaciones mínimas
+        if (request.name.isEmpty() || request.lastname.isEmpty()) {
+            throw IllegalArgumentException("Nombre y apellido son obligatorios")
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(request.email).matches()) {
+            throw IllegalArgumentException("Email no válido")
+        }
+
+        if (request.password.length < 6) {
+            throw IllegalArgumentException("Contraseña demasiado corta")
+        }
+
+        // Aquí llamas al repo
+        repository.register(request)
+
+        // Hacer login automáticamente después de registrarse
+        login(LoginRequest(request.email, request.password))
+    }
+
+    private fun isTokenValid(token: String?): Boolean {
+        if (token.isNullOrEmpty()) return false
+
+        return try {
+            val jwt = JWT(token)
+
+            // Comprueba si ha expirado
+            !jwt.isExpired(10) // 10 = margen de tolerancia en segundos
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
 }
 
 @Suppress("UNCHECKED_CAST")
