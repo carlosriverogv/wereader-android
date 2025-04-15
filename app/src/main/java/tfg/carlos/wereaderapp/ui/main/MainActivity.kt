@@ -35,20 +35,17 @@ class MainActivity : AppCompatActivity() {
             // Si no hay token, redirigir a la pantalla de inicio de sesión
             goToLogin()
         } else {
-            // Si hay token, continuar con la lógica de la aplicación
-            // Aquí puedes cargar los datos del usuario o cualquier otra cosa que necesites hacer
-            // ...
             binding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-
-            fetchUserProfile()
 
             enableEdgeToEdge()
+            setContentView(binding.root)
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
             }
+
+            fetchUserProfile()
         }
 
     }
