@@ -34,9 +34,7 @@ class RegisterStep2Fragment : Fragment() {
             if (email.isEmpty()) {
                 binding.emailLayout.error = getString(R.string.register_step2_error_empty_email)
                 isValid = false
-            }
-
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 binding.emailLayout.error = getString(R.string.register_step2_error_invalid_email)
                 isValid = false
             }
@@ -58,7 +56,7 @@ class RegisterStep2Fragment : Fragment() {
             }
 
             if (password != repeatPassword) {
-                binding.passwordRepeatLayout.error = "Las contraseñas no coinciden"
+                binding.passwordRepeatLayout.error = getString(R.string.register_step2_error_password_mismatch)
                 isValid = false
             }
 

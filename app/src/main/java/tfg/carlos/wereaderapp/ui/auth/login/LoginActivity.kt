@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import edu.carlosrivero.demo5.utils.checkConnection
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.model.auth.LoginRequest
@@ -53,26 +54,35 @@ class LoginActivity: AppCompatActivity() {
 
             val loginRequest = LoginRequest(email, password)
 
-            lifecycleScope.launch {
-                try {
-                    // Llamar al ViewModel para iniciar sesión
-                    vm.login(loginRequest)
+            if (checkConnection(this)) {
+                lifecycleScope.launch {
+                    try {
+                        // Llamar al ViewModel para iniciar sesión
+                        vm.login(loginRequest)
 
-                    // Si el inicio de sesión es exitoso, redirigir a la pantalla principal
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                    finish()
-                } catch (e: Exception) {
-                    // Mostrar un mensaje de error
-                    e.printStackTrace()
+                        // Si el inicio de sesión es exitoso, redirigir a la pantalla principal
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    } catch (e: Exception) {
+                        // Mostrar un mensaje de error
+                        e.printStackTrace()
 
-                    // Mostrar un mensaje de error en UI
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        // Mostrar un mensaje de error en UI
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
+                    }
                 }
+            } else {
+                // Mostrar un mensaje de error
+                Toast.makeText(
+                    this,
+                    getString(R.string.error_no_connection),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         // Al pulsar el botón de registro
