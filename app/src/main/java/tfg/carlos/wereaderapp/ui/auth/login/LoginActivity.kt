@@ -48,8 +48,8 @@ class LoginActivity: AppCompatActivity() {
         // Al pulsar el botón de inicio de sesión
         binding.loginButton.setOnClickListener {
             // Obtener los datos de entrada
-            val email = binding.email.text.toString()
-            val password = binding.password.text.toString()
+            val email = binding.email.text.toString().trim()
+            val password = binding.password.text.toString().trim()
 
             val loginRequest = LoginRequest(email, password)
 

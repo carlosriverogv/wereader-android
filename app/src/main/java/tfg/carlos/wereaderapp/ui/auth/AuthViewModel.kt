@@ -23,14 +23,6 @@ class AuthViewModel(val repository: AuthRepository): ViewModel() {
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(loginRequest.email).matches()) {
             throw IllegalArgumentException("Email no válido")
         }
-        // Validar la longitud de la contraseña
-        //if (password.length < 8) {
-            //throw IllegalArgumentException("La contraseña debe tener al menos 8 caracteres")
-        //}
-        // Validar la complejidad de la contraseña
-        //if (!password.matches(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$"))) {
-            //throw IllegalArgumentException("La contraseña debe contener al menos una minúscula, una mayúscula, un número y un símbolo")
-        //}
         // Llamar al repositorio para realizar la llamada a la API guardando el token en el SessionManager
         val loginResponse: LoginResponse = repository.login(loginRequest)
 

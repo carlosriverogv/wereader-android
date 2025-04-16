@@ -5,19 +5,19 @@ import com.google.gson.annotations.SerializedName
 
 data class RegisterRequest(
     @SerializedName("authorFav")
-    val authorFav: String,
+    var authorFav: String,
     @SerializedName("avatar")
-    val avatar: Int,
+    var avatar: Int,
     @SerializedName("email")
-    val email: String,
+    var email: String,
     @SerializedName("genderFav")
-    val genderFav: String,
+    var genderFav: String,
     @SerializedName("lastname")
-    val lastname: String,
+    var lastname: String,
     @SerializedName("name")
-    val name: String,
+    var name: String,
     @SerializedName("password")
-    val password: String,
+    var password: String,
     @SerializedName("tag")
-    val tag: String
+    var tag: String
 )

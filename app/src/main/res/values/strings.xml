@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">WeReaderApp</string>
-    <string name="title_app">WeReader</string>
+    <string name="app_name">WeReader</string>
     <string name="title_lr">Registro</string>
     <string name="email_hint">Correo Electrónico</string>
     <string name="password_hint">Contraseña</string>
@@ -9,4 +8,40 @@
     <string name="loading_text">Cargando…</string>
     <string name="welcome_text">¡Bienvenido a WeReader!</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="register_failed">"Register failed"</string>
+
+    <!-- String para el regsitro -->
+    <string name="prefixTextTag">"@"</string>
+    <string name="register_step_title">"¡Crea tu cuenta!"</string>
+    <string name="register_step1_title_name">"Introduce tu nombre y apellido"</string>+
+    <string name="register_step1_title_user_name">"Elige tu nombre de usuario"</string>
+    <string name="register_step2_title_email">"Introduce tu correo electrónico"</string>
+    <string name="register_step2_title_password">"Crea una contraseña"</string>
+    <string name="register_step_info_password">"Debe tener mínimo 8 carácteres "</string>
+    <string name="register_step_info">"Podrás cambiarlo más tarde"</string>
+    <string name="register_step1_name_hint">"Nombre"</string>
+    <string name="register_step1_lastname_hint">"Apellido"</string>
+    <string name="register_step1_user_name_hint">"Nombre de usuario"</string>
+    <string name="register_step2_email_hint">"Correo Electrónico"</string>
+    <string name="register_step2_email_re_hint">"Repite tu Correo Electrónico"</string>
+    <string name="register_step2_password_hint">"Contraseña"</string>
+    <string name="register_step2_password_re_hint">"Repite tu contraseña"</string>
+
+    <!-- Mensajes de error -->
+    <string name="register_step2_error_password_mismatch">"La contraseña no coincide."</string>
+    <string name="register_step2_error_empty_password">"La contraseña no puede estar vacía."</string>
+    <string name="register_step2_error_empty_repeat_password">"Repite tu contraseña."</string>
+    <string name="register_step2_error_invalid_password">"La contraseña debe contener al menos una minúscula, una mayúscula, un número y un símbolo."</string>
+
+    <string name="register_step2_error_invalid_email">"El email no es válido."</string>
+    <string name="register_step2_error_empty_email">"El email no puede estar vacío."</string>
+
+    <!-- Mensajes de error user -->
+    <string name="register_step1_error_empty_user_name">"El nombre de usuario no puede estar vacío."</string>
+    <string name="register_step1_error_invalid_user_name">"Nombre de usuario inválido (solo minúsculas, números, 3 a 15 caracteres)"</string>
+    <string name="register_step1_error_empty_lastname">"El apellido no puede estar vacío."</string>
+    <string name="register_step1_error_empty_name">"El nombre no puede estar vacío."</string>
+
+    <string name="register_step_button_next">"Siguiente"</string>
+    <string name="register_step_button_register">"Registrarse"</string>
 </resources>
