@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.databinding.FragmentRegisterStep2Binding
 import tfg.carlos.wereaderapp.ui.auth.register.RegisterActivity
@@ -18,7 +19,7 @@ class RegisterStep2Fragment : Fragment() {
     ): View {
         _binding = FragmentRegisterStep2Binding.inflate(inflater, container, false)
 
-        binding.btnNext1.setOnClickListener {
+        binding.btnNext2.setOnClickListener {
             val email = binding.inputEmail.text.toString().trim()
             val password = binding.inputPassword.text.toString().trim()
             val repeatPassword = binding.inputRepeatPassword.text.toString().trim()
@@ -40,23 +41,27 @@ class RegisterStep2Fragment : Fragment() {
             }
 
             // Validar contraseñas
-            if (!password.matches(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$"))) {
+            if (!password.matches(
+                    Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$"))) {
                 binding.passwordLayout.error =
                     getString(R.string.register_step2_error_invalid_password)
                 isValid = false
             }
             if (password.isEmpty()) {
-                binding.passwordLayout.error = getString(R.string.register_step2_error_empty_password)
+                binding.passwordLayout.error = getString(
+                    R.string.register_step2_error_empty_password)
                 isValid = false
             }
 
             if (repeatPassword.isEmpty()) {
-                binding.passwordRepeatLayout.error = getString(R.string.register_step2_error_empty_repeat_password)
+                binding.passwordRepeatLayout.error = getString(
+                    R.string.register_step2_error_empty_repeat_password)
                 isValid = false
             }
 
             if (password != repeatPassword) {
-                binding.passwordRepeatLayout.error = getString(R.string.register_step2_error_password_mismatch)
+                binding.passwordRepeatLayout.error = getString(
+                    R.string.register_step2_error_password_mismatch)
                 isValid = false
             }
 

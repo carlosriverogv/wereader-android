@@ -9,9 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.auth0.android.jwt.JWT
 import edu.carlosrivero.demo5.utils.checkConnection
+import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.model.auth.LoginRequest
 import tfg.carlos.wereaderapp.data.remote.datasource.AuthRemoteDataSource
 import tfg.carlos.wereaderapp.data.repository.AuthRepository
@@ -30,6 +33,10 @@ class LoginActivity: AppCompatActivity() {
         AuthViewModelFactory(repository)
     }
 
+    private val sessionManager by lazy {
+        WeReaderApplication.sessionManager
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -41,8 +48,30 @@ class LoginActivity: AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
 
-        login()
+    override fun onResume() {
+        super.onResume()
+        // Verificar si el token es válido
+        val token = sessionManager.getToken()
+        if (isTokenValid(token)) {
+            goToMain()
+        } else {
+            login()
+        }
+    }
+
+    private fun goToMain() {
+        // Redirigir a la pantalla principal
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun goToRegister() {
+        // Redirigir a la pantalla de registro
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
     }
 
     private fun login() {
@@ -61,8 +90,7 @@ class LoginActivity: AppCompatActivity() {
                         vm.login(loginRequest)
 
                         // Si el inicio de sesión es exitoso, redirigir a la pantalla principal
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                        finish()
+                        goToMain()
                     } catch (e: Exception) {
                         // Mostrar un mensaje de error
                         e.printStackTrace()
@@ -88,8 +116,7 @@ class LoginActivity: AppCompatActivity() {
         // Al pulsar el botón de registro
         binding.registerLink.setOnClickListener {
             // Redirigir a la pantalla de registro
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            goToRegister()
         }
     }
 }

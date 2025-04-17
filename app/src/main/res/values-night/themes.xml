@@ -21,6 +21,9 @@
         <item name="colorTertiaryContainer">@color/dark_tertiaryContainer</item>
         <item name="colorOnTertiaryContainer">@color/dark_onTertiaryContainer</item>
 
+        <!-- Buttons -->
+        <item name="colorAccent">@color/dark_accentColor</item>
+
         <!-- Error -->
         <item name="colorError">@color/dark_error</item>
         <item name="colorOnError">@color/dark_onError</item>
@@ -38,5 +41,8 @@
         <!-- Otros -->
         <item name="colorOutline">@color/dark_outline</item>
         <item name="colorOutlineVariant">@color/dark_outlineVariant</item>
+
+        <item name="android:textColorPrimary">@color/dark_textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/dark_textColorSecondary</item>
     </style>
 </resources>

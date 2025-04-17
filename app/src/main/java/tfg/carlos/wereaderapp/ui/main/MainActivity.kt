@@ -13,6 +13,7 @@ import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.databinding.ActivityMainBinding
 import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import com.auth0.android.jwt.JWT
+import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.userApi
@@ -31,10 +32,7 @@ class MainActivity : AppCompatActivity() {
         // Verificar si hay token
         val token = sessionManager.getToken()
 
-        if (!isTokenValid(token)) {
-            // Si no hay token, redirigir a la pantalla de inicio de sesión
-            goToLogin()
-        } else {
+        if (isTokenValid(token)) {
             binding = ActivityMainBinding.inflate(layoutInflater)
 
             enableEdgeToEdge()
@@ -47,32 +45,23 @@ class MainActivity : AppCompatActivity() {
 
             fetchUserProfile()
         }
-
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Verificar si hay token
+        val token = sessionManager.getToken()
+
+        if (!isTokenValid(token)) {
+            // Si no hay token, redirigir a la pantalla de inicio de sesión
+            goToLogin()
+        }
+    }
     private fun goToLogin() {
         // Redirigir a la pantalla de inicio de sesión
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
-
-        // Cerrar la actividad actual
         finish()
-    }
-
-
-    private fun isTokenValid(token: String?): Boolean {
-        if (token.isNullOrEmpty()) return false
-
-        return try {
-            val jwt = JWT(token)
-
-            // Comprueba si ha expirado
-            !jwt.isExpired(10) // 10 = margen de tolerancia en segundos
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
     }
 
     private fun fakeLoginToken() {

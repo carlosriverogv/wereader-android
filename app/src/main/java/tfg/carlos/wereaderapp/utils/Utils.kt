@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.core.content.getSystemService
+import com.auth0.android.jwt.JWT
 
 // Función que comprueba si el dispositivo tiene conexión a internet
 fun checkConnection(context: Context): Boolean {
@@ -27,4 +28,19 @@ fun checkConnection(context: Context): Boolean {
         }
     }
     return false
+}
+
+fun isTokenValid(token: String?): Boolean {
+    if (token.isNullOrEmpty()) return false
+
+    return try {
+        val jwt = JWT(token)
+
+        // Comprueba si ha expirado
+        !jwt.isExpired(10) // 10 = margen de tolerancia en segundos
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
 }

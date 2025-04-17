@@ -52,13 +52,29 @@
     <!-- STRINGS para Step 3 -->
     <!-- Titles Step 3 -->
     <string name="register_step3_title">"¡Ya casi está!"</string>
-    <string name="register_step3_title_author">"Introduce tu autor y género favorito"</string>
-    <string name="register_step3_title_user_name">"Elige un avatar"</string>
+    <string name="register_step3_title_author">"¿Cual es tu autor y género favorito?"</string>
+    <string name="register_step3_title_avatar">"Elige un avatar"</string>
 
     <!-- STRING Buttons -->
     <string name="register_step_button_next">"Siguiente"</string>
-    <string name="register_step_button_register">"Registrarse"</string>
+    <string name="register_step_button_register">"Crear cuenta"</string>
     <string name="register_step_button_back">"Atrás"</string>
+
+    <!-- STRING for Avatar -->
+
+    <!-- STRING for Autor -->
+    <string name="register_step3_author_hint">"Autor favorito"</string>
+
+    <!-- STRING for Genero -->
+    <string name="register_step3_gender_hint">"Género favorito"</string>
+
+    <!-- Errors Step 3 -->
+    <string name="register_step3_error_empty_author">"El autor no puede estar vacío."</string>
+    <string name="register_step3_error_empty_genre">"El género no puede estar vacío."</string>
+    <string name="register_step3_error_empty_avatar">"El avatar no puede estar vacío."</string>
+    <string name="register_step3_error_invalid_author">"Autor no disponible."</string>
+    <string name="register_step3_error_invalid_genre">"Género no disponible."</string>
+
 
     <!-- error connection -->
     <string name="error_no_connection">"No hay conexión a internet"</string>

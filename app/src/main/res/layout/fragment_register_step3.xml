@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:context=".ui.auth.register.fragments.RegisterStep2Fragment">
+    tools:context=".ui.auth.register.fragments.RegisterStep3Fragment">
 
     <TextView
         android:id="@+id/titleRegister"
@@ -15,8 +14,8 @@
         android:layout_marginTop="10dp"
         android:text="@string/register_step3_title"
         android:textAlignment="center"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="40sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="42sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
@@ -28,29 +27,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="@string/register_step2_title_email"
+        android:text="@string/register_step3_title_author"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleRegister" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailLayout"
+        android:id="@+id/authorDropdownLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginTop="15dp"
-        android:hint="@string/register_step2_email_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/inputEmail"
-            android:inputType="textEmailAddress"
+        <AutoCompleteTextView
+            android:id="@+id/authorDropdown"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:hint="@string/register_step3_author_hint"
+            android:paddingVertical="16dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -58,72 +60,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="@string/register_step2_title_password"
+        android:text="@string/register_step3_title_avatar"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/genreDropdownLayout" />
 
     <TextView
         android:id="@+id/infoTextView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="@string/register_step_info_password"
-        android:textSize="12sp"
+        android:text="@string/register_step_info"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView3" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordLayout"
+        android:id="@+id/genreDropdownLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginTop="15dp"
-        android:hint="@string/register_step2_password_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/infoTextView3">
+        app:layout_constraintTop_toBottomOf="@id/authorDropdownLayout">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/inputPassword"
-            android:inputType="textPassword"
+        <AutoCompleteTextView
+            android:id="@+id/genreDropdown"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordRepeatLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:hint="@string/register_step2_password_re_hint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/inputRepeatPassword"
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:hint="@string/register_step3_gender_hint"
+            android:paddingVertical="16dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btnNext1"
+        android:id="@+id/btnRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:backgroundTint="?attr/colorTertiary"
-        android:text="@string/register_step_button_next"
+        android:backgroundTint="?attr/colorAccent"
+        android:text="@string/register_step_button_register"
         android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordRepeatLayout" />
+        app:layout_constraintTop_toBottomOf="@id/infoTextView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package tfg.carlos.wereaderapp.ui.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.auth0.android.jwt.JWT
+import edu.carlosrivero.demo5.utils.isTokenValid
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.model.auth.LoginRequest
 import tfg.carlos.wereaderapp.data.model.auth.LoginResponse
@@ -54,21 +55,6 @@ class AuthViewModel(val repository: AuthRepository): ViewModel() {
 
         // Hacer login automáticamente después de registrarse
         login(LoginRequest(request.email, request.password))
-    }
-
-    private fun isTokenValid(token: String?): Boolean {
-        if (token.isNullOrEmpty()) return false
-
-        return try {
-            val jwt = JWT(token)
-
-            // Comprueba si ha expirado
-            !jwt.isExpired(10) // 10 = margen de tolerancia en segundos
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
     }
 }
 

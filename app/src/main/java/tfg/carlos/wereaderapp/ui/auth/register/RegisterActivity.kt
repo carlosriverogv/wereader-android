@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import tfg.carlos.wereaderapp.data.repository.AuthRepository
 import tfg.carlos.wereaderapp.databinding.ActivityRegisterBinding
 import tfg.carlos.wereaderapp.ui.auth.AuthViewModel
 import tfg.carlos.wereaderapp.ui.auth.AuthViewModelFactory
+import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import tfg.carlos.wereaderapp.ui.main.MainActivity
 
 class RegisterActivity : AppCompatActivity() {
@@ -54,29 +56,46 @@ class RegisterActivity : AppCompatActivity() {
         viewPager.adapter = RegisterPagerAdapter(this)
         viewPager.isUserInputEnabled = false // sin swipe manual
 
+        // Recoge del sistema si se pulsa el botón de atrás o se realiza el gesto de retroceso
+        onBackPressedDispatcher.addCallback(this) {
+            val currentItem = viewPager.currentItem
+            if (currentItem > 0) {
+                goToPreviousStep()
+            } else {
+                finish()
+            }
+        }
+    }
+
+    fun registerUser() {
         if (checkConnection(this)) {
             lifecycleScope.launch {
                 try {
                     vm.register(registerData)
-
-                    val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    goToMain()
                 } catch (e: Exception) {
                     Log.e("RegisterActivity", "Excepción en la llamada API", e)
-                    // Manejar el error de registro
                     Toast.makeText(this@RegisterActivity, getString(R.string.error_register), Toast.LENGTH_SHORT).show()
                 }
-
             }
         } else {
-            // Mostrar mensaje de error
             Toast.makeText(this, getString(R.string.error_no_connection), Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun goToMain() {
+        // Redirigir a la pantalla de inicio de sesión
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     fun goToNextStep() {
         viewPager.currentItem += 1
+    }
+
+    private fun goToPreviousStep() {
+        viewPager.currentItem -= 1
     }
 
     fun getRegisterData(): RegisterRequest = registerData
