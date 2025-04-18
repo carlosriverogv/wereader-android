@@ -52,7 +52,7 @@
     <!-- STRINGS para Step 3 -->
     <!-- Titles Step 3 -->
     <string name="register_step3_title">"¡Ya casi está!"</string>
-    <string name="register_step3_title_author">"¿Cual es tu autor y género favorito?"</string>
+    <string name="register_step3_title_author">"¿Cuál es tu autor y género favorito?"</string>
     <string name="register_step3_title_avatar">"Elige un avatar"</string>
 
     <!-- STRING Buttons -->
@@ -80,6 +80,6 @@
     <!-- error connection -->
     <string name="error_no_connection">"No hay conexión a internet"</string>
 
-    <string name="error_register">"Error al registrarse"</string>
+    <string name="error_register">"Error inesperado al registrarse"</string>
 
 </resources>

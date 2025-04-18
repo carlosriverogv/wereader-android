@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
-    android:layout_margin="8dp"
-    android:background="?attr/selectableItemBackground"
-    android:foreground="?attr/selectableItemBackgroundBorderless">
+    android:id="@+id/avatarContainer"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_margin="8dp">
 
     <ImageView
         android:id="@+id/avatarImage"
@@ -12,4 +11,12 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:contentDescription="@string/register_step3_avatar_iv" />
+
+    <!-- Marco de selección sobrepuesto -->
+    <View
+        android:id="@+id/selectionBorder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/avatar_selected_border"
+        android:visibility="gone" />
 </FrameLayout>

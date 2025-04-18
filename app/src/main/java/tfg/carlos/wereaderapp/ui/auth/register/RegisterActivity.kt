@@ -21,7 +21,6 @@ import tfg.carlos.wereaderapp.data.repository.AuthRepository
 import tfg.carlos.wereaderapp.databinding.ActivityRegisterBinding
 import tfg.carlos.wereaderapp.ui.auth.AuthViewModel
 import tfg.carlos.wereaderapp.ui.auth.AuthViewModelFactory
-import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import tfg.carlos.wereaderapp.ui.main.MainActivity
 
 class RegisterActivity : AppCompatActivity() {
@@ -49,9 +48,11 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
 
+        // Creamos el objeto RegisterRequest vacío
         registerData = RegisterRequest("", 0, "", "",
             "", "", "", "")
 
+        // Configuramos el ViewPager
         viewPager = findViewById(R.id.registerViewPager)
         viewPager.adapter = RegisterPagerAdapter(this)
         viewPager.isUserInputEnabled = false // sin swipe manual
@@ -74,7 +75,7 @@ class RegisterActivity : AppCompatActivity() {
                     vm.register(registerData)
                     goToMain()
                 } catch (e: Exception) {
-                    Log.e("RegisterActivity", "Excepción en la llamada API", e)
+                    //Log.e("RegisterActivity", "Excepción en la llamada API", e)
                     Toast.makeText(this@RegisterActivity, getString(R.string.error_register), Toast.LENGTH_SHORT).show()
                 }
             }
@@ -86,8 +87,16 @@ class RegisterActivity : AppCompatActivity() {
     private fun goToMain() {
         // Redirigir a la pantalla de inicio de sesión
         val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+
+        /*
+        * Al ir de LoginActivity --> RegisterActivity y hacer un registro correcto,
+        * el LoginActivity no se cerró (queda en la pila), por lo que llegaría tras el autologin
+        * a la MaionActivity y al pulsar atrás volvería a la LoginActivity, que a su vez al existir
+        * un token válido, volvería a la MainActivity
+        * SOLUCIÓN: Limpiar la pila de actividades
+        * */
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        this.startActivity(intent)
     }
 
     fun goToNextStep() {

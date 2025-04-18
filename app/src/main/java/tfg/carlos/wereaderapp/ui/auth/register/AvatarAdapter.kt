@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.data.model.user.Avatar
 import tfg.carlos.wereaderapp.databinding.ItemAvatarBinding
 
 class AvatarAdapter(
-    private val avatars: List<Int>,
+    private val avatars: List<Avatar>,
     private val onAvatarSelected: (Int) -> Unit
 ) : RecyclerView.Adapter<AvatarAdapter.AvatarViewHolder>() {
 
@@ -19,25 +20,20 @@ class AvatarAdapter(
     inner class AvatarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemAvatarBinding.bind(view)
 
-        fun bind(avatar: Int, isSelected: Boolean) {
-            binding.avatarImage.setImageResource(avatar)
+        fun bind(avatar: Avatar, isSelected: Boolean) {
+            binding.avatarImage.setImageResource(avatar.drawableRes)
 
             Glide.with(itemView.context)
-                .load(avatar)
+                .load(avatar.drawableRes)
                 .transform(CircleCrop())
                 .into(binding.avatarImage)
 
-            // Aplica el fondo solo si está seleccionado
-            if (isSelected) {
-                binding.avatarImage.setBackgroundResource(R.drawable.avatar_selected_border)
-            } else {
-                binding.avatarImage.background = null
-            }
+            binding.selectionBorder.visibility = if (isSelected) View.VISIBLE else View.GONE
 
             itemView.setOnClickListener {
                 val previousPosition = selectedPosition
                 selectedPosition = adapterPosition
-                onAvatarSelected(avatar)
+                onAvatarSelected(avatar.id)
                 notifyItemChanged(previousPosition)
                 notifyItemChanged(adapterPosition)
             }

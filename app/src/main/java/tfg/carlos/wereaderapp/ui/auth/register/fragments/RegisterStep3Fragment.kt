@@ -2,12 +2,14 @@ package tfg.carlos.wereaderapp.ui.auth.register.fragments
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.data.model.user.Avatar
 import tfg.carlos.wereaderapp.databinding.FragmentRegisterStep3Binding
 import tfg.carlos.wereaderapp.ui.auth.register.AvatarAdapter
 import tfg.carlos.wereaderapp.ui.auth.register.RegisterActivity
@@ -68,20 +70,25 @@ class RegisterStep3Fragment : Fragment() {
         binding.genreDropdown.threshold = 1
 
         val avatarList = listOf(
-            R.drawable.avatar1,
-            R.drawable.avatar2,
-            R.drawable.avatar3,
-            R.drawable.avatar4,
-            R.drawable.avatar5,
-            R.drawable.avatar6,
-            R.drawable.avatar7,
-            R.drawable.avatar8,
+            Avatar(1, R.drawable.avatar1),
+            Avatar(2, R.drawable.avatar2),
+            Avatar(3, R.drawable.avatar3),
+            Avatar(4, R.drawable.avatar4),
+            Avatar(5, R.drawable.avatar5),
+            Avatar(6, R.drawable.avatar6),
+            Avatar(7, R.drawable.avatar7),
+            Avatar(8, R.drawable.avatar8),
+            Avatar(9, R.drawable.avatar9),
+            Avatar(10, R.drawable.avatar10),
+            Avatar(11, R.drawable.avatar11),
+            Avatar(12, R.drawable.avatar12),
         )
 
-        var selectedAvatar = R.drawable.avatar1 // valor por defecto
+        var selectedAvatarId = avatarList.first().id
 
-        val adapter = AvatarAdapter(avatarList) { avatarResId ->
-            selectedAvatar = avatarResId
+        val adapter = AvatarAdapter(avatarList) { avatarId ->
+            selectedAvatarId = avatarId
+            Log.d("RegisterStep3Fragment", "Avatar seleccionado: $avatarId")
         }
 
         binding.avatarRecyclerView.adapter = adapter
@@ -99,26 +106,21 @@ class RegisterStep3Fragment : Fragment() {
             // Validaciones
             if (author.isEmpty()) {
                 binding.authorDropdownLayout.error = getString(
-                    tfg.carlos.wereaderapp.R.string.register_step3_error_empty_author)
+                    R.string.register_step3_error_empty_author)
+                isValid = false
+            } else if (!authors.contains(author)) {
+                binding.authorDropdownLayout.error = getString(
+                    R.string.register_step3_error_invalid_author)
                 isValid = false
             }
 
             if (genre.isEmpty()) {
                 binding.genreDropdownLayout.error = getString(
-                    tfg.carlos.wereaderapp.R.string.register_step3_error_empty_genre)
+                    R.string.register_step3_error_empty_genre)
                 isValid = false
-            }
-
-            // Validar que el autor y el género están en las listas
-            if (!authors.contains(author)) {
-                binding.authorDropdownLayout.error = getString(
-                    tfg.carlos.wereaderapp.R.string.register_step3_error_invalid_author)
-                isValid = false
-            }
-
-            if (!genres.contains(genre)) {
+            } else if (!genres.contains(genre)) {
                 binding.genreDropdownLayout.error = getString(
-                    tfg.carlos.wereaderapp.R.string.register_step3_error_invalid_genre)
+                    R.string.register_step3_error_invalid_genre)
                 isValid = false
             }
 
@@ -128,7 +130,7 @@ class RegisterStep3Fragment : Fragment() {
 
                 data.authorFav = author
                 data.genderFav = genre
-                data.avatar = selectedAvatar
+                data.avatar = selectedAvatarId
 
                 activity.registerUser()
             }
