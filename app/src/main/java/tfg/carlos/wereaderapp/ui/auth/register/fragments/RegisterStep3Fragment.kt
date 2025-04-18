@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.databinding.FragmentRegisterStep3Binding
+import tfg.carlos.wereaderapp.ui.auth.register.AvatarAdapter
 import tfg.carlos.wereaderapp.ui.auth.register.RegisterActivity
 
 class RegisterStep3Fragment : Fragment() {
@@ -65,12 +67,28 @@ class RegisterStep3Fragment : Fragment() {
         binding.authorDropdown.threshold = 1
         binding.genreDropdown.threshold = 1
 
+        val avatarList = listOf(
+            R.drawable.avatar1,
+            R.drawable.avatar2,
+            R.drawable.avatar3,
+            R.drawable.avatar4,
+            R.drawable.avatar5,
+            R.drawable.avatar6,
+            R.drawable.avatar7,
+            R.drawable.avatar8,
+        )
+
+        var selectedAvatar = R.drawable.avatar1 // valor por defecto
+
+        val adapter = AvatarAdapter(avatarList) { avatarResId ->
+            selectedAvatar = avatarResId
+        }
+
+        binding.avatarRecyclerView.adapter = adapter
+
         binding.btnRegister.setOnClickListener {
             val author = binding.authorDropdown.text.toString().trim()
             val genre = binding.genreDropdown.text.toString().trim()
-
-            // Provisional hasta que se implementen los avatares
-            val avatar = 1
 
             var isValid = true
 
@@ -110,7 +128,7 @@ class RegisterStep3Fragment : Fragment() {
 
                 data.authorFav = author
                 data.genderFav = genre
-                data.avatar = avatar
+                data.avatar = selectedAvatar
 
                 activity.registerUser()
             }

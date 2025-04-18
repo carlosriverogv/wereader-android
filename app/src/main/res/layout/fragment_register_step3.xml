@@ -101,6 +101,17 @@
             android:paddingVertical="16dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/avatarRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="4"
+        app:layout_constraintTop_toBottomOf="@+id/infoTextView3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="0dp"
@@ -113,6 +124,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/infoTextView3" />
+        app:layout_constraintTop_toBottomOf="@id/avatarRecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

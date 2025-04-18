@@ -61,6 +61,7 @@
     <string name="register_step_button_back">"Atrás"</string>
 
     <!-- STRING for Avatar -->
+    <string name="register_step3_avatar_iv">"Avatar"</string>
 
     <!-- STRING for Autor -->
     <string name="register_step3_author_hint">"Autor favorito"</string>
