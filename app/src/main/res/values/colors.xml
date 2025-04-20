@@ -21,7 +21,7 @@
     <color name="light_errorContainer">#FFDAD6</color>
     <color name="light_onErrorContainer">#93000A</color>
 
-    <color name="light_background">#FFFFFF</color> <!--F9F9FF -->
+    <color name="light_background">#F9F9FF</color> <!--F9F9FF -->
     <color name="light_onBackground">#191C20</color>
     <color name="light_surface">#F8F9FF</color>
     <color name="light_onSurface">#191C20</color>
@@ -29,6 +29,7 @@
     <color name="light_onSurfaceVariant">#44464F</color>
     <color name="light_outline">#757780</color>
     <color name="light_outlineVariant">#C5C6D0</color>
+    <color name="light_navigationBarBackground">#EEEDF4</color>
     <color name="light_scrim">#000000</color>
 
     <color name="light_inverseSurface">#2E3035</color>
@@ -36,6 +37,8 @@
     <color name="light_inversePrimary">#AAC7FF</color>
 
     <color name="light_accentColor">#FC797D</color>
+    <color name="light_accentColorSecondary">#F19295</color>
+    <color name="light_accentColorBackground">#28F8A5AA</color>
 
     <color name="light_textColorPrimary">#000000</color>
     <color name="light_textColorSecondary">#3C4950</color>
@@ -63,7 +66,7 @@
     <color name="dark_errorContainer">#93000A</color>
     <color name="dark_onErrorContainer">#FFDAD6</color>
 
-    <color name="dark_background">#0E1014</color> <!--111318 0E1014 -->
+    <color name="dark_background">#0E0F14</color> <!--111318 0E1014 -->
     <color name="dark_onBackground">#E2E2E9</color>
     <color name="dark_surface">#111418</color>
     <color name="dark_onSurface">#E1E2E8</color>
@@ -71,6 +74,7 @@
     <color name="dark_onSurfaceVariant">#C5C6D0</color>
     <color name="dark_outline">#8F9099</color>
     <color name="dark_outlineVariant">#44464F</color>
+    <color name="dark_navigationBarBackground">#1E1F24</color>
     <color name="dark_scrim">#000000</color>
 
     <color name="dark_inverseSurface">#E1E2E8</color>

@@ -44,5 +44,7 @@
 
         <item name="android:textColorPrimary">@color/dark_textColorPrimary</item>
         <item name="android:textColorSecondary">@color/dark_textColorSecondary</item>
+
+        <item name="bottomNavigationStyle">@color/dark_navigationBarBackground</item>
     </style>
 </resources>

@@ -44,6 +44,8 @@
 
         <item name="android:textColorPrimary">@color/light_textColorPrimary</item>
         <item name="android:textColorSecondary">@color/light_textColorSecondary</item>
+
+        <item name="bottomNavigationStyle">@color/light_navigationBarBackground</item>
     </style>
 
     <style name="Theme.WeReaderApp" parent="Base.Theme.WeReaderApp" />
