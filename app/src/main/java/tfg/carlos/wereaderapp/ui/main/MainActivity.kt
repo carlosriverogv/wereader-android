@@ -1,5 +1,6 @@
 package tfg.carlos.wereaderapp.ui.main
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,9 @@ import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.userApi
+import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
+import tfg.carlos.wereaderapp.ui.library.LibraryActivity
+import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -42,9 +46,43 @@ class MainActivity : AppCompatActivity() {
                 insets
             }
 
-            // Todo: TEST
-            fetchUserProfile()
+            // Set up the bottom navigation
+            val bottomNav = binding.bottomNavigation
+            binding.bottomNavigation.selectedItemId = R.id.nav_home
+
+            bottomNav.setOnItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.nav_home -> {
+                        true
+                    }
+                    R.id.nav_library -> {
+                        val intent = Intent(this, LibraryActivity::class.java)
+                        val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
+                        startActivity(intent, options.toBundle())
+                        finish()
+                        true
+                    }
+                    R.id.nav_discover -> {
+                        val intent = Intent(this, DiscoverActivity::class.java)
+                        val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
+                        startActivity(intent, options.toBundle())
+                        finish()
+                        true
+                    }
+                    R.id.nav_profile -> {
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
+                        startActivity(intent, options.toBundle())
+                        finish()
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
+
+        // Todo: TEST
+        fetchUserProfile()
     }
 
     override fun onResume() {
@@ -52,6 +90,11 @@ class MainActivity : AppCompatActivity() {
         val token = sessionManager.getToken()
 
         if (!isTokenValid(token)) {
+            goToLogin()
+        }
+
+        binding.textViewPage.setOnClickListener() {
+            sessionManager.clearToken()
             goToLogin()
         }
     }
@@ -84,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
                         // Aquí puedes actualizar la UI con los datos del usuario
                         // Por ejemplo, mostrar el nombre de usuario en un TextView
-                        binding.textViewName.text = user?.tag ?: getString(R.string.app_name)
+                        binding.textViewPage.text = user?.tag ?: getString(R.string.app_name)
 
                     } else {
                         val errorBody = response.errorBody()?.string()
@@ -108,8 +151,7 @@ class MainActivity : AppCompatActivity() {
                     Log.e("MainActivity", "Excepción en la llamada API", e)
 
                     // Mostrar el mensaje de error en un Toast
-                    Toast.makeText(this@MainActivity, "Excepción: ${e.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(this@MainActivity, "Excepción: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {

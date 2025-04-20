@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.auth0.android.jwt.JWT
 import edu.carlosrivero.demo5.utils.checkConnection
 import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
