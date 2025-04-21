@@ -9,7 +9,7 @@ import tfg.carlos.wereaderapp.data.local.SessionManager
 import tfg.carlos.wereaderapp.data.remote.api.UserService
 
 object Retrofit2Api  {
-    private const val BASE_URL = "http://192.168.1.132:3000/"
+    private const val BASE_URL = "http://192.168.1.135:3000/"
 
     private val sessionManager: SessionManager = WeReaderApplication.sessionManager
 
