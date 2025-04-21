@@ -17,6 +17,7 @@ import edu.carlosrivero.demo5.utils.checkConnection
 import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.libraryApi
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.userApi
 import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Todo: TEST (Call API)
-        fetchUserProfile()
+        fetchApi()
     }
 
     private fun goToLogin() {
@@ -104,21 +105,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Todo: TEST (Call API)
-    private fun fetchUserProfile() {
+    private fun fetchApi() {
         // Usamos Coroutine para hacer la llamada de forma asíncrona
         if (checkConnection(this)) {
             lifecycleScope.launch {
                 try {
                     // Hacemos la llamada al API de UserService
-                    val response = userApi.myProfile()
+                    val response = libraryApi.getMyLibrary()
 
                     // Si la respuesta es exitosa, la procesamos
                     if (response.isSuccessful) {
-                        val user = response.body()
+                        val library = response.body()
 
                         // Aquí puedes actualizar la UI con los datos del usuario
                         // Por ejemplo, mostrar el nombre de usuario en un TextView
-                        binding.textViewPage.text = user?.tag ?: getString(R.string.app_name)
+                        binding.textViewPage.text = library?.id ?: getString(R.string.app_name)
 
                     } else {
                         val errorBody = response.errorBody()?.string()
