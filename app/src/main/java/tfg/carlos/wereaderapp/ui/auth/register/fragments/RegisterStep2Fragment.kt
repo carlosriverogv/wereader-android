@@ -69,6 +69,7 @@ class RegisterStep2Fragment : Fragment() {
             if (isValid) {
                 val activity = requireActivity() as RegisterActivity
                 val data = activity.getRegisterData()
+
                 data.email = email
                 data.password = password
 

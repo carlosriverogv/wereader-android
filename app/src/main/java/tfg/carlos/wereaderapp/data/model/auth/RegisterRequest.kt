@@ -10,8 +10,8 @@ data class RegisterRequest(
     var avatar: Int,
     @SerializedName("email")
     var email: String,
-    @SerializedName("genderFav")
-    var genderFav: String,
+    @SerializedName("genreFav")
+    var genreFav: String,
     @SerializedName("lastname")
     var lastname: String,
     @SerializedName("name")

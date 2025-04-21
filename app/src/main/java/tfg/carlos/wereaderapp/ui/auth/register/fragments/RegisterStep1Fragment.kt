@@ -43,7 +43,7 @@ class RegisterStep1Fragment : Fragment() {
             if (rawTag.isEmpty()) {
                 binding.tagNameLayout.error = getString(R.string.register_step1_error_empty_user_name)
                 isValid = false
-            } else if (!rawTag.matches(Regex("^[a-z0-9]{3,15}$"))) {
+            } else if (!rawTag.matches(Regex("^[a-zA-Z0-9_]{3,15}$"))) {
                 binding.tagNameLayout.error = getString(R.string.register_step1_error_invalid_user_name)
                 isValid = false
             }

@@ -129,7 +129,7 @@ class RegisterStep3Fragment : Fragment() {
                 val data = activity.getRegisterData()
 
                 data.authorFav = author
-                data.genderFav = genre
+                data.genreFav = genre
                 data.avatar = selectedAvatarId
 
                 activity.registerUser()

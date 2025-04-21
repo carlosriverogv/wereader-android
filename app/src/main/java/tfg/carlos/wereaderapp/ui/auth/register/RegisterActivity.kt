@@ -53,9 +53,9 @@ class RegisterActivity : AppCompatActivity() {
             "", "", "", "")
 
         // Configuramos el ViewPager
-        viewPager = findViewById(R.id.registerViewPager)
-        viewPager.adapter = RegisterPagerAdapter(this)
-        viewPager.isUserInputEnabled = false // sin swipe manual
+        viewPager = binding.registerViewPager
+        binding.registerViewPager.adapter = RegisterPagerAdapter(this)
+        binding.registerViewPager.isUserInputEnabled = false // sin swipe manual
 
         // Recoge del sistema si se pulsa el botón de atrás o se realiza el gesto de retroceso
         onBackPressedDispatcher.addCallback(this) {
@@ -75,7 +75,7 @@ class RegisterActivity : AppCompatActivity() {
                     vm.register(registerData)
                     goToMain()
                 } catch (e: Exception) {
-                    //Log.e("RegisterActivity", "Excepción en la llamada API", e)
+                    Log.e("RegisterActivity", "Excepción en la llamada API", e)
                     Toast.makeText(this@RegisterActivity, getString(R.string.error_register), Toast.LENGTH_SHORT).show()
                 }
             }
@@ -100,12 +100,20 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun goToNextStep() {
-        viewPager.currentItem += 1
+        val currentItem = binding.registerViewPager.currentItem
+        binding.registerViewPager.setCurrentItem(currentItem + 1, true)
     }
 
+
     private fun goToPreviousStep() {
-        viewPager.currentItem -= 1
+        val currentItem = binding.registerViewPager.currentItem
+        if (currentItem > 0) {
+            binding.registerViewPager.setCurrentItem(currentItem - 1, true)
+        } else {
+            finish()
+        }
     }
+
 
     fun getRegisterData(): RegisterRequest = registerData
 }
