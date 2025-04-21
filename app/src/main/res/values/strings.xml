@@ -30,7 +30,7 @@
 
     <!-- Error Step 1 -->
     <string name="register_step1_error_empty_user_name">"El nombre de usuario no puede estar vacío."</string>
-    <string name="register_step1_error_invalid_user_name">"Nombre de usuario inválido (solo minúsculas, números, 3 a 15 caracteres)"</string>
+    <string name="register_step1_error_invalid_user_name">"Nombre de usuario inválido. Solo letras, números y guion bajo _"</string>
     <string name="register_step1_error_empty_lastname">"El apellido no puede estar vacío."</string>
     <string name="register_step1_error_empty_name">"El nombre no puede estar vacío."</string>
 
