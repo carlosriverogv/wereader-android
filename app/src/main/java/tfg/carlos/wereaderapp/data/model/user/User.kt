@@ -11,7 +11,7 @@ data class User(
     @SerializedName("email")
     val email: String,
     @SerializedName("genderFav")
-    val genderFav: String,
+    val genreFav: String,
     @SerializedName("_id")
     val id: String,
     @SerializedName("lastname")
