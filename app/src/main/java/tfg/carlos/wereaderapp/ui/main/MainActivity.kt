@@ -31,58 +31,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //fakeLoginToken()
 
+        // Se obtiene el token de sesión y se verifica su validez
         val token = sessionManager.getToken()
 
         if (isTokenValid(token)) {
-            binding = ActivityMainBinding.inflate(layoutInflater)
-
-            enableEdgeToEdge()
-            setContentView(binding.root)
-            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                insets
-            }
-
-            // Set up the bottom navigation
-            val bottomNav = binding.bottomNavigation
-            binding.bottomNavigation.selectedItemId = R.id.nav_home
-
-            bottomNav.setOnItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.nav_home -> {
-                        true
-                    }
-                    R.id.nav_library -> {
-                        val intent = Intent(this, LibraryActivity::class.java)
-                        val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
-                        startActivity(intent, options.toBundle())
-                        finish()
-                        true
-                    }
-                    R.id.nav_discover -> {
-                        val intent = Intent(this, DiscoverActivity::class.java)
-                        val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
-                        startActivity(intent, options.toBundle())
-                        finish()
-                        true
-                    }
-                    R.id.nav_profile -> {
-                        val intent = Intent(this, ProfileActivity::class.java)
-                        val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
-                        startActivity(intent, options.toBundle())
-                        finish()
-                        true
-                    }
-                    else -> false
-                }
-            }
+            setupUI()
         }
-
-        // Todo: TEST
-        fetchUserProfile()
     }
 
     override fun onResume() {
@@ -91,13 +46,49 @@ class MainActivity : AppCompatActivity() {
 
         if (!isTokenValid(token)) {
             goToLogin()
-        }
-
-        binding.textViewPage.setOnClickListener() {
-            sessionManager.clearToken()
-            goToLogin()
+        } else {
+            // TODO: TEST (Logout provisional)
+            binding.textViewPage.setOnClickListener() {
+                sessionManager.clearToken()
+                goToLogin()
+            }
         }
     }
+
+    private fun setupUI() {
+        // Se inicializa la vista
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        enableEdgeToEdge()
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        // Se establece el ID del elemento seleccionado en el BottomNavigationView
+        binding.bottomNavigation.selectedItemId = R.id.nav_home
+
+        // Se establece el listener para los elementos del BottomNavigationView
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            val intent = when (item.itemId) {
+                R.id.nav_home -> return@setOnItemSelectedListener true
+                R.id.nav_library -> Intent(this, LibraryActivity::class.java)
+                R.id.nav_discover -> Intent(this, DiscoverActivity::class.java)
+                R.id.nav_profile -> Intent(this, ProfileActivity::class.java)
+                else -> return@setOnItemSelectedListener false
+            }
+            val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
+            startActivity(intent, options.toBundle())
+            finish()
+            true
+        }
+
+        // Todo: TEST (Call API)
+        fetchUserProfile()
+    }
+
     private fun goToLogin() {
         // Redirigir a la pantalla de inicio de sesión
         val intent = Intent(this, LoginActivity::class.java)
@@ -105,14 +96,14 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    // Todo: TEST
+    // Todo: TEST (Login provisional)
     private fun fakeLoginToken() {
         val testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imthcmxvcy5yaXZlcm9nQGdtYWlsLmNvbSIsInN1YiI6IjY3ZTU0NDUzZmFlNDgwODViMzdhMjhjZSIsImlhdCI6MTc0NDcwNDg0NSwiZXhwIjoxNzQ0NzEyMDQ1fQ.DLsM6Y-S6JnC_LJMA8UzAsA3wsLV2TSM-JKmeT9gjn4"
 
         sessionManager.saveToken(testToken)
     }
 
-    // Todo: TEST
+    // Todo: TEST (Call API)
     private fun fetchUserProfile() {
         // Usamos Coroutine para hacer la llamada de forma asíncrona
         if (checkConnection(this)) {
@@ -139,12 +130,6 @@ class MainActivity : AppCompatActivity() {
                             "Error: ${response.code()} - $errorBody",
                             Toast.LENGTH_LONG
                         ).show()
-
-                        // Borrar el token
-                        sessionManager.clearToken()
-
-                        // Redirigir a la pantalla de inicio de sesión
-                        goToLogin()
                     }
                 } catch (e: Exception) {
                     // Imprime la excepción completa y su tipo

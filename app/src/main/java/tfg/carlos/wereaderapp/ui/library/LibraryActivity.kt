@@ -27,48 +27,38 @@ class LibraryActivity : AppCompatActivity() {
         val token = sessionManager.getToken()
 
         if (isTokenValid(token)) {
-            binding = ActivityLibraryBinding.inflate(layoutInflater)
+            setupUI()
+        }
+    }
 
-            enableEdgeToEdge()
-            setContentView(binding.root)
-            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                insets
-            }
+    private fun setupUI() {
+        // Se inicializa la vista
+        binding = ActivityLibraryBinding.inflate(layoutInflater)
+
+        enableEdgeToEdge()
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
 
-        val bottomNav = binding.bottomNavigation
+        // Se establece el ID del elemento seleccionado en el BottomNavigationView
         binding.bottomNavigation.selectedItemId = R.id.nav_library
 
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
-                    startActivity(intent, options.toBundle())
-                    finish()
-                    true
-                }
-                R.id.nav_library -> {
-                    true
-                }
-                R.id.nav_discover -> {
-                    val intent = Intent(this, DiscoverActivity::class.java)
-                    val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
-                    startActivity(intent, options.toBundle())
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
-                    startActivity(intent, options.toBundle())
-                    finish()
-                    true
-                }
-                else -> false
+        // Se establece el listener para los elementos del BottomNavigationView
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            val intent = when (item.itemId) {
+                R.id.nav_home -> Intent(this, MainActivity::class.java)
+                R.id.nav_library -> return@setOnItemSelectedListener true
+                R.id.nav_discover -> Intent(this, DiscoverActivity::class.java)
+                R.id.nav_profile -> Intent(this, ProfileActivity::class.java)
+                else -> return@setOnItemSelectedListener false
             }
+            val options = ActivityOptions.makeCustomAnimation(this, 0, 0)
+            startActivity(intent, options.toBundle())
+            finish()
+            true
         }
     }
 }
