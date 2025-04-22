@@ -15,6 +15,11 @@
     <string name="library_me">Mi biblioteca</string>
     <string name="library_friends">Biblioteca de amigos</string>
 
+    <!-- STRINGS Library TABS -->
+    <string name="library_tab_books">Libros</string>
+    <string name="library_tab_shared">Compartidos</string>
+    <string name="library_tab_collections">Colecciones</string>
+
     <!-- STRINGS LOGIN -->
     <string name="email_hint">Correo Electrónico</string>
     <string name="password_hint">Contraseña</string>

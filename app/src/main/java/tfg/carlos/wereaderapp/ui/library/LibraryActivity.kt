@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.tabs.TabLayoutMediator
 import edu.carlosrivero.demo5.utils.isTokenValid
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
@@ -60,5 +61,18 @@ class LibraryActivity : AppCompatActivity() {
             finish()
             true
         }
+
+        val tabTitles = listOf(
+            getString(R.string.library_tab_books),
+            getString(R.string.library_tab_shared),
+            getString(R.string.library_tab_collections)
+        )
+        val adapter = LibraryPagerAdapter(this)
+
+        binding.viewPager.adapter = adapter
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
     }
 }
