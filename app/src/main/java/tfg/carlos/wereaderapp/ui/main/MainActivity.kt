@@ -18,8 +18,7 @@ import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.libraryApi
-import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.userApi
-import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
+ import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
 
@@ -111,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
                     // Hacemos la llamada al API de UserService
-                    val response = libraryApi.getMyLibrary()
+                    val response = libraryApi.getAuthUserLibrary()
 
                     // Si la respuesta es exitosa, la procesamos
                     if (response.isSuccessful) {

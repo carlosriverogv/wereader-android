@@ -4,8 +4,8 @@ import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api
 
 class LibraryRemoteDadaSource {
-    suspend fun getMyLibrary(): LibraryResponse {
-        val response = Retrofit2Api.libraryApi.getMyLibrary()
+    suspend fun getAuthUserLibrary(): LibraryResponse {
+        val response = Retrofit2Api.libraryApi.getAuthUserLibrary()
         if (response.isSuccessful) {
             return response.body()!!
         } else {

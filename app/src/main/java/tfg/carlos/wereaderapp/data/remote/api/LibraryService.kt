@@ -6,5 +6,5 @@ import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
 
 interface LibraryService {
     @GET("library/mylibrary")
-    suspend fun getMyLibrary(): Response<LibraryResponse>
+    suspend fun getAuthUserLibrary(): Response<LibraryResponse>
 }
