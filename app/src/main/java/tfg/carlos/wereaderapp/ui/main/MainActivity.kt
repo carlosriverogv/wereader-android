@@ -17,8 +17,10 @@ import edu.carlosrivero.demo5.utils.checkConnection
 import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.libraryApi
- import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
+import tfg.carlos.wereaderapp.data.repository.LibraryRepository
+import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
 

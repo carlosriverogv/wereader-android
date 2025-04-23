@@ -1,14 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
-    android:layout_margin="8dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="14dp">
 
     <ImageView
-        android:id="@+id/avatarImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/coverImage"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/register_step3_avatar_iv"
         android:scaleType="centerCrop"
-        android:contentDescription="@string/register_step3_avatar_iv" />
+        android:src="@drawable/ic_book_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleBook"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/item_book_title"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coverImage" />
+
+    <TextView
+        android:id="@+id/authorName"
+        android:layout_width="100dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/item_book_author"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBook" />
+
+    <TextView
+        android:id="@+id/authorName2"
+        android:layout_width="28dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/item_book_progress"
+        android:textAlignment="textEnd"
+        android:textColor="@color/dark_accentColor"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/authorName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,6 +20,12 @@
     <string name="library_tab_shared">Compartidos</string>
     <string name="library_tab_collections">Colecciones</string>
 
+    <!-- STRINGS ItemBook -->
+    <string name="item_book_title">Título</string>
+    <string name="item_book_author">Autor</string>
+    <string name="item_book_progress">67%</string>
+
+
     <!-- STRINGS LOGIN -->
     <string name="email_hint">Correo Electrónico</string>
     <string name="password_hint">Contraseña</string>

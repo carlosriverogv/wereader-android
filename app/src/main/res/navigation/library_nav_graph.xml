@@ -6,19 +6,19 @@
 
     <fragment
         android:id="@+id/tab_books"
-        android:name="tfg.carlos.wereaderapp.ui.library.fragments.BooksFragment"
+        android:name="tfg.carlos.wereaderapp.ui.library.fragments.book.BooksFragment"
         android:label="@string/library_me"
         tools:layout="@layout/fragment_books" />
 
     <fragment
         android:id="@+id/tab_authors"
-        android:name="tfg.carlos.wereaderapp.ui.library.fragments.SharedLibraryFragment"
+        android:name="tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.SharedLibraryFragment"
         android:label="@string/library_friends"
         tools:layout="@layout/fragment_shared_library" />
 
     <fragment
         android:id="@+id/tab_collections"
-        android:name="tfg.carlos.wereaderapp.ui.library.fragments.CollectionsFragment"
+        android:name="tfg.carlos.wereaderapp.ui.library.fragments.collection.CollectionsFragment"
         android:label="Colecciones"
         tools:layout="@layout/fragment_collections" />
 </navigation>

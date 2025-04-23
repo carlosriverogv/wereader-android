@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.library.fragments
+package tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import tfg.carlos.wereaderapp.R
 
-class CollectionsFragment : Fragment() {
+class SharedLibraryFragment : Fragment() {
 
     companion object {
-        fun newInstance() = CollectionsFragment()
+        fun newInstance() = SharedLibraryFragment()
     }
 
-    private val viewModel: CollectionsViewModel by viewModels()
+    private val viewModel: SharedLibraryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +26,6 @@ class CollectionsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_collections, container, false)
+        return inflater.inflate(R.layout.fragment_shared_library, container, false)
     }
 }

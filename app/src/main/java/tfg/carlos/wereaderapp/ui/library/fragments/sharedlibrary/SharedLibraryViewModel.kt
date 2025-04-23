@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.library.fragments
+package tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary
 
 import androidx.lifecycle.ViewModel
 
