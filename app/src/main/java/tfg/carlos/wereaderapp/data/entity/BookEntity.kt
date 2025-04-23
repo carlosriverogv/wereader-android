@@ -18,5 +18,10 @@ data class BookEntity(
     val shareable: Boolean,
     val genre: String,
     val dateCreation: String,
-    val v : Int
+    val v : Int,
+
+    // Campos locales ROOM:
+    val isPending: Boolean = false,
+    val isReading: Boolean = false,
+    val readingProgress: Int = 0 // Porcentaje de lectura (0-100)
 )

@@ -19,6 +19,10 @@ class LibraryRepository(
     // ROOM Methods
     fun getLibraryBooks(): Flow<List<BookEntity>> = local.getBooksFlow()
 
+    fun getReadingBooks(): Flow<List<BookEntity>> = local.getReadingBooks()
+
+    fun getPendingBooks(): Flow<List<BookEntity>> = local.getPendingBooks()
+
     suspend fun insertBooks(books: List<BookEntity>) = local.insertBooks(books)
 
     suspend fun cacheBooks(bookItems: List<BookEntity>) {
@@ -35,5 +39,11 @@ class LibraryRepository(
         local.cacheBooks(entities)
 
         return bookItems
+    }
+
+    suspend fun updateBookReadingStatus(id: String, isReading: Boolean) {
+        val book = local.getBookById(id) ?: return
+        val updated = book.copy(isReading = isReading)
+        local.updateBook(updated)
     }
 }

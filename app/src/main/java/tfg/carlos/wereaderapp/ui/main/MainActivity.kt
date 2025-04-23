@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.databinding.ActivityMainBinding
 import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
@@ -19,17 +22,44 @@ import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.libraryApi
+import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
+import tfg.carlos.wereaderapp.ui.library.fragments.book.BooksAdapter
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var clickedItemPosition: Int = RecyclerView.NO_POSITION
+
 
     private val sessionManager by lazy {
         WeReaderApplication.sessionManager
     }
+
+    private val vm: MainViewModel by viewModels {
+        val db = (application as WeReaderApplication).weReaderDB
+        val localDataSource = LibraryLocalDataSource(db.bookDao())
+        val remoteDadaSource = LibraryRemoteDadaSource()
+        val repository = LibraryRepository(remoteDadaSource, localDataSource)
+        MainViewModelFactory(repository)
+    }
+
+    private val adapter = BooksAdapter (
+        onClickBookItem = { idBook: String, position: Int ->
+            clickedItemPosition = position
+            // TODO: Se ejecuta la lectura del libro con FileReader
+
+            // TODO: TEST (Cambiar el estado de lectura del libro y el progreso)
+            vm.updateBookReadingStatus(idBook, false) // PARA PRUEBAS
+            Toast.makeText(
+                this,
+                "No leyendo: $idBook",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,8 +117,23 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        // Todo: TEST (Call API)
-        fetchApi()
+        // Se cargan los libros que se están leyendo
+        loadReadingBooks()
+    }
+
+    private fun loadReadingBooks() {
+        binding.readingBooksRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.readingBooksRecyclerView.adapter = adapter
+
+        adapter.submitList(null)
+
+        lifecycleScope.launch {
+            vm.books.collect { booksList ->
+                Log.d("BooksFragment", "Libros recibidos: ${booksList.size}")
+                adapter.submitList(booksList)
+            }
+        }
     }
 
     private fun goToLogin() {

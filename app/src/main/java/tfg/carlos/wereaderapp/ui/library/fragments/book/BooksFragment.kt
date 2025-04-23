@@ -44,9 +44,10 @@ class BooksFragment : Fragment() {
         onClickBookItem = { idBook: String, position: Int ->
             clickedItemPosition = position
             // TODO: Se ejecuta la lectura del libro con FileReader
+            vm.updateBookReadingStatus(idBook, true)
             Toast.makeText(
                 requireContext(),
-                "Se abre el libro: $idBook",
+                "Leyendo: $idBook",
                 Toast.LENGTH_SHORT
             ).show()
         }

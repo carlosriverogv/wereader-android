@@ -44,6 +44,14 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
         }
     }
 
+    fun updateBookReadingStatus(id: String, isReading: Boolean) {
+        viewModelScope.launch {
+            repository.updateBookReadingStatus(id, isReading)
+
+            //TODO: Se actualiza el progreso de lectura aqui
+        }
+    }
+
     //fun refreshBooks() {
         //loadBooks()
     //}

@@ -25,6 +25,8 @@ class WeReaderApplication: Application() {
             this,
             LibraryDB::class.java,
             "WeReader-db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration() // ⚠️ SOLO PARA DESARROLLO
+            .build()
     }
 }

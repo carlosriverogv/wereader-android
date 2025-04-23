@@ -12,8 +12,36 @@ class LibraryLocalDataSource(private val dao: BookDao) {
         dao.insertAll(books)
     }
 
-    suspend fun cacheBooks(bookItems: List<BookEntity>) {
+    suspend fun cacheBooks(newBooks: List<BookEntity>) {
+        val existingBooks = dao.getAllBooksOnce()
+
+        // Merge de campos locales con los nuevos
+        val mergedBooks = newBooks.map { newBook ->
+            val old = existingBooks.find { it.id == newBook.id }
+            newBook.copy(
+                isReading = old?.isReading ?: false,
+                isPending = old?.isPending ?: false,
+                readingProgress = old?.readingProgress ?: 0
+            )
+        }
+
         dao.clearBooks()
-        dao.insertAll(bookItems)
+        dao.insertAll(mergedBooks)
+    }
+
+    suspend fun getBookById(id: String): BookEntity? {
+        return dao.getBookById(id)
+    }
+
+    suspend fun updateBook(book: BookEntity) {
+        dao.updateBook(book)
+    }
+
+    fun getPendingBooks(): Flow<List<BookEntity>> {
+        return dao.getPendingBooks()
+    }
+
+    fun getReadingBooks(): Flow<List<BookEntity>> {
+        return dao.getReadingBooks()
     }
 }
