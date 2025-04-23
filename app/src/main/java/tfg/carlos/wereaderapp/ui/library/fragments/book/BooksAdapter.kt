@@ -12,7 +12,6 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.entity.BookEntity
-import tfg.carlos.wereaderapp.data.model.book.BookItem
 import tfg.carlos.wereaderapp.databinding.ItemBookBinding
 
 class BooksAdapter(

@@ -1,5 +1,6 @@
 package tfg.carlos.wereaderapp.ui.library.fragments.book
 
+import android.app.Application
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
@@ -8,8 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
+import edu.carlosrivero.demo5.utils.checkConnection
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
@@ -24,6 +28,7 @@ class BooksFragment : Fragment() {
     private var clickedItemPosition: Int = RecyclerView.NO_POSITION
 
     companion object {
+        var needsRefresh = false
         fun newInstance() = BooksFragment()
     }
 
@@ -50,21 +55,35 @@ class BooksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Setup RecyclerView
         binding.booksRecyclerView.adapter = adapter
 
+        // Se carga la lista de libros de ROOM
         getBooks()
 
-        // Configurar SwipeRefreshLayout
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            vm.refreshBooks() // ← llama al ViewModel a recargar desde API
-        }
-
-        // Observa isLoading para mostrar u ocultar el indicador de carga
-        lifecycleScope.launch {
-            vm.isLoading.collect { isLoading ->
-                binding.swipeRefreshLayout.isRefreshing = isLoading
+        // Funcionalidad del SwipeRefreshLayout
+        /*if(checkConnection(requireActivity().application)) {
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                vm.refreshBooks()
             }
-        }
+
+            // Observa isLoading para mostrar u ocultar el indicador de carga
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    vm.isLoading.collect {
+                        binding.swipeRefreshLayout.isRefreshing = it
+                    }
+                }
+            }
+        } else {
+            binding.swipeRefreshLayout.isEnabled = false
+            // Si no hay conexión, muestra un mensaje
+            Toast.makeText(
+                requireContext(),
+                "No hay conexión, podrás leer los libros descargados",
+                Toast.LENGTH_SHORT
+            ).show()
+        }*/
     }
 
     override fun onCreateView(
