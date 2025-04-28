@@ -23,5 +23,6 @@ data class BookEntity(
     // Campos locales ROOM:
     val isPending: Boolean = false,
     val isReading: Boolean = false,
-    val readingProgress: Int = 0 // Porcentaje de lectura (0-100)
+    val readingProgress: Int = 0, // Porcentaje de lectura (0-100)
+    val mine: Boolean = true
 )

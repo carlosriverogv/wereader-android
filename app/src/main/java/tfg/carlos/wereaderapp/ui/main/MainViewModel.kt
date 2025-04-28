@@ -14,15 +14,13 @@ class MainViewModel(val repository: LibraryRepository): ViewModel() {
     val books: Flow<List<BookEntity>> get() = _books
 
     init {
-        // Cargar los libros al iniciar el ViewModel
         loadBooks()
     }
 
     private fun loadBooks() {
         viewModelScope.launch {
             try {
-                val result = repository.fetchAndCacheAuthUserLibrary()
-                Log.d("BooksViewModel", "Libros cacheados: ${result.size}")
+                repository.fetchAndCacheLibrary()
             } catch (e: Exception) {
                 Log.e("BooksViewModel", "Error al cargar libros: ${e.message}")
             }

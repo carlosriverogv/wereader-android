@@ -1,6 +1,5 @@
-package tfg.carlos.wereaderapp.ui.library.fragments.book
+package tfg.carlos.wereaderapp.ui.library.fragments.library
 
-import android.app.Application
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
@@ -9,27 +8,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
-import edu.carlosrivero.demo5.utils.checkConnection
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
-import tfg.carlos.wereaderapp.databinding.FragmentBooksBinding
+import tfg.carlos.wereaderapp.databinding.FragmentSharedLibraryBinding
 
-
-class BooksFragment : Fragment() {
-    private var _binding: FragmentBooksBinding? = null
+class SharedLibraryFragment : Fragment() {
+    private var _binding: FragmentSharedLibraryBinding? = null
     private val binding get() = _binding!!
     private var clickedItemPosition: Int = RecyclerView.NO_POSITION
 
     companion object {
-        var needsRefresh = false
-        fun newInstance() = BooksFragment()
+        fun newInstance() = SharedLibraryFragment()
     }
 
     private val vm: BooksViewModel by viewModels {
@@ -61,37 +55,14 @@ class BooksFragment : Fragment() {
 
         // Se carga la lista de libros de ROOM
         getBooks()
-
-        // Funcionalidad del SwipeRefreshLayout
-        /*if(checkConnection(requireActivity().application)) {
-            binding.swipeRefreshLayout.setOnRefreshListener {
-                vm.refreshBooks()
-            }
-
-            // Observa isLoading para mostrar u ocultar el indicador de carga
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    vm.isLoading.collect {
-                        binding.swipeRefreshLayout.isRefreshing = it
-                    }
-                }
-            }
-        } else {
-            binding.swipeRefreshLayout.isEnabled = false
-            // Si no hay conexión, muestra un mensaje
-            Toast.makeText(
-                requireContext(),
-                "No hay conexión, podrás leer los libros descargados",
-                Toast.LENGTH_SHORT
-            ).show()
-        }*/
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBooksBinding.inflate(inflater, container, false)
+        _binding = FragmentSharedLibraryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -104,7 +75,7 @@ class BooksFragment : Fragment() {
         adapter.submitList(null)
 
         lifecycleScope.launch {
-            vm.books.collect { booksList ->
+            vm.sharedBooks.collect { booksList ->
                 Log.d("BooksFragment", "Libros recibidos: ${booksList.size}")
                 adapter.submitList(booksList)
             }

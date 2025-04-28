@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.library.fragments.book
+package tfg.carlos.wereaderapp.ui.library.fragments.library
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -12,16 +12,11 @@ import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
 
     // Libros desde Room (flujo en tiempo real)
-    private val _books: Flow<List<BookEntity>> = repository.getLibraryBooks()
-    val books: Flow<List<BookEntity>> get() = _books
+    private val _myBooks: Flow<List<BookEntity>> = repository.getMyBooks()
+    val myBooks: Flow<List<BookEntity>> get() = _myBooks
 
-    /* Estado de carga
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> get() = _isLoading
-
-    // Estado de error
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> get() = _errorMessage */
+    private val _sharedBooks: Flow<List<BookEntity>> = repository.getSharedBooks()
+    val sharedBooks: Flow<List<BookEntity>> get() = _sharedBooks
 
     init {
         // Cargar los libros al iniciar el ViewModel
@@ -30,17 +25,11 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
 
     private fun loadBooks() {
         viewModelScope.launch {
-            //_isLoading.value = true
-            //_errorMessage.value = null
             try {
-                val result = repository.fetchAndCacheAuthUserLibrary()
-                Log.d("BooksViewModel", "Libros cacheados: ${result.size}")
+                repository.fetchAndCacheLibrary()
             } catch (e: Exception) {
-                //_errorMessage.value = "Error al cargar libros: ${e.message}"
                 Log.e("BooksViewModel", "Error al cargar libros: ${e.message}")
-            } //finally {
-                //_isLoading.value = false
-            //}
+            }
         }
     }
 

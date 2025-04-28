@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.library.fragments.book
+package tfg.carlos.wereaderapp.ui.library.fragments.library
 
 import android.util.Log
 import android.view.LayoutInflater

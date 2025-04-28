@@ -7,6 +7,8 @@ import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.model.book.BookItem
 import tfg.carlos.wereaderapp.data.model.book.toEntity
+import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
+import tfg.carlos.wereaderapp.data.model.sharedlibrary.SharedLibraryResponse
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 
 class LibraryRepository(
@@ -14,10 +16,16 @@ class LibraryRepository(
     val local: LibraryLocalDataSource
 ) {
     // API Methods
-    suspend fun getAuthUserLibrary() = remote.getAuthUserLibrary()
+    private suspend fun getAuthUserLibrary() = remote.getAuthUserLibrary()
+
+    private suspend fun getSharedLibrary() = remote.getSharedLibrary()
 
     // ROOM Methods
-    fun getLibraryBooks(): Flow<List<BookEntity>> = local.getBooksFlow()
+    fun getAllBooks(): Flow<List<BookEntity>> = local.getBooksFlow()
+
+    fun getMyBooks(): Flow<List<BookEntity>> = local.getMyBooksFlow()
+
+    fun getSharedBooks(): Flow<List<BookEntity>> = local.getSharedBooksFlow()
 
     fun getReadingBooks(): Flow<List<BookEntity>> = local.getReadingBooks()
 
@@ -25,20 +33,31 @@ class LibraryRepository(
 
     suspend fun insertBooks(books: List<BookEntity>) = local.insertBooks(books)
 
-    suspend fun cacheBooks(bookItems: List<BookEntity>) {
+    private suspend fun cacheBooks(bookItems: List<BookEntity>) {
         local.cacheBooks(bookItems)
     }
 
-    suspend fun fetchAndCacheAuthUserLibrary(): List<BookItem> {
-        val libraryResponse = remote.getAuthUserLibrary().first()
+    suspend fun fetchAndCacheLibrary() {
+        val libraryResponse: LibraryResponse = getAuthUserLibrary().first()
+        val sharedLibraryResponse: SharedLibraryResponse = getSharedLibrary().first()
+
+        val myBooks = libraryResponse.books.map { it.toEntity(mine = true) }
+        val sharedBooks = sharedLibraryResponse.library.books.map { it.toEntity(mine = false) }
+
+        // 💡 Resolver duplicados: priorizar mine = true
+        val entities = (myBooks + sharedBooks)
+            .groupBy { it.id }
+            .mapValues { entry ->
+                entry.value.find { it.mine } ?: entry.value.first()
+            }
+            .values
+            .toList()
+
         Log.d("Repository", "Libros recibidos de API: ${libraryResponse.books.size}")
-        val bookItems = libraryResponse.books
+        Log.d("Repository", "Libros compartidos recibidos de API: ${sharedLibraryResponse.library.books.size}")
+        Log.d("Repository", "Entidades generadas (únicas): ${entities.size}")
 
-        val entities = bookItems.map { it.toEntity() }
-        Log.d("Repository", "Entidades generadas: ${entities.size}")
-        local.cacheBooks(entities)
-
-        return bookItems
+        cacheBooks(entities)
     }
 
     suspend fun updateBookReadingStatus(id: String, isReading: Boolean) {

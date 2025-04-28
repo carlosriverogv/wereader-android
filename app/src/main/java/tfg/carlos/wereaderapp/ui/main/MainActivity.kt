@@ -26,7 +26,7 @@ import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
-import tfg.carlos.wereaderapp.ui.library.fragments.book.BooksAdapter
+import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksAdapter
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {

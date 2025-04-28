@@ -7,6 +7,7 @@ import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.remote.api.AuthService
 import tfg.carlos.wereaderapp.data.local.SessionManager
 import tfg.carlos.wereaderapp.data.remote.api.LibraryService
+import tfg.carlos.wereaderapp.data.remote.api.SharedLibraryService
 import tfg.carlos.wereaderapp.data.remote.api.UserService
 
 object Retrofit2Api  {
@@ -36,5 +37,9 @@ object Retrofit2Api  {
 
     val libraryApi: LibraryService by lazy {
         retrofit.create(LibraryService::class.java)
+    }
+
+    val sharedLibraryApi: SharedLibraryService by lazy {
+        retrofit.create(SharedLibraryService::class.java)
     }
 }
