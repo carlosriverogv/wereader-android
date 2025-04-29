@@ -1,20 +1,26 @@
 package tfg.carlos.wereaderapp.data.repository
 
 import android.util.Log
+import androidx.core.content.ContextCompat.getString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
-import tfg.carlos.wereaderapp.data.model.book.BookItem
 import tfg.carlos.wereaderapp.data.model.book.toEntity
 import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
-import tfg.carlos.wereaderapp.data.model.sharedlibrary.SharedLibraryResponse
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 
 class LibraryRepository(
     val remote: LibraryRemoteDadaSource,
     val local: LibraryLocalDataSource
+
 ) {
+    private val sessionManager by lazy {
+        WeReaderApplication.sessionManager
+    }
+
     // API Methods
     private suspend fun getAuthUserLibrary() = remote.getAuthUserLibrary()
 
@@ -38,13 +44,23 @@ class LibraryRepository(
     }
 
     suspend fun fetchAndCacheLibrary() {
+        // Obtener el ID de usuario de la sesión
+        val userId = sessionManager.getUserId()
+
+        // Obtener la biblioteca del usuario autenticado
         val libraryResponse: LibraryResponse = getAuthUserLibrary().first()
-        val sharedLibraryResponse: SharedLibraryResponse = getSharedLibrary().first()
+        val myBooks = libraryResponse.books.map { it.toEntity(mine = true, idUser = userId) }
 
-        val myBooks = libraryResponse.books.map { it.toEntity(mine = true) }
-        val sharedBooks = sharedLibraryResponse.library.books.map { it.toEntity(mine = false) }
+        // Se obtiene la biblioteca compartida con el usuario autenticado
+        // Manejar el caso en que no hay biblioteca compartida (404)
+        val sharedBooks = try {
+            val sharedLibraryResponse = getSharedLibrary().first()
+            sharedLibraryResponse.library.books.map { it.toEntity(mine = false, idUser = userId) }
+        } catch (e: Exception) {
+            emptyList()
+        }
 
-        // 💡 Resolver duplicados: priorizar mine = true
+        // Combinar libros propios y compartidos, asegurando que no haya duplicados
         val entities = (myBooks + sharedBooks)
             .groupBy { it.id }
             .mapValues { entry ->
@@ -52,10 +68,6 @@ class LibraryRepository(
             }
             .values
             .toList()
-
-        Log.d("Repository", "Libros recibidos de API: ${libraryResponse.books.size}")
-        Log.d("Repository", "Libros compartidos recibidos de API: ${sharedLibraryResponse.library.books.size}")
-        Log.d("Repository", "Entidades generadas (únicas): ${entities.size}")
 
         cacheBooks(entities)
     }

@@ -35,7 +35,7 @@ data class BookItem(
     val v: Int
 )
 
-fun BookItem.toEntity(mine: Boolean): BookEntity {
+fun BookItem.toEntity(mine: Boolean, idUser: String): BookEntity {
     return BookEntity(
         id = this.id,
         title = this.title,
@@ -52,5 +52,6 @@ fun BookItem.toEntity(mine: Boolean): BookEntity {
         dateCreation = this.dateCreation,
         v = this.v,
         mine = mine,
+        idUser = idUser,
     )
 }

@@ -25,6 +25,9 @@
     <string name="library_tab_shared">Compartidos</string>
     <string name="library_tab_collections">Colecciones</string>
 
+    <!-- STRINGS Library Errors -->
+    <string name="user_id_unavailable">User ID no disponible en sesión</string>
+
     <!-- STRINGS ItemBook -->
     <string name="item_book_title">Título</string>
     <string name="item_book_author">Autor</string>

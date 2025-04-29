@@ -18,7 +18,7 @@ class AuthViewModel(val repository: AuthRepository): ViewModel() {
     suspend fun login(loginRequest: LoginRequest) {
         // Validar los datos de entrada
         if (loginRequest.email.isEmpty() || loginRequest.password.isEmpty()) {
-            throw IllegalArgumentException("EL email o contraseña no pueden estar vacíos")
+            throw IllegalArgumentException("El email o contraseña no pueden estar vacíos")
         }
         // Validar el formato del email
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(loginRequest.email).matches()) {
@@ -28,12 +28,19 @@ class AuthViewModel(val repository: AuthRepository): ViewModel() {
         val loginResponse: LoginResponse = repository.login(loginRequest)
 
         // Comprobar si la respuesta es válida
-        if (!isTokenValid(loginResponse.token.token)) {
+        if (!isTokenValid(loginResponse.token)) {
             throw IllegalArgumentException("Token no válido")
         }
 
         // Guardar el token en el SessionManager
-        sessionManager.saveToken(loginResponse.token.token)
+        sessionManager.saveToken(loginResponse.token)
+
+        // Guardar el id del usuario en el SessionManager
+        val jwt = JWT(loginResponse.token)
+        val userId = jwt.getClaim("sub").asString()
+            ?: throw IllegalArgumentException("ID de usuario no válido")
+
+        sessionManager.saveUserId(userId)
     }
 
     suspend fun register(request: RegisterRequest) {

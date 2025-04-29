@@ -76,7 +76,6 @@ class LibraryFragment : Fragment() {
 
         lifecycleScope.launch {
             vm.myBooks.collect { booksList ->
-                Log.d("BooksFragment", "Libros recibidos: ${booksList.size}")
                 adapter.submitList(booksList)
             }
         }

@@ -9,5 +9,7 @@ data class LoginResponse(
     @SerializedName("success")
     val success: Boolean,
     @SerializedName("token")
-    val token: Token
+    val token: String,
+    @SerializedName("idUser")
+    val idUser: String,
 )

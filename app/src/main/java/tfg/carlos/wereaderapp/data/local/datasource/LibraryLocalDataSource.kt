@@ -1,17 +1,21 @@
 package tfg.carlos.wereaderapp.data.local.datasource
 
 import kotlinx.coroutines.flow.Flow
+import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.BookDao
-import tfg.carlos.wereaderapp.data.model.book.BookItem
 
 class LibraryLocalDataSource(private val dao: BookDao) {
+    private val sessionManager by lazy {
+        WeReaderApplication.sessionManager
+    }
+
     fun getBooksFlow(): Flow<List<BookEntity>> = dao.getAllBooks()
-    fun getMyBooksFlow(): Flow<List<BookEntity>> = dao.getMyBooks()
-    fun getSharedBooksFlow(): Flow<List<BookEntity>> = dao.getSharedBooks()
+    fun getMyBooksFlow(): Flow<List<BookEntity>> = dao.getMyBooks(getIdUser())
+    fun getSharedBooksFlow(): Flow<List<BookEntity>> = dao.getSharedBooks(getIdUser())
 
     suspend fun getBookById(id: String): BookEntity? {
-        return dao.getBookById(id)
+        return dao.getBookById(id, getIdUser())
     }
 
     suspend fun insertBooks(books: List<BookEntity>) {
@@ -23,16 +27,16 @@ class LibraryLocalDataSource(private val dao: BookDao) {
 
         // Merge de campos locales
         val mergedBooks = newBooks.map { newBook ->
-            val old = existingBooks.find { it.id == newBook.id }
+            val old = existingBooks.find { it.id == newBook.id && it.idUser == newBook.idUser }
             newBook.copy(
                 isReading = old?.isReading ?: false,
                 isPending = old?.isPending ?: false,
                 readingProgress = old?.readingProgress ?: 0,
-                mine = newBook.mine
+                mine = newBook.mine,
+                idUser = newBook.idUser
             )
         }
 
-        dao.clearBooks()
         // Ya no se borra toda la tabla
         dao.insertAll(mergedBooks)
     }
@@ -42,10 +46,15 @@ class LibraryLocalDataSource(private val dao: BookDao) {
     }
 
     fun getPendingBooks(): Flow<List<BookEntity>> {
-        return dao.getPendingBooks()
+        return dao.getPendingBooks(getIdUser())
     }
 
     fun getReadingBooks(): Flow<List<BookEntity>> {
-        return dao.getReadingBooks()
+        return dao.getReadingBooks(getIdUser())
+    }
+
+    // Obtiene el ID de usuario de la sesión
+    private fun getIdUser(): String {
+        return sessionManager.getUserId()
     }
 }

@@ -1,11 +1,16 @@
 package tfg.carlos.wereaderapp.data.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "books")
+@Entity(
+    tableName = "books",
+    primaryKeys = ["id", "idUser"],
+    indices = [Index(value = ["idUser"])]
+)
 data class BookEntity(
-    @PrimaryKey val id: String,
+    val id: String,
     val title: String,
     val author: String,
     val coverUrl: String,
@@ -24,5 +29,6 @@ data class BookEntity(
     val isPending: Boolean = false,
     val isReading: Boolean = false,
     val readingProgress: Int = 0, // Porcentaje de lectura (0-100)
-    val mine: Boolean = true
+    val mine: Boolean = true,
+    val idUser: String
 )
