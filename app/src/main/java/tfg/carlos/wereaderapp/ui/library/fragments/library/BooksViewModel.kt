@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import edu.carlosrivero.demo5.utils.checkConnection
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.data.entity.BookEntity
@@ -40,10 +41,6 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
             //TODO: Se actualiza el progreso de lectura aqui
         }
     }
-
-    //fun refreshBooks() {
-        //loadBooks()
-    //}
 }
 
 @Suppress("UNCHECKED_CAST")

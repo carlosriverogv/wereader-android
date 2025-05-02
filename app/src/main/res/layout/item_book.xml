@@ -20,6 +20,7 @@
         android:id="@+id/titleBook"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="@string/item_book_title"

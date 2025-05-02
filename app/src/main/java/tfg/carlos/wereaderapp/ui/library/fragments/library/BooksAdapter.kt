@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.firebase.Firebase
+import com.google.firebase.storage.storage
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.databinding.ItemBookBinding
@@ -17,6 +19,8 @@ import tfg.carlos.wereaderapp.databinding.ItemBookBinding
 class BooksAdapter(
     val onClickBookItem: (idBook: String, position: Int) -> Unit,
 ) : ListAdapter<BookEntity, BooksAdapter.BooksViewHolder>(BookItemDiffCallback()) {
+    // Se inicializa Firebase Storage
+    private val storage = Firebase.storage
 
     inner class BooksViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val bind = ItemBookBinding.bind(view)
@@ -26,11 +30,19 @@ class BooksAdapter(
                 bind.titleBook.text = bookEntity.title
                 bind.authorName.text = bookEntity.author
 
-                Glide.with(itemView)
-                    .load(R.drawable.ic_book_placeholder)
-                    .placeholder(R.drawable.ic_book_placeholder)
-                    .transform(FitCenter(), RoundedCorners(8))
-                    .into(bind.coverImage)
+                // Se obtiene la referencia de Firebase de la portada del libro (getReference)
+                storage.getReference(bookEntity.coverUrl).downloadUrl.addOnSuccessListener { uri ->
+                    if (itemView.isAttachedToWindow) {
+                        Glide.with(itemView.context)
+                            .load(uri)
+                            .placeholder(R.drawable.ic_book_placeholder)
+                            .transform(FitCenter(), RoundedCorners(8))
+                            .into(bind.coverImage)
+                    }
+                }.addOnFailureListener {
+                    // Manejar el error al obtener la URL de descarga
+                    Log.e("BooksAdapter", "Error al obtener la URL de descarga: ${it.message}")
+                }
 
                 itemView.setOnClickListener {
                     // Se pasa el id del show y la posición del item seleccionado

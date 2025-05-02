@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "213102630373",
+    "project_id": "wereader-8b345",
+    "storage_bucket": "wereader-8b345.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213102630373:android:8eb1168df08f23de320b0c",
+        "android_client_info": {
+          "package_name": "tfg.carlos.wereaderapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLPg8D4sf1wb4Vn06NmNog0BMbddBs7hU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
