@@ -37,7 +37,6 @@
     <color name="light_inversePrimary">#AAC7FF</color>
 
     <color name="light_accentColor">#FC797D</color>
-    <color name="light_accentColorSecondary">#F19295</color>
     <color name="light_accentColorBackground">#28F8A5AA</color>
 
     <color name="light_textColorPrimary">#000000</color>

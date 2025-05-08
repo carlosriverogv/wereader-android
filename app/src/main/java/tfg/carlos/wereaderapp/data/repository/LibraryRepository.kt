@@ -77,4 +77,10 @@ class LibraryRepository(
         val updated = book.copy(isReading = isReading)
         local.updateBook(updated)
     }
+
+    suspend fun updateBookPendingStatus(id: String, isPending: Boolean) {
+        val book = local.getBookById(id) ?: return
+        val updated = book.copy(isPending = isPending)
+        local.updateBook(updated)
+    }
 }

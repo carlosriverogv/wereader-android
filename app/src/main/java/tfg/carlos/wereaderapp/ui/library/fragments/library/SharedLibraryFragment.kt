@@ -38,10 +38,19 @@ class SharedLibraryFragment : Fragment() {
         onClickBookItem = { idBook: String, position: Int ->
             clickedItemPosition = position
             // TODO: Se ejecuta la lectura del libro con FileReader
-            vm.updateBookReadingStatus(idBook, true)
+            vm.updateBookPendingStatus(idBook, true)
             Toast.makeText(
                 requireContext(),
                 "Leyendo: $idBook",
+                Toast.LENGTH_SHORT
+            ).show()
+        },
+        onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
+            clickedItemPosition = position
+            vm.updateBookReadingStatus(idBook, false)
+            Toast.makeText(
+                requireContext(),
+                "No leyendo: $idBook",
                 Toast.LENGTH_SHORT
             ).show()
         }

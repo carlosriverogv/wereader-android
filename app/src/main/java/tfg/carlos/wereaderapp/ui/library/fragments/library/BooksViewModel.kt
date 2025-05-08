@@ -41,6 +41,12 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
             //TODO: Se actualiza el progreso de lectura aqui
         }
     }
+
+    fun updateBookPendingStatus(id: String, isPending: Boolean) {
+        viewModelScope.launch {
+            repository.updateBookPendingStatus(id, isPending)
+        }
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

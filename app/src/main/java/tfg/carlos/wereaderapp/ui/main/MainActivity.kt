@@ -46,18 +46,37 @@ class MainActivity : AppCompatActivity() {
         MainViewModelFactory(repository)
     }
 
-    private val adapter = BooksAdapter (
+    private val readingBooksAdapter = BooksAdapter(
         onClickBookItem = { idBook: String, position: Int ->
             clickedItemPosition = position
+            vm.updateBookReadingStatus(idBook, false) // Para pruebas
             // TODO: Se ejecuta la lectura del libro con FileReader
-
-            // TODO: TEST (Cambiar el estado de lectura del libro y el progreso)
-            vm.updateBookReadingStatus(idBook, false) // PARA PRUEBAS
             Toast.makeText(
                 this,
-                "No leyendo: $idBook",
+                "Eliminado de leyendo: $idBook",
                 Toast.LENGTH_SHORT
             ).show()
+        },
+        onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
+            clickedItemPosition = position
+            //showBookOptionsMenu(idBook, isPending)
+        }
+    )
+
+    private val pendingBooksAdapter = BooksAdapter(
+        onClickBookItem = { idBook: String, position: Int ->
+            clickedItemPosition = position
+            vm.updateBookReadingStatus(idBook, true) // Para pruebas
+            // TODO: Se ejecuta la lectura del libro con FileReader
+            Toast.makeText(
+                this,
+                "Abriendo el libro",
+                Toast.LENGTH_SHORT
+            ).show()
+        },
+        onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
+            clickedItemPosition = position
+            showBookOptionsMenu(idBook, isPending)
         }
     )
 
@@ -80,10 +99,10 @@ class MainActivity : AppCompatActivity() {
             goToLogin()
         } else {
             // TODO: TEST (Logout provisional)
-            binding.textViewPage.setOnClickListener() {
-                sessionManager.clearToken()
-                goToLogin()
-            }
+            //binding.textViewPage.setOnClickListener() {
+            //    sessionManager.clearToken()
+            //   goToLogin()
+            //}
         }
     }
 
@@ -119,21 +138,87 @@ class MainActivity : AppCompatActivity() {
 
         // Se cargan los libros que se están leyendo
         loadReadingBooks()
+        // Se cargan los libros pendientes
+        loadPendingBooks()
     }
 
     private fun loadReadingBooks() {
         binding.readingBooksRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.readingBooksRecyclerView.adapter = adapter
+        binding.readingBooksRecyclerView.adapter = readingBooksAdapter
 
-        adapter.submitList(null)
+        readingBooksAdapter.submitList(null)
 
         lifecycleScope.launch {
-            vm.books.collect { booksList ->
+            vm.readingBooks.collect { booksList ->
                 Log.d("BooksFragment", "Libros recibidos: ${booksList.size}")
-                adapter.submitList(booksList)
+                readingBooksAdapter.submitList(booksList)
             }
         }
+    }
+
+    private fun loadPendingBooks() {
+        binding.pendingBooksRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.pendingBooksRecyclerView.adapter = pendingBooksAdapter
+
+        pendingBooksAdapter.submitList(null)
+
+        lifecycleScope.launch {
+            vm.pendingBooks.collect { booksList ->
+                Log.d("BooksFragment", "Libros recibidos: ${booksList.size}")
+                pendingBooksAdapter.submitList(booksList)
+            }
+        }
+    }
+
+    private fun showBookOptionsMenu(idBook: String, isPending: Boolean) {
+        val viewHolder = binding.pendingBooksRecyclerView.findViewHolderForAdapterPosition(clickedItemPosition)
+            ?: return
+
+        val anchorView = viewHolder.itemView
+
+        val popupMenu = android.widget.PopupMenu(this, anchorView)
+        popupMenu.menuInflater.inflate(R.menu.book_options_menu, popupMenu.menu)
+
+        val togglePendingTitle =
+            if (isPending) getString(R.string.library_menu_remove_pending)
+            else getString(R.string.library_menu_add_pending)
+        popupMenu.menu.findItem(R.id.action_toggle_pending).title = togglePendingTitle
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_read -> {
+                    vm.updateBookReadingStatus(idBook, true)
+                    // TODO: Se ejecuta la lectura del libro con FileReader
+                    Toast.makeText(this, "Abriendo el libro", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.action_toggle_pending -> {
+                    vm.updateBookPendingStatus(idBook, !isPending)
+                    Toast.makeText(
+                        this,
+                        if (!isPending) getString(R.string.library_menu_add_pending_response)
+                        else getString(R.string.library_menu_remove_pending_response),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                R.id.action_toggle_read -> {
+                    vm.updateBookReadingStatus(idBook, false)
+                    // TODO: Poner progreso de lectura a 100%
+                    Toast.makeText(this, getString(R.string.library_menu_mark_read), Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.action_detail -> {
+                    // TODO: Ir a la vista de detalle del libro
+                    Toast.makeText(this, getString(R.string.library_menu_detail), Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
     }
 
     private fun goToLogin() {
@@ -165,7 +250,7 @@ class MainActivity : AppCompatActivity() {
 
                         // Aquí puedes actualizar la UI con los datos del usuario
                         // Por ejemplo, mostrar el nombre de usuario en un TextView
-                        binding.textViewPage.text = library?.id ?: getString(R.string.app_name)
+                        //binding.textViewPage.text = library?.id ?: getString(R.string.app_name)
 
                     } else {
                         val errorBody = response.errorBody()?.string()

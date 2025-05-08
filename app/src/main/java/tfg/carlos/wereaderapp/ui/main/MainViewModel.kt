@@ -10,8 +10,11 @@ import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 
 class MainViewModel(val repository: LibraryRepository): ViewModel() {
-    private val _books: Flow<List<BookEntity>> = repository.getReadingBooks()
-    val books: Flow<List<BookEntity>> get() = _books
+    private val _readingBooks: Flow<List<BookEntity>> = repository.getReadingBooks()
+    val readingBooks: Flow<List<BookEntity>> get() = _readingBooks
+
+    private val _pendingBooks: Flow<List<BookEntity>> = repository.getPendingBooks()
+    val pendingBooks: Flow<List<BookEntity>> get() = _pendingBooks
 
     init {
         loadBooks()
@@ -32,6 +35,12 @@ class MainViewModel(val repository: LibraryRepository): ViewModel() {
             repository.updateBookReadingStatus(id, isReading)
 
             //TODO: Se actualiza el progreso de lectura aqui
+        }
+    }
+
+    fun updateBookPendingStatus(id: String, isPending: Boolean) {
+        viewModelScope.launch {
+            repository.updateBookPendingStatus(id, isPending)
         }
     }
 }

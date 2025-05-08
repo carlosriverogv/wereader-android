@@ -12,6 +12,7 @@
     <!-- STRINGS HOME -->
     <string name="home_reading">Leyendo</string>
     <string name="home_reading_empty">No tienes libros en lectura</string>
+    <string name="home_pending">Pendientes</string>
 
 
     <!-- STRINGS LIBRARY -->
@@ -19,6 +20,21 @@
     <string name="library_empty">No tienes libros en tu biblioteca</string>
     <string name="library_me">Mi biblioteca</string>
     <string name="library_friends">Biblioteca de amigos</string>
+
+    <!-- STRINGS Library Menu LongClick -->
+    <string name="library_menu_add_pending">Añadir a pendientes</string>
+    <string name="library_menu_remove_pending">Eliminar de pendientes</string>
+    <string name="library_menu_mark_read">Marcar como leído</string>
+    <string name="library_menu_mark_unread">Marcar como no leído</string>
+    <string name="library_menu_read">Leer</string>
+    <string name="library_menu_detail">Ver detalles</string>
+
+    <!-- STRINGS Library Menu LongClick Response -->
+    <string name="library_menu_add_pending_response">Añadido a pendientes</string>
+    <string name="library_menu_remove_pending_response">Eliminado de pendientes</string>
+    <string name="library_menu_mark_read_response">Marcado como leído</string>
+    <string name="library_menu_mark_unread_response">Marcado como no leído</string>
+    <string name="library_menu_read_response">Abriendo libro</string>
 
     <!-- STRINGS Library TABS -->
     <string name="library_tab_books">Libros</string>
@@ -31,7 +47,7 @@
     <!-- STRINGS ItemBook -->
     <string name="item_book_title">Título</string>
     <string name="item_book_author">Autor</string>
-    <string name="item_book_progress">67%</string>
+    <string name="item_book_progress">0%</string>
 
 
     <!-- STRINGS LOGIN -->
@@ -40,6 +56,7 @@
     <string name="login_button">Iniciar sesión</string>
     <string name="register_link">¿No tienes cuenta? Regístrate</string>
     <string name="welcome_text">¡Bienvenido a WeReader!</string>
+    <string name="logout_button">Cerrar sesión</string>
 
     <!-- STRINGS REGISTER -->
     <!-- STRINGS para Step 1 -->
