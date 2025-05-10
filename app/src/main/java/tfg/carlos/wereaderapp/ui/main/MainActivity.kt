@@ -16,14 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.databinding.ActivityMainBinding
 import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
-import edu.carlosrivero.demo5.utils.checkConnection
 import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
-import tfg.carlos.wereaderapp.data.remote.Retrofit2Api.libraryApi
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
+import tfg.carlos.wereaderapp.utils.BookMenuHandler
 import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksAdapter
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         },
         onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
             clickedItemPosition = position
-            //showBookOptionsMenu(idBook, isPending)
+            showBookOptionsMenu(binding.readingBooksRecyclerView, idBook, isPending, position)
         }
     )
 
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         },
         onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
             clickedItemPosition = position
-            showBookOptionsMenu(idBook, isPending)
+            showBookOptionsMenu(binding.pendingBooksRecyclerView, idBook, isPending, position)
         }
     )
 
@@ -172,108 +171,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBookOptionsMenu(idBook: String, isPending: Boolean) {
-        val viewHolder = binding.pendingBooksRecyclerView.findViewHolderForAdapterPosition(clickedItemPosition)
-            ?: return
-
+    // Mostrar el menú de opciones del libro
+    private fun showBookOptionsMenu(
+        recyclerView: RecyclerView,
+        idBook: String,
+        isPending: Boolean,
+        position: Int
+    ) {
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(position) ?: return
         val anchorView = viewHolder.itemView
 
-        val popupMenu = android.widget.PopupMenu(this, anchorView)
-        popupMenu.menuInflater.inflate(R.menu.book_options_menu, popupMenu.menu)
-
-        val togglePendingTitle =
-            if (isPending) getString(R.string.library_menu_remove_pending)
-            else getString(R.string.library_menu_add_pending)
-        popupMenu.menu.findItem(R.id.action_toggle_pending).title = togglePendingTitle
-
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_read -> {
-                    vm.updateBookReadingStatus(idBook, true)
-                    // TODO: Se ejecuta la lectura del libro con FileReader
-                    Toast.makeText(this, "Abriendo el libro", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.action_toggle_pending -> {
-                    vm.updateBookPendingStatus(idBook, !isPending)
-                    Toast.makeText(
-                        this,
-                        if (!isPending) getString(R.string.library_menu_add_pending_response)
-                        else getString(R.string.library_menu_remove_pending_response),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    true
-                }
-                R.id.action_toggle_read -> {
-                    vm.updateBookReadingStatus(idBook, false)
-                    // TODO: Poner progreso de lectura a 100%
-                    Toast.makeText(this, getString(R.string.library_menu_mark_read), Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.action_detail -> {
-                    // TODO: Ir a la vista de detalle del libro
-                    Toast.makeText(this, getString(R.string.library_menu_detail), Toast.LENGTH_SHORT).show()
-                    true
-                }
-                else -> false
+        BookMenuHandler.show(
+            context = this,
+            anchorView = anchorView,
+            idBook = idBook,
+            isPending = isPending,
+            updateReading = { reading ->
+                vm.updateBookReadingStatus(idBook, reading)
+            },
+            updatePending = { pending ->
+                vm.updateBookPendingStatus(idBook, pending)
+            },
+            onRead = {
+                // TODO: Se ejecuta la lectura del libro con FileReader
+                Toast.makeText(this, "Abriendo el libro", Toast.LENGTH_SHORT).show()
+            },
+            onDetail = {
+                // TODO: abrir un detalle del libro
+                // startActivity(Intent(this, BookDetailActivity::class.java))
             }
-        }
-        popupMenu.show()
+        )
     }
 
+    // Función para redirigir a la pantalla de inicio de sesión
     private fun goToLogin() {
         // Redirigir a la pantalla de inicio de sesión
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    // Todo: TEST (Login provisional)
-    private fun fakeLoginToken() {
-        val testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imthcmxvcy5yaXZlcm9nQGdtYWlsLmNvbSIsInN1YiI6IjY3ZTU0NDUzZmFlNDgwODViMzdhMjhjZSIsImlhdCI6MTc0NDcwNDg0NSwiZXhwIjoxNzQ0NzEyMDQ1fQ.DLsM6Y-S6JnC_LJMA8UzAsA3wsLV2TSM-JKmeT9gjn4"
-
-        sessionManager.saveToken(testToken)
-    }
-
-    // Todo: TEST (Call API)
-    private fun fetchApi() {
-        // Usamos Coroutine para hacer la llamada de forma asíncrona
-        if (checkConnection(this)) {
-            lifecycleScope.launch {
-                try {
-                    // Hacemos la llamada al API de UserService
-                    val response = libraryApi.getAuthUserLibrary()
-
-                    // Si la respuesta es exitosa, la procesamos
-                    if (response.isSuccessful) {
-                        val library = response.body()
-
-                        // Aquí puedes actualizar la UI con los datos del usuario
-                        // Por ejemplo, mostrar el nombre de usuario en un TextView
-                        //binding.textViewPage.text = library?.id ?: getString(R.string.app_name)
-
-                    } else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.e("MainActivity", "Error: ${response.code()} - $errorBody")
-
-                        // Si la respuesta no fue exitosa, mostramos un error
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Error: ${response.code()} - $errorBody",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                } catch (e: Exception) {
-                    // Imprime la excepción completa y su tipo
-                    Log.e("MainActivity", "Excepción en la llamada API", e)
-
-                    // Mostrar el mensaje de error en un Toast
-                    Toast.makeText(this@MainActivity, "Excepción: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
-            // Si no hay conexión, mostramos un mensaje
-            Toast.makeText(this, getString(R.string.error_no_connection), Toast.LENGTH_SHORT).show()
-        }
     }
 }

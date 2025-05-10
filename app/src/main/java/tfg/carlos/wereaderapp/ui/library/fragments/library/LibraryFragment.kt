@@ -16,6 +16,7 @@ import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.FragmentLibraryBinding
+import tfg.carlos.wereaderapp.utils.BookMenuHandler
 
 
 class LibraryFragment : Fragment() {
@@ -38,18 +39,18 @@ class LibraryFragment : Fragment() {
     private val adapter = BooksAdapter (
         onClickBookItem = { idBook: String, position: Int ->
             clickedItemPosition = position
-            // TODO: Se ejecuta la lectura del libro con FileReader
             vm.updateBookReadingStatus(idBook, true)
+            // TODO: Se ejecuta la lectura del libro con FileReader
             Toast.makeText(
                 requireContext(),
-                "Abriendo el libro",
+                "Abriendo el libro,: $idBook",
                 Toast.LENGTH_SHORT
             ).show()
             // TODO: Se ejecuta la lectura del libro con FileReader
         },
         onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
             clickedItemPosition = position
-            showBookOptionsMenu(idBook, isPending)
+            showBookOptionsMenu(binding.booksRecyclerView, idBook, isPending, position)
         }
     )
 
@@ -86,56 +87,35 @@ class LibraryFragment : Fragment() {
         }
     }
 
-    private fun showBookOptionsMenu(idBook: String, isPending: Boolean) {
-        val viewHolder = binding.booksRecyclerView.findViewHolderForAdapterPosition(clickedItemPosition)
-            ?: return
-
+    // Mostrar el menú de opciones del libro
+    private fun showBookOptionsMenu(
+        recyclerView: RecyclerView,
+        idBook: String,
+        isPending: Boolean,
+        position: Int
+    ) {
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(position) ?: return
         val anchorView = viewHolder.itemView
 
-        val popupMenu = android.widget.PopupMenu(requireContext(), anchorView)
-        popupMenu.menuInflater.inflate(R.menu.book_options_menu, popupMenu.menu)
-
-        val togglePendingTitle =
-            if (isPending) getString(R.string.library_menu_remove_pending)
-            else getString(R.string.library_menu_add_pending)
-        popupMenu.menu.findItem(R.id.action_toggle_pending).title = togglePendingTitle
-
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_read -> {
-                    vm.updateBookReadingStatus(idBook, true)
-                    // TODO: Se ejecuta la lectura del libro con FileReader
-                    Toast.makeText(
-                        requireContext(),
-                        "Abriendo el libro",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    true
-                }
-                R.id.action_toggle_pending -> {
-                    vm.updateBookPendingStatus(idBook, !isPending)
-                    Toast.makeText(
-                        requireContext(),
-                        if (!isPending) getString(R.string.library_menu_add_pending_response)
-                        else getString(R.string.library_menu_remove_pending_response),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    true
-                }
-                R.id.action_toggle_read -> {
-                    vm.updateBookReadingStatus(idBook, false)
-                    // TODO: Poner progreso de lectura a 100%
-                    Toast.makeText(requireContext(), getString(R.string.library_menu_mark_read), Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.action_detail -> {
-                    // TODO: Ir a la vista de detalle del libro
-                    Toast.makeText(requireContext(), "Detalle del libro", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                else -> false
+        BookMenuHandler.show(
+            context = requireContext(),
+            anchorView = anchorView,
+            idBook = idBook,
+            isPending = isPending,
+            updateReading = { reading ->
+                vm.updateBookReadingStatus(idBook, reading)
+            },
+            updatePending = { pending ->
+                vm.updateBookPendingStatus(idBook, pending)
+            },
+            onRead = {
+                // TODO: Se ejecuta la lectura del libro con FileReader
+                Toast.makeText(requireContext(), "Abriendo el libro", Toast.LENGTH_SHORT).show()
+            },
+            onDetail = {
+                // TODO: abrir un detalle del libro
+                // startActivity(Intent(this, BookDetailActivity::class.java))
             }
-        }
-        popupMenu.show()
+        )
     }
 }

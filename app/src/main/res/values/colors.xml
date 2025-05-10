@@ -21,7 +21,7 @@
     <color name="light_errorContainer">#FFDAD6</color>
     <color name="light_onErrorContainer">#93000A</color>
 
-    <color name="light_background">#F9F9FF</color> <!--F9F9FF -->
+    <color name="light_background">#FFFFFF</color> <!--F9F9FF -->
     <color name="light_onBackground">#191C20</color>
     <color name="light_surface">#F8F9FF</color>
     <color name="light_onSurface">#191C20</color>
@@ -29,7 +29,7 @@
     <color name="light_onSurfaceVariant">#44464F</color>
     <color name="light_outline">#757780</color>
     <color name="light_outlineVariant">#C5C6D0</color>
-    <color name="light_navigationBarBackground">#EEEDF4</color>
+    <color name="light_navigationBarBackground">#F1F1F1</color> <!--#EEEDF3 -->
     <color name="light_scrim">#000000</color>
 
     <color name="light_inverseSurface">#2E3035</color>
