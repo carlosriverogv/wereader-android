@@ -1,6 +1,7 @@
 [versions]
-agp = "8.2.2"
-kotlin = "1.9.0"
+agp = "8.6.0"
+desugar_jdk_libs = "2.0.4"
+kotlin = "2.1.0"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -8,9 +9,9 @@ espressoCore = "3.5.1"
 appcompat = "1.6.1"
 material = "1.11.0"
 constraintlayout = "2.1.4"
-ksp = "1.9.22-1.0.16"
+ksp = "2.1.20-2.0.1"
 retrofit = "2.9.0"
-room = "2.6.1"
+room = "2.7.1"
 glide = "4.16.0"
 activity = "1.9.0"
 swiperefreshlayout = "1.1.0"
@@ -24,9 +25,11 @@ fragmentKtx = "1.5.6"
 firebaseAuthKtx = "22.3.1"
 firebase-bom = "32.7.0"
 google-services = "4.4.0"
+readium = "3.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -60,6 +63,12 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx" }
+
+readium-shared = { module = "org.readium.kotlin-toolkit:readium-shared", version.ref = "readium" }
+readium-streamer = { module = "org.readium.kotlin-toolkit:readium-streamer", version.ref = "readium" }
+readium-navigator = { module = "org.readium.kotlin-toolkit:readium-navigator", version.ref = "readium" }
+readium-opds = { module = "org.readium.kotlin-toolkit:readium-opds", version.ref = "readium" }
+readium-lcp = { module = "org.readium.kotlin-toolkit:readium-lcp", version.ref = "readium" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

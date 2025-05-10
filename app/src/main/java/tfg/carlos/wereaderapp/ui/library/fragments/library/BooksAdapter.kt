@@ -49,13 +49,13 @@ class BooksAdapter(
 
                 itemView.setOnClickListener {
                     // Se pasa el id del book y la posición del item seleccionado
-                    onClickBookItem(bookEntity.id, adapterPosition)
+                    onClickBookItem(bookEntity.id, bindingAdapterPosition)
                     Log.d("BooksAdapter", "Item clicked: ${bookEntity.id}")
                 }
 
                 itemView.setOnLongClickListener {
                     // Se pasa el id del book y la posición del item seleccionado
-                    onLongClickBookItem(bookEntity.id, adapterPosition, bookEntity.isPending)
+                    onLongClickBookItem(bookEntity.id, bindingAdapterPosition, bookEntity.isPending)
                     Log.d("BooksAdapter", "Item long clicked: ${bookEntity.id}")
                     true
                 }

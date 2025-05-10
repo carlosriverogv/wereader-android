@@ -32,10 +32,10 @@ class AvatarAdapter(
 
             itemView.setOnClickListener {
                 val previousPosition = selectedPosition
-                selectedPosition = adapterPosition
+                selectedPosition = bindingAdapterPosition
                 onAvatarSelected(avatar.id)
                 notifyItemChanged(previousPosition)
-                notifyItemChanged(adapterPosition)
+                notifyItemChanged(bindingAdapterPosition)
             }
         }
     }

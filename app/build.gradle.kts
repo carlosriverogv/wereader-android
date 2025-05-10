@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "tfg.carlos.wereaderapp"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         viewBinding = true
@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId = "tfg.carlos.wereaderapp"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -42,6 +42,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -91,4 +92,11 @@ dependencies {
     implementation(libs.firebase.analytics)
     // Módulo de Firebase Storage con KTX
     implementation(libs.firebase.storage.ktx)
+
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(libs.readium.shared)
+    implementation(libs.readium.streamer)
+    implementation(libs.readium.navigator)
+    implementation(libs.readium.opds)
+    implementation(libs.readium.lcp)
 }
