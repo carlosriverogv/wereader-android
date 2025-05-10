@@ -23,27 +23,29 @@ class BooksAdapter(
     // Se inicializa Firebase Storage
     private val storage = Firebase.storage
 
+    companion object {
+        private val downloadUrlCache = mutableMapOf<String, String>()
+    }
+
     inner class BooksViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val bind = ItemBookBinding.bind(view)
 
         fun bind(bookEntity: BookEntity) {
             bind.apply {
-                bind.titleBook.text = bookEntity.title
-                bind.authorName.text = bookEntity.author
-
-                // Se obtiene la referencia de Firebase de la portada del libro (getReference)
-                storage.getReference(bookEntity.coverUrl).downloadUrl.addOnSuccessListener { uri ->
-                    if (itemView.isAttachedToWindow) {
-                        Glide.with(itemView.context)
-                            .load(uri)
-                            .placeholder(R.drawable.ic_book_placeholder)
-                            .transform(FitCenter(), RoundedCorners(8))
-                            .into(bind.coverImage)
+                val cachedUrl = downloadUrlCache[bookEntity.coverUrl]
+                if (cachedUrl != null) {
+                    loadImage(cachedUrl)
+                } else {
+                    storage.getReference(bookEntity.coverUrl).downloadUrl.addOnSuccessListener { uri ->
+                        downloadUrlCache[bookEntity.coverUrl] = uri.toString()
+                        if (itemView.isAttachedToWindow) {
+                            loadImage(uri.toString())
+                        }
                     }
-                }.addOnFailureListener {
-                    // Manejar el error al obtener la URL de descarga
-                    Log.e("BooksAdapter", "Error al obtener la URL de descarga: ${it.message}")
                 }
+
+                titleBook.text = bookEntity.title
+                authorName.text = bookEntity.author
 
                 itemView.setOnClickListener {
                     // Se pasa el id del book y la posición del item seleccionado
@@ -58,6 +60,14 @@ class BooksAdapter(
                     true
                 }
             }
+        }
+
+        private fun loadImage(url: String) {
+            Glide.with(itemView.context)
+                .load(url)
+                .placeholder(R.drawable.ic_book_placeholder)
+                .transform(FitCenter(), RoundedCorners(8))
+                .into(bind.coverImage)
         }
     }
 

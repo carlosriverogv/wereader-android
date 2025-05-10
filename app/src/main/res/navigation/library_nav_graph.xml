@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/tab_authors"
-        android:name="tfg.carlos.wereaderapp.ui.library.fragments.library.SharedLibraryFragment"
+        android:name="tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.SharedLibraryFragment"
         android:label="@string/library_friends"
         tools:layout="@layout/fragment_shared_library" />
 

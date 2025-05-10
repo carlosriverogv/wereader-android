@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import tfg.carlos.wereaderapp.ui.library.fragments.library.LibraryFragment
 import tfg.carlos.wereaderapp.ui.library.fragments.collection.CollectionsFragment
-import tfg.carlos.wereaderapp.ui.library.fragments.library.SharedLibraryFragment
+import tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.SharedLibraryFragment
 
 class LibraryPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount() = 3

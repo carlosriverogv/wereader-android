@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.library.fragments.library
+package tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -16,6 +16,9 @@ import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.FragmentSharedLibraryBinding
+import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksAdapter
+import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModel
+import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModelFactory
 import tfg.carlos.wereaderapp.utils.BookMenuHandler
 
 class SharedLibraryFragment : Fragment() {
