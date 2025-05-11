@@ -19,14 +19,17 @@ import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
+import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 import tfg.carlos.wereaderapp.utils.BookMenuHandler
 import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksAdapter
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -46,15 +49,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val readingBooksAdapter = BooksAdapter(
-        onClickBookItem = { idBook: String, position: Int ->
+        onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
-            vm.updateBookReadingStatus(idBook, false) // Para pruebas
-            // TODO: Se ejecuta la lectura del libro con FileReader
-            Toast.makeText(
-                this,
-                "Eliminado de leyendo: $idBook",
-                Toast.LENGTH_SHORT
-            ).show()
+            // TODO: Se ejecuta la lectura del libro con Readium
+
+            val epubPath = book.epubUrl
+            val intent = Intent(this@MainActivity, ReaderActivity::class.java)
+            intent.putExtra("bookPath", epubPath)
+            startActivity(intent)
         },
         onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
             clickedItemPosition = position
@@ -63,9 +65,9 @@ class MainActivity : AppCompatActivity() {
     )
 
     private val pendingBooksAdapter = BooksAdapter(
-        onClickBookItem = { idBook: String, position: Int ->
+        onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
-            vm.updateBookReadingStatus(idBook, true) // Para pruebas
+            vm.updateBookReadingStatus(book.id, true) // Para pruebas
             // TODO: Se ejecuta la lectura del libro con FileReader
             Toast.makeText(
                 this,

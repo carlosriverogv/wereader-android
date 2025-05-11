@@ -37,6 +37,8 @@ class LibraryRepository(
 
     fun getPendingBooks(): Flow<List<BookEntity>> = local.getPendingBooks()
 
+    suspend fun getBookById(id: String): BookEntity = local.getBookById(id)
+
     suspend fun insertBooks(books: List<BookEntity>) = local.insertBooks(books)
 
     private suspend fun cacheBooks(bookItems: List<BookEntity>) {

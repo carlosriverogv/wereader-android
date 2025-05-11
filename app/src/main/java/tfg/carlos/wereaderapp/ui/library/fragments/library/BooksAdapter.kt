@@ -17,7 +17,7 @@ import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.databinding.ItemBookBinding
 
 class BooksAdapter(
-    val onClickBookItem: (idBook: String, position: Int) -> Unit,
+    val onClickBookItem: (book: BookEntity, position: Int) -> Unit,
     val onLongClickBookItem: (idBook: String, position: Int, isPending: Boolean) -> Unit,
 ) : ListAdapter<BookEntity, BooksAdapter.BooksViewHolder>(BookItemDiffCallback()) {
     // Se inicializa Firebase Storage
@@ -49,7 +49,7 @@ class BooksAdapter(
 
                 itemView.setOnClickListener {
                     // Se pasa el id del book y la posición del item seleccionado
-                    onClickBookItem(bookEntity.id, bindingAdapterPosition)
+                    onClickBookItem(bookEntity, bindingAdapterPosition)
                     Log.d("BooksAdapter", "Item clicked: ${bookEntity.id}")
                 }
 

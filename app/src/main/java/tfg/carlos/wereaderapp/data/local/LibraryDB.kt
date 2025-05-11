@@ -30,7 +30,7 @@ interface BookDao {
     fun getSharedBooks(userId: String): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books WHERE id = :id AND idUser = :userId LIMIT 1")
-    suspend fun getBookById(id: String, userId: String): BookEntity?
+    suspend fun getBookById(id: String, userId: String): BookEntity
 
     @Query("SELECT * FROM books WHERE isReading = 1 AND idUser = :userId")
     fun getReadingBooks(userId: String): Flow<List<BookEntity>>

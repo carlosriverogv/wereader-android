@@ -14,7 +14,7 @@ class LibraryLocalDataSource(private val dao: BookDao) {
     fun getMyBooksFlow(): Flow<List<BookEntity>> = dao.getMyBooks(getIdUser())
     fun getSharedBooksFlow(): Flow<List<BookEntity>> = dao.getSharedBooks(getIdUser())
 
-    suspend fun getBookById(id: String): BookEntity? {
+    suspend fun getBookById(id: String): BookEntity {
         return dao.getBookById(id, getIdUser())
     }
 

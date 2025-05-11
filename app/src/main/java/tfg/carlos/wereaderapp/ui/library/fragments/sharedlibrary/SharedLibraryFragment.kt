@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.WeReaderApplication
+import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
@@ -39,13 +40,13 @@ class SharedLibraryFragment : Fragment() {
     }
 
     private val adapter = BooksAdapter (
-        onClickBookItem = { idBook: String, position: Int ->
+        onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
-            vm.updateBookReadingStatus(idBook, true)
+            vm.updateBookReadingStatus(book.id, true)
             // TODO: Se ejecuta la lectura del libro con FileReader
             Toast.makeText(
                 requireContext(),
-                "Abriendo el libro,: $idBook",
+                "Abriendo el libro,: ${book.id}",
                 Toast.LENGTH_SHORT
             ).show()
         },
