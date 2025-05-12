@@ -1,12 +1,10 @@
 package tfg.carlos.wereaderapp.data.remote.datasource
 
-import retrofit2.Response
 import tfg.carlos.wereaderapp.data.model.auth.LoginRequest
 import tfg.carlos.wereaderapp.data.model.auth.LoginResponse
 import tfg.carlos.wereaderapp.data.model.auth.RegisterRequest
 import tfg.carlos.wereaderapp.data.model.auth.RegisterResponse
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api
-import tfg.carlos.wereaderapp.data.remote.api.AuthService
 
 class AuthRemoteDataSource {
 

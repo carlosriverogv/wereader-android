@@ -11,6 +11,7 @@ import edu.carlosrivero.demo5.utils.isTokenValid
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.databinding.ActivityProfileBinding
+import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
 import tfg.carlos.wereaderapp.ui.main.MainActivity
@@ -28,6 +29,21 @@ class ProfileActivity : AppCompatActivity() {
 
         if (isTokenValid(token)) {
             setupIU()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val token = sessionManager.getToken()
+
+        if (!isTokenValid(token)) {
+            goToLogin()
+        } else {
+            // TODO: TEST (Logout provisional)
+            binding.ivLogout.setOnClickListener() {
+                sessionManager.clearToken()
+                goToLogin()
+            }
         }
     }
 
@@ -60,5 +76,12 @@ class ProfileActivity : AppCompatActivity() {
             finish()
             true
         }
+    }
+
+    private fun goToLogin() {
+        // Redirigir a la pantalla de inicio de sesión
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

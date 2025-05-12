@@ -98,12 +98,6 @@ class MainActivity : AppCompatActivity() {
 
         if (!isTokenValid(token)) {
             goToLogin()
-        } else {
-            // TODO: TEST (Logout provisional)
-            //binding.textViewPage.setOnClickListener() {
-            //    sessionManager.clearToken()
-            //   goToLogin()
-            //}
         }
     }
 
