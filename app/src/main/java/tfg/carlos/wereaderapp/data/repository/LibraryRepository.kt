@@ -1,10 +1,9 @@
 package tfg.carlos.wereaderapp.data.repository
 
 import android.util.Log
-import androidx.core.content.ContextCompat.getString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import tfg.carlos.wereaderapp.R
+import org.readium.r2.shared.publication.Locator
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
@@ -36,8 +35,6 @@ class LibraryRepository(
     fun getReadingBooks(): Flow<List<BookEntity>> = local.getReadingBooks()
 
     fun getPendingBooks(): Flow<List<BookEntity>> = local.getPendingBooks()
-
-    suspend fun getBookById(id: String): BookEntity = local.getBookById(id)
 
     suspend fun insertBooks(books: List<BookEntity>) = local.insertBooks(books)
 
@@ -75,14 +72,26 @@ class LibraryRepository(
     }
 
     suspend fun updateBookReadingStatus(id: String, isReading: Boolean) {
-        val book = local.getBookById(id) ?: return
+        val book = local.getBookById(id)
         val updated = book.copy(isReading = isReading)
         local.updateBook(updated)
     }
 
     suspend fun updateBookPendingStatus(id: String, isPending: Boolean) {
-        val book = local.getBookById(id) ?: return
+        val book = local.getBookById(id)
         val updated = book.copy(isPending = isPending)
         local.updateBook(updated)
+    }
+
+    suspend fun updateReadingProgression(id: String, lastLocator: String) {
+        val book = local.getBookById(id)
+        val updated = book.copy(lastLocator = lastLocator)
+        local.updateBook(updated)
+    }
+
+    suspend fun getReadingProgression(id: String): String? {
+        val book = local.getBookById(id)
+        Log.d("ReaderViewModel", "Book loaded Repo: ${book.id}, lastLocator: ${book.lastLocator}")
+        return book.lastLocator
     }
 }

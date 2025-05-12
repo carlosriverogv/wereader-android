@@ -52,10 +52,10 @@ class MainActivity : AppCompatActivity() {
         onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
             // TODO: Se ejecuta la lectura del libro con Readium
-
             val epubPath = book.epubUrl
             val intent = Intent(this@MainActivity, ReaderActivity::class.java)
             intent.putExtra("bookPath", epubPath)
+            intent.putExtra("bookId", book.id)
             startActivity(intent)
         },
         onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
@@ -68,12 +68,12 @@ class MainActivity : AppCompatActivity() {
         onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
             vm.updateBookReadingStatus(book.id, true) // Para pruebas
-            // TODO: Se ejecuta la lectura del libro con FileReader
-            Toast.makeText(
-                this,
-                "Abriendo el libro",
-                Toast.LENGTH_SHORT
-            ).show()
+            // TODO: Se ejecuta la lectura del libro con Readium
+            val epubPath = book.epubUrl
+            val intent = Intent(this@MainActivity, ReaderActivity::class.java)
+            intent.putExtra("bookPath", epubPath)
+            intent.putExtra("bookId", book.id)
+            startActivity(intent)
         },
         onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
             clickedItemPosition = position

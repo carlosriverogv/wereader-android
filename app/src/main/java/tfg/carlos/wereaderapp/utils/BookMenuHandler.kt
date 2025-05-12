@@ -1,11 +1,13 @@
 package tfg.carlos.wereaderapp.utils
 
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.StringRes
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 
 object BookMenuHandler {
 

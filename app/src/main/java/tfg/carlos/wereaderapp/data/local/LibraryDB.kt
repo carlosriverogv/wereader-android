@@ -10,7 +10,7 @@ import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 
-@Database(entities = [BookEntity::class], version = 5, exportSchema = false)
+@Database(entities = [BookEntity::class], version = 6, exportSchema = false)
 abstract class LibraryDB: RoomDatabase() {
     abstract fun bookDao(): BookDao
 }

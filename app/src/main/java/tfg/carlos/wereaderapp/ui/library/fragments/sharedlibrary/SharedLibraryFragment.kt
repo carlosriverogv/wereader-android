@@ -1,5 +1,6 @@
 package tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary
 
+import android.content.Intent
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,7 @@ import tfg.carlos.wereaderapp.databinding.FragmentSharedLibraryBinding
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksAdapter
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModel
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModelFactory
+import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 import tfg.carlos.wereaderapp.utils.BookMenuHandler
 
 class SharedLibraryFragment : Fragment() {
@@ -43,12 +45,12 @@ class SharedLibraryFragment : Fragment() {
         onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
             vm.updateBookReadingStatus(book.id, true)
-            // TODO: Se ejecuta la lectura del libro con FileReader
-            Toast.makeText(
-                requireContext(),
-                "Abriendo el libro,: ${book.id}",
-                Toast.LENGTH_SHORT
-            ).show()
+            // TODO: Se ejecuta la lectura del libro con Readium
+            val epubPath = book.epubUrl
+            val intent = Intent(requireContext(), ReaderActivity::class.java)
+            intent.putExtra("bookPath", epubPath)
+            intent.putExtra("bookId", book.id)
+            startActivity(intent)
         },
         onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
             clickedItemPosition = position

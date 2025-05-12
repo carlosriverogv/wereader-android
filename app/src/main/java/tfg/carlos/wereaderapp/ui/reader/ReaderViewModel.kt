@@ -1,39 +1,35 @@
 package tfg.carlos.wereaderapp.ui.reader
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
-import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.suspendCancellableCoroutine
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
-import org.readium.r2.navigator.epub.EpubNavigatorFactory
 import org.readium.r2.shared.publication.Locator
 import org.readium.r2.shared.publication.Publication
 import org.readium.r2.shared.publication.services.locateProgression
-import org.readium.r2.shared.util.Url
 import org.readium.r2.shared.util.asset.AssetRetriever
-import org.readium.r2.shared.util.fromEpubHref
 import org.readium.r2.shared.util.getOrElse
 import org.readium.r2.shared.util.http.DefaultHttpClient
-import org.readium.r2.shared.util.mediatype.MediaType
 import org.readium.r2.shared.util.toUrl
 import org.readium.r2.streamer.PublicationOpener
 import org.readium.r2.streamer.parser.DefaultPublicationParser
+import tfg.carlos.wereaderapp.WeReaderApplication
+import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
+import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
+import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import java.io.File
-import kotlin.coroutines.resumeWithException
 
 class ReaderViewModel(application: Application) : AndroidViewModel(application) {
+    private val db = (application as WeReaderApplication).weReaderDB
+    private val localDataSource = LibraryLocalDataSource(db.bookDao())
+    private val remoteDadaSource = LibraryRemoteDadaSource()
+    val repository = LibraryRepository(remoteDadaSource, localDataSource)
 
     lateinit var publication: Publication
     var initialLocator: Locator? = null
-        private set
 
-    lateinit var navigatorFactory: EpubNavigatorFactory
-        private set
-
-    private val prefs: SharedPreferences = application
-        .getSharedPreferences("reader_prefs", Context.MODE_PRIVATE)
+    var bookId: String = ""
 
     suspend fun loadPublication(filePath: String) {
         val context = getApplication<Application>()
@@ -52,24 +48,26 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
             throw Exception("Error al abrir publicación")
         }
 
-
-        // Intentar recuperar el Locator guardado
         initialLocator = loadReadingProgression()
             ?: publication.locateProgression(0.0)
-
-
     }
 
     fun saveReadingProgression(locator: Locator) {
         val json = locator.toJSON().toString()
-        prefs.edit().putString("lastLocator", json).apply()
+        viewModelScope.launch {
+            try {
+                repository.updateReadingProgression(bookId, json)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     // Cargar progreso
-    private fun loadReadingProgression(): Locator? {
-        val json = prefs.getString("lastLocator", null) ?: return null
+    private suspend fun loadReadingProgression(): Locator? {
         return try {
-            Locator.fromJSON(JSONObject(json))
+            val json = repository.getReadingProgression(bookId)
+            Locator.fromJSON(json?.let { JSONObject(it) })
         } catch (e: Exception) {
             null
         }

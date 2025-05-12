@@ -32,6 +32,7 @@ class LibraryLocalDataSource(private val dao: BookDao) {
                 isReading = old?.isReading ?: false,
                 isPending = old?.isPending ?: false,
                 readingProgress = old?.readingProgress ?: 0,
+                lastLocator = old?.lastLocator, // Se evita  sobreescribir el último localizador al cachear
                 mine = newBook.mine,
                 idUser = newBook.idUser
             )

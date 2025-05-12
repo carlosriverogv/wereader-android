@@ -2,13 +2,13 @@ package tfg.carlos.wereaderapp.data.entity
 
 import androidx.room.Entity
 import androidx.room.Index
-import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "books",
     primaryKeys = ["id", "idUser"],
     indices = [Index(value = ["idUser"])]
 )
+
 data class BookEntity(
     val id: String,
     val title: String,
@@ -30,5 +30,6 @@ data class BookEntity(
     val isReading: Boolean = false,
     val readingProgress: Int = 0, // Porcentaje de lectura (0-100)
     val mine: Boolean = true,
-    val idUser: String
+    val idUser: String,
+    val lastLocator: String? = null, // Última posición de lectura (JSON de Readium) (null si no se ha leído el libro aún)
 )

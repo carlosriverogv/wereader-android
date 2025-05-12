@@ -1,13 +1,15 @@
 package tfg.carlos.wereaderapp.ui.reader
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commitNow
 import androidx.lifecycle.Lifecycle
@@ -20,10 +22,11 @@ import org.readium.r2.navigator.epub.EpubDefaults
 import org.readium.r2.navigator.epub.EpubNavigatorFactory
 import org.readium.r2.navigator.epub.EpubNavigatorFragment
 import org.readium.r2.navigator.epub.EpubPreferences
-import org.readium.r2.navigator.preferences.ReadingProgression
 import org.readium.r2.navigator.preferences.Theme
 import org.readium.r2.shared.ExperimentalReadiumApi
+import org.readium.r2.shared.publication.Locator
 import org.readium.r2.shared.util.AbsoluteUrl
+import org.readium.r2.shared.util.Language
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.databinding.FragmentEpubReaderBinding
 
@@ -35,13 +38,28 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
     private val binding get() = _binding!!
     private lateinit var navigator: EpubNavigatorFragment
 
+
+    @OptIn(ExperimentalReadiumApi::class)
+    private val _preferences = EpubPreferences(
+        fontSize = 1.0,
+        theme = Theme.SEPIA,
+        scroll = false,
+        language = Language("es"),
+    )
+    val preferences get() = _preferences
+
+
+    @OptIn(ExperimentalReadiumApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val navigatorFactory = EpubNavigatorFactory(
             publication = viewModel.publication,
             configuration = EpubNavigatorFactory.Configuration(
                 defaults = EpubDefaults(
-                    pageMargins = 1.4,
-                    readingProgression = ReadingProgression.RTL,
+                    pageMargins = 1.2,
+                    fontSize = 1.0,
+                    scroll = false,
+                    language = Language("es"),
                 )
             )
         )
@@ -50,25 +68,57 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             navigatorFactory.createFragmentFactory(
                 initialLocator = viewModel.initialLocator,
                 listener = this,
-                initialPreferences = EpubPreferences(
-                    fontSize = 1.0,
-                    theme = Theme.SEPIA,
-                    scroll = true,
-
-                ),
+                initialPreferences = preferences
             )
-        super.onCreate(savedInstanceState)
+
+        /*val editor = navigatorFactory.createPreferencesEditor(preferences)
+
+        editor.apply {
+            fontSize.increment()
+            scroll.toggle()
+        }
+
+        navigator.submitPreferences(editor.preferences)*/
     }
 
     // Guardamos el progreso de lectura en la base de datos
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().window.statusBarColor = Color.parseColor("#faf4e8")
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        /*viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                navigator.currentLocator
+                    .onEach {
+                        viewModel.initialLocator = viewModel.loadReadingProgression()
+                        viewModel.saveReadingProgression(it)
+                    }
+                    .launchIn(this)
+            }
+        }*/
+
+        var firstEmissionSkipped = false
+        var lastSavedHref: String? = null
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 navigator.currentLocator
-                    .onEach { viewModel.saveReadingProgression(it) }
+                    .onEach { locator ->
+
+                        if (!firstEmissionSkipped) {
+                            firstEmissionSkipped = true
+                            return@onEach
+                        }
+
+                        if (locator.href.toString() != lastSavedHref) {
+                            lastSavedHref = locator.href.toString()
+                            viewModel.saveReadingProgression(locator)
+                        }
+                    }
                     .launchIn(this)
             }
         }
