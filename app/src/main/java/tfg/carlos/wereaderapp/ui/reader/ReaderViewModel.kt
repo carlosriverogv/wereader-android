@@ -52,11 +52,11 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
             ?: publication.locateProgression(0.0)
     }
 
-    fun saveReadingProgression(locator: Locator) {
+    fun saveReadingProgression(locator: Locator, progress: Double) {
         val json = locator.toJSON().toString()
         viewModelScope.launch {
             try {
-                repository.updateReadingProgression(bookId, json)
+                repository.updateReadingProgression(bookId, json, progress)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -3,13 +3,13 @@ package tfg.carlos.wereaderapp.ui.reader
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commitNow
 import androidx.lifecycle.Lifecycle
@@ -18,13 +18,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.readium.r2.navigator.VisualNavigator
 import org.readium.r2.navigator.epub.EpubDefaults
 import org.readium.r2.navigator.epub.EpubNavigatorFactory
 import org.readium.r2.navigator.epub.EpubNavigatorFragment
 import org.readium.r2.navigator.epub.EpubPreferences
 import org.readium.r2.navigator.preferences.Theme
 import org.readium.r2.shared.ExperimentalReadiumApi
-import org.readium.r2.shared.publication.Locator
+import org.readium.r2.shared.publication.services.locateProgression
 import org.readium.r2.shared.util.AbsoluteUrl
 import org.readium.r2.shared.util.Language
 import tfg.carlos.wereaderapp.R
@@ -46,7 +47,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         scroll = false,
         language = Language("es"),
     )
-    val preferences get() = _preferences
+    private val preferences get() = _preferences
 
 
     @OptIn(ExperimentalReadiumApi::class)
@@ -90,21 +91,10 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             insets
         }
 
-        /*viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                navigator.currentLocator
-                    .onEach {
-                        viewModel.initialLocator = viewModel.loadReadingProgression()
-                        viewModel.saveReadingProgression(it)
-                    }
-                    .launchIn(this)
-            }
-        }*/
-
         var firstEmissionSkipped = false
         var lastSavedHref: String? = null
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        /*viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 navigator.currentLocator
                     .onEach { locator ->
@@ -121,7 +111,57 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
                     }
                     .launchIn(this)
             }
+        }*/
+        binding.progressSlider.max = 100
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                navigator.currentLocator
+                    .onEach { locator ->
+
+                        // Actualiza el SeekBar y texto
+                        val progression = locator.locations.totalProgression ?: 0.0
+                        binding.progressSlider.progress = (progression * 100).toInt()
+
+                        val totalPages = viewModel.publication.readingOrder.size
+                        val pagesRemaining = ((1.0 - progression) * totalPages).toInt()
+                        val currentPage = (progression * totalPages).toInt() + 1
+                        val progressText = getString(
+                            R.string.reading_progress_detail,
+                            currentPage,
+                            totalPages,
+                            pagesRemaining
+                        )
+                        binding.progressText.text = progressText
+
+                        val progress = (locator.locations.totalProgression ?: 0.0) * 100
+                        // Todo: guardar progreso para el libro
+
+                        // Guarda solo si ha cambiado de página
+                        if (locator.href.toString() != lastSavedHref) {
+                            lastSavedHref = locator.href.toString()
+                            viewModel.saveReadingProgression(locator, progress)
+                        }
+                    }
+                    .launchIn(this)
+            }
         }
+
+        binding.progressSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                val progress = seekBar?.progress ?: return
+                val target = progress / 100.0
+
+                lifecycleScope.launch {
+                    val locator = viewModel.publication.locateProgression(target)
+                        ?: return@launch
+                    (navigator as? VisualNavigator)?.go(locator)
+                }
+            }
+        })
     }
 
     override fun onCreateView(
@@ -129,7 +169,9 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Se infla el layout
         _binding = FragmentEpubReaderBinding.inflate(inflater, container, false)
+
         val view = binding.root
         val tag = "EpubNavigatorFragment"
 
@@ -139,9 +181,47 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             }
         }
 
-        navigator = childFragmentManager.findFragmentByTag(tag) as EpubNavigatorFragment
+        // Se obtiene el fragmento del navegador
+        navigator = childFragmentManager.findFragmentByTag(tag) as? EpubNavigatorFragment
+            ?: throw IllegalStateException("EpubNavigatorFragment not found")
+
+        // Se incializa el funcionamiento de la toolbar
+        setupToolbar()
 
         return view
+    }
+
+
+    // Función para inicializar la MarterialToolbar
+    private fun setupToolbar() {
+        binding.readerToolbar.inflateMenu(R.menu.read_options_menu)
+        binding.readerToolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.opt_user_preferences -> {
+                    //TODO: Se abre el editor de preferencias
+                    showUserPreferences()
+                    true
+                }
+                R.id.opt_more_options -> {
+                    //TODO: Se abre el menú de opciones adicionales
+                    showMoreOptions()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.readerToolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun showUserPreferences() {
+        TODO("Not yet implemented")
+    }
+
+    private fun showMoreOptions() {
+        TODO("Not yet implemented")
     }
 
     // Cuando el usuario pulsa un enlace externo, abrimos el navegador

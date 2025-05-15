@@ -83,9 +83,9 @@ class LibraryRepository(
         local.updateBook(updated)
     }
 
-    suspend fun updateReadingProgression(id: String, lastLocator: String) {
+    suspend fun updateReadingProgression(id: String, lastLocator: String, progress: Double) {
         val book = local.getBookById(id)
-        val updated = book.copy(lastLocator = lastLocator)
+        val updated = book.copy(lastLocator = lastLocator, readingProgress = progress)
         local.updateBook(updated)
     }
 

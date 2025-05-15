@@ -47,7 +47,9 @@
     <!-- STRINGS ItemBook -->
     <string name="item_book_title">Título</string>
     <string name="item_book_author">Autor</string>
-    <string name="item_book_progress">11%</string>
+    <string name="item_book_progress">0%</string>
+    <string name="reading_progress">%d%%</string>
+    <string name="reading_progress_detail">Página %1$d de %2$d  •  %3$d restantes</string>
 
 
     <!-- STRINGS LOGIN -->

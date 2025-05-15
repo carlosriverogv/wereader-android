@@ -46,6 +46,9 @@ class BooksAdapter(
 
                 titleBook.text = bookEntity.title
                 authorName.text = bookEntity.author
+                val progress = bookEntity.readingProgress.toInt()
+                progressPercent.text = progressPercent.context.getString(
+                    R.string.reading_progress, progress)
 
                 itemView.setOnClickListener {
                     // Se pasa el id del book y la posición del item seleccionado
