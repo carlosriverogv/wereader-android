@@ -14,9 +14,9 @@ object BookMenuHandler {
     fun show(
         context: Context,
         anchorView: View,
-        idBook: String,
         isPending: Boolean,
         updateReading: (Boolean) -> Unit,
+        updateReadingProgress: (Double) -> Unit,
         updatePending: (Boolean) -> Unit,
         onRead: (() -> Unit)? = null,
         onDetail: (() -> Unit)? = null
@@ -28,6 +28,7 @@ object BookMenuHandler {
             popupMenu,
             isPending,
             updateReading,
+            updateReadingProgress,
             updatePending,
             onRead,
             onDetail
@@ -41,8 +42,6 @@ object BookMenuHandler {
         }
     }
 
-    // TODO: Añadir a BookEntity un campo booleano para indicar si el libro está leído o no
-    // TODO: Función para cambiar entre Marcar como leído y Marcar como no leído según el estado
     private fun setupMenuItems(context: Context, popupMenu: PopupMenu, isPending: Boolean) {
         val title = if (isPending)
             context.getString(R.string.library_menu_remove_pending)
@@ -57,6 +56,7 @@ object BookMenuHandler {
         popupMenu: PopupMenu,
         isPending: Boolean,
         updateReading: (Boolean) -> Unit,
+        updateReadingProgress: (Double) -> Unit,
         updatePending: (Boolean) -> Unit,
         onRead: (() -> Unit)? = null,
         onDetail: (() -> Unit)?
@@ -65,9 +65,14 @@ object BookMenuHandler {
             when (item.itemId) {
                 R.id.action_read -> {
                     updateReading(true)
-                    // TODO: Se ejecuta la lectura del libro con FileReader
+                    // Se ejecuta la lectura del libro con FileReader
                     onRead?.invoke()
-                    showToast(context, R.string.library_menu_read)
+                    true
+                }
+                R.id.action_detail -> {
+                    onDetail?.invoke()
+                    // TODO: Ir a la vista de detalle del libro
+                    showToast(context, R.string.library_menu_detail)
                     true
                 }
                 R.id.action_toggle_pending -> {
@@ -79,16 +84,18 @@ object BookMenuHandler {
                     showToast(context, msgRes)
                     true
                 }
-                R.id.action_toggle_read -> {
-                    updateReading(false)
+                R.id.action_mark_read -> {
+                    val progress = 100.0
+                    updateReadingProgress(progress)
                     // TODO: Poner progreso de lectura a 100%
                     showToast(context, R.string.library_menu_mark_read)
                     true
                 }
-                R.id.action_detail -> {
-                    onDetail?.invoke()
-                    // TODO: Ir a la vista de detalle del libro
-                    showToast(context, R.string.library_menu_detail)
+                R.id.action_mark_unread -> {
+                    val progress = 0.0
+                    updateReadingProgress(progress)
+                    // TODO: Poner progreso de lectura a 100%
+                    showToast(context, R.string.library_menu_mark_unread)
                     true
                 }
                 else -> false

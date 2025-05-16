@@ -1,6 +1,7 @@
 package tfg.carlos.wereaderapp.ui.reader
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -52,11 +53,12 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
             ?: publication.locateProgression(0.0)
     }
 
-    fun saveReadingProgression(locator: Locator, progress: Double) {
+    fun saveReadingProgression(locator: Locator, progressPercentage: Double) {
+        Log.d("ReaderViewModel", "saveReadingProgression: $locator")
         val json = locator.toJSON().toString()
         viewModelScope.launch {
             try {
-                repository.updateReadingProgression(bookId, json, progress)
+                repository.updateReadingProgression(bookId, json, progressPercentage)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

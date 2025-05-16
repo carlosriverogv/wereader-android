@@ -10,7 +10,10 @@
         android:id="@+id/action_toggle_pending"
         android:title="@string/library_menu_add_pending" />
     <item
-        android:id="@+id/action_toggle_read"
+        android:id="@+id/action_mark_read"
         android:title="@string/library_menu_mark_read" />
+    <item
+        android:id="@+id/action_mark_unread"
+        android:title="@string/library_menu_mark_unread" />
     <!-- Aquí puedes ir añadiendo más opciones -->
 </menu>

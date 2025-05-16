@@ -83,15 +83,25 @@ class LibraryRepository(
         local.updateBook(updated)
     }
 
-    suspend fun updateReadingProgression(id: String, lastLocator: String, progress: Double) {
+    suspend fun updateReadingProgression(id: String, lastLocator: String, progressPercentage: Double) {
         val book = local.getBookById(id)
-        val updated = book.copy(lastLocator = lastLocator, readingProgress = progress)
+        val updated = book.copy(lastLocator = lastLocator, readingProgress = progressPercentage)
         local.updateBook(updated)
     }
 
     suspend fun getReadingProgression(id: String): String? {
         val book = local.getBookById(id)
-        Log.d("ReaderViewModel", "Book loaded Repo: ${book.id}, lastLocator: ${book.lastLocator}")
+        Log.d("ReaderViewModel", "loadReadingProgression: ${book.id}, lastLocator: ${book.lastLocator}")
         return book.lastLocator
+    }
+
+    suspend fun updateBookReadingProgress(id: String, progress: Double) {
+        val book = local.getBookById(id)
+        val updated = book.copy(readingProgress = progress, lastLocator = null, isReading = false)
+        local.updateBook(updated)
+    }
+
+    suspend fun getBookById(id: String): BookEntity {
+        return local.getBookById(id)
     }
 }

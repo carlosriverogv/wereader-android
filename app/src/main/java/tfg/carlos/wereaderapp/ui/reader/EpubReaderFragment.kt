@@ -3,6 +3,7 @@ package tfg.carlos.wereaderapp.ui.reader
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,28 +92,6 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             insets
         }
 
-        var firstEmissionSkipped = false
-        var lastSavedHref: String? = null
-
-        /*viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                navigator.currentLocator
-                    .onEach { locator ->
-
-                        if (!firstEmissionSkipped) {
-                            firstEmissionSkipped = true
-                            return@onEach
-                        }
-
-                        if (locator.href.toString() != lastSavedHref) {
-                            lastSavedHref = locator.href.toString()
-                            viewModel.saveReadingProgression(locator)
-                        }
-                    }
-                    .launchIn(this)
-            }
-        }*/
-        binding.progressSlider.max = 100
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 navigator.currentLocator
@@ -120,7 +99,10 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
 
                         // Actualiza el SeekBar y texto
                         val progression = locator.locations.totalProgression ?: 0.0
-                        binding.progressSlider.progress = (progression * 100).toInt()
+                        // Se calcula el porcentaje de progreso
+                        val progressPercentage = (progression * 100)
+
+                        binding.progressSlider.progress = progressPercentage.toInt()
 
                         val totalPages = viewModel.publication.readingOrder.size
                         val pagesRemaining = ((1.0 - progression) * totalPages).toInt()
@@ -133,19 +115,14 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
                         )
                         binding.progressText.text = progressText
 
-                        val progress = (locator.locations.totalProgression ?: 0.0) * 100
-                        // Todo: guardar progreso para el libro
-
-                        // Guarda solo si ha cambiado de página
-                        if (locator.href.toString() != lastSavedHref) {
-                            lastSavedHref = locator.href.toString()
-                            viewModel.saveReadingProgression(locator, progress)
-                        }
+                        // Si el progreso ha cambiado, lo guardamos
+                        viewModel.saveReadingProgression(locator, progressPercentage)
                     }
                     .launchIn(this)
             }
         }
 
+        binding.progressSlider.max = 100
         binding.progressSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
 

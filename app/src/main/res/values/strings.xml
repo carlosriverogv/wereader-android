@@ -28,6 +28,7 @@
     <string name="library_menu_mark_unread">Marcar como no leído</string>
     <string name="library_menu_read">Leer</string>
     <string name="library_menu_detail">Ver detalles</string>
+    <string name="library_menu_open_book">Abriendo libro</string>
 
     <!-- STRINGS Library Menu LongClick Response -->
     <string name="library_menu_add_pending_response">Añadido a pendientes</string>

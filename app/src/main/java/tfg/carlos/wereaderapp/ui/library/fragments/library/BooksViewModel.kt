@@ -47,6 +47,16 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
             repository.updateBookPendingStatus(id, isPending)
         }
     }
+
+    fun updateBookReadingProgress(id: String, progress: Double) {
+        viewModelScope.launch {
+            repository.updateBookReadingProgress(id, progress)
+        }
+    }
+
+    suspend fun getBookById(id: String): BookEntity {
+        return repository.getBookById(id)
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

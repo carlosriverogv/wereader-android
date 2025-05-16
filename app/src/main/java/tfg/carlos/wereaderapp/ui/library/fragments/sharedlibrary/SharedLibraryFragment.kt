@@ -45,12 +45,10 @@ class SharedLibraryFragment : Fragment() {
         onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
             vm.updateBookReadingStatus(book.id, true)
-            // TODO: Se ejecuta la lectura del libro con Readium
-            val epubPath = book.epubUrl
-            val intent = Intent(requireContext(), ReaderActivity::class.java)
-            intent.putExtra("bookPath", epubPath)
-            intent.putExtra("bookId", book.id)
-            startActivity(intent)
+            // Se ejecuta la lectura del libro con Readium
+            lifecycleScope.launch {
+                openReaderActivity(book.id)
+            }
         },
         onLongClickBookItem = { idBook: String, position: Int, isPending: Boolean ->
             clickedItemPosition = position
@@ -93,6 +91,16 @@ class SharedLibraryFragment : Fragment() {
         }
     }
 
+    private suspend fun openReaderActivity(idBook: String) {
+        vm.getBookById(idBook).let { book ->
+            val epubPath = book.epubUrl
+            val intent = Intent(requireContext(), ReaderActivity::class.java)
+            intent.putExtra("bookPath", epubPath)
+            intent.putExtra("bookId", book.id)
+            startActivity(intent)
+        }
+    }
+
     // Mostrar el menú de opciones del libro
     private fun showBookOptionsMenu(
         recyclerView: RecyclerView,
@@ -106,22 +114,25 @@ class SharedLibraryFragment : Fragment() {
         BookMenuHandler.show(
             context = requireContext(),
             anchorView = anchorView,
-            idBook = idBook,
             isPending = isPending,
-            updateReading = { reading ->
-                vm.updateBookReadingStatus(idBook, reading)
-            },
-            updatePending = { pending ->
-                vm.updateBookPendingStatus(idBook, pending)
-            },
             onRead = {
-                // TODO: Se ejecuta la lectura del libro con FileReader
-                Toast.makeText(requireContext(), "Abriendo el libro", Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch {
+                    openReaderActivity(idBook)
+                }
             },
             onDetail = {
                 // TODO: abrir un detalle del libro
                 // startActivity(Intent(this, BookDetailActivity::class.java))
-            }
+            },
+            updatePending = { pending ->
+                vm.updateBookPendingStatus(idBook, pending)
+            },
+            updateReading = { reading ->
+                vm.updateBookReadingStatus(idBook, reading)
+            },
+            updateReadingProgress = { progress ->
+                vm.updateBookReadingProgress(idBook, progress)
+            },
         )
     }
 }
