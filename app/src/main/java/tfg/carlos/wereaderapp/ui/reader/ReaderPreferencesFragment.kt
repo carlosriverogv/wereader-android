@@ -14,16 +14,15 @@ import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.databinding.FragmentReaderPreferencesBinding
 
 class ReaderPreferencesFragment(
-    private val initialPreferences: EpubPreferences,
+    initialPreferences: EpubPreferences,
     private val onPreferencesChanged: (EpubPreferences) -> Unit
 ) : BottomSheetDialogFragment() {
-    // TODO: Rename and change types of parameters
+
     private var _binding: FragmentReaderPreferencesBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    // Estado mutable de preferencias
+    private var currentPreferences: EpubPreferences = initialPreferences
 
     @OptIn(ExperimentalReadiumApi::class)
     override fun onCreateView(
@@ -33,14 +32,24 @@ class ReaderPreferencesFragment(
     ): View {
         _binding = FragmentReaderPreferencesBinding.inflate(inflater, container, false)
 
-        // Font size
-        binding.textSizeSlider.value = (initialPreferences.fontSize ?: 1.0).toFloat()
+        // Inicializa controles con las preferencias actuales
+        binding.textSizeSlider.value = (currentPreferences.fontSize ?: 1.0).toFloat()
+        binding.scrollSwitch.isChecked = currentPreferences.scroll ?: false
+
+        val checkedTheme = when (currentPreferences.theme) {
+            Theme.LIGHT -> R.id.theme_light
+            Theme.DARK -> R.id.theme_dark
+            Theme.SEPIA, null -> R.id.theme_sepia
+            else -> R.id.theme_sepia
+        }
+        binding.themeGroup.check(checkedTheme)
+
+        // Listeners que modifican el estado actual
         binding.textSizeSlider.addOnChangeListener { _, value, _ ->
-            val newPrefs = initialPreferences.copy(fontSize = value.toDouble())
-            onPreferencesChanged(newPrefs)
+            currentPreferences = currentPreferences.copy(fontSize = value.toDouble())
+            onPreferencesChanged(currentPreferences)
         }
 
-        // Theme
         binding.themeGroup.setOnCheckedChangeListener { _, checkedId ->
             val newTheme = when (checkedId) {
                 R.id.theme_light -> Theme.LIGHT
@@ -48,15 +57,13 @@ class ReaderPreferencesFragment(
                 R.id.theme_sepia -> Theme.SEPIA
                 else -> Theme.SEPIA
             }
-            val newPrefs = initialPreferences.copy(theme = newTheme)
-            onPreferencesChanged(newPrefs)
+            currentPreferences = currentPreferences.copy(theme = newTheme)
+            onPreferencesChanged(currentPreferences)
         }
 
-        // Scroll
-        binding.scrollSwitch.isChecked = initialPreferences.scroll ?: false
         binding.scrollSwitch.setOnCheckedChangeListener { _, isChecked ->
-            val newPrefs = initialPreferences.copy(scroll = isChecked)
-            onPreferencesChanged(newPrefs)
+            currentPreferences = currentPreferences.copy(scroll = isChecked)
+            onPreferencesChanged(currentPreferences)
         }
 
         return binding.root

@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +32,7 @@ import org.readium.r2.shared.util.AbsoluteUrl
 import org.readium.r2.shared.util.Language
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.databinding.FragmentEpubReaderBinding
+import tfg.carlos.wereaderapp.utils.ReaderPreferencesManager
 
 
 class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
@@ -41,19 +43,18 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
     private lateinit var navigator: EpubNavigatorFragment
     private lateinit var navigatorFactory: EpubNavigatorFactory
 
-    @OptIn(ExperimentalReadiumApi::class)
-    private val _preferences = EpubPreferences(
-        fontSize = 1.0,
-        theme = Theme.SEPIA,
-        scroll = false,
-        language = Language("es"),
-    )
+    // Se cargan las preferencias del lector
+    private val _preferences: EpubPreferences by lazy {
+        ReaderPreferencesManager.loadPreferences(requireContext())
+    }
     private val preferences get() = _preferences
 
 
     @OptIn(ExperimentalReadiumApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Se inicializa el navegador con las preferencias por defecto
         navigatorFactory = EpubNavigatorFactory(
             publication = viewModel.publication,
             configuration = EpubNavigatorFactory.Configuration(
@@ -66,21 +67,13 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             )
         )
 
+        // Se inicializa el navegador con las últimas preferencias guardadas
         childFragmentManager.fragmentFactory =
             navigatorFactory.createFragmentFactory(
                 initialLocator = viewModel.initialLocator,
                 listener = this,
                 initialPreferences = preferences
             )
-
-        /*val editor = navigatorFactory.createPreferencesEditor(preferences)
-
-        editor.apply {
-            fontSize.increment()
-            scroll.toggle()
-        }
-
-        navigator.submitPreferences(editor.preferences)*/
     }
 
     // Guardamos el progreso de lectura en la base de datos
@@ -165,17 +158,19 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         // Se incializa el funcionamiento de la toolbar
         setupToolbar()
 
+        applyReaderThemeToUI(preferences.theme ?: Theme.SEPIA)
+
         return view
     }
-
 
     // Función para inicializar la MarterialToolbar
     private fun setupToolbar() {
         binding.readerToolbar.inflateMenu(R.menu.read_options_menu)
+        binding.readerToolbar.title = viewModel.publication.metadata.title
         binding.readerToolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.opt_user_preferences -> {
-                    //TODO: Se abre el editor de preferencias
+                    // Se abre el menú de preferencias del lector
                     showUserPreferences()
                     true
                 }
@@ -193,23 +188,66 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         }
     }
 
-
-
+    // Función que muestra el menú de preferencias del lector
     private fun showUserPreferences() {
-        val dialog = ReaderPreferencesFragment(preferences) { newPrefs ->
-            val editor = navigatorFactory.createPreferencesEditor(preferences)
+        // Se vuelve a cargar las preferencias para asegurarse de que están actualizadas
+        val latestPreferences = ReaderPreferencesManager.loadPreferences(requireContext())
+
+        // Se crea el fragmento de preferencias
+        val dialog = ReaderPreferencesFragment(latestPreferences) { newPrefs ->
+            // Se actualizan las preferencias en el navegador
+            val editor = navigatorFactory.createPreferencesEditor(latestPreferences)
             editor.apply {
                 fontSize.set(newPrefs.fontSize)
                 scroll.set(newPrefs.scroll)
                 theme.set(newPrefs.theme)
             }
             navigator.submitPreferences(editor.preferences)
+            applyReaderThemeToUI(newPrefs.theme ?: Theme.SEPIA)
+
+            // Se guardan las nuevas preferencias en SharedPreferences
+            ReaderPreferencesManager.savePreferences(requireContext(), newPrefs)
+
+            // Aplicar tema visual completo
+            (activity as? ReaderActivity)?.applyReaderTheme()
         }
+        // Se muestra el fragmento de preferencias
         dialog.show(childFragmentManager, "readerPrefs")
     }
 
     private fun showMoreOptions() {
         TODO("Not yet implemented")
+    }
+
+    private fun applyReaderThemeToUI(theme: Theme) {
+        val bgColorRes = when (theme) {
+            Theme.LIGHT -> R.color.light_textColorPrimary
+            Theme.DARK -> R.color.dark_textColorPrimary
+            Theme.SEPIA -> R.color.light_textColorPrimary
+            else -> R.color.reader_theme_sepia
+        }
+
+        val color = requireContext().getColor(bgColorRes)
+
+        // Se ajusta el color de fondo de la toolbar
+        binding.readerToolbar.setTitleTextColor(color)
+
+        // Se ajusta el color de los iconos de la toolbar
+        binding.readerToolbar.navigationIcon?.setTint(color)
+
+        // Se ajusta el color del texto de la barra de progreso
+        binding.progressText.setTextColor(color)
+
+        // Se ajusta del color del progreso faltante de la barra de progreso (el resto de la barra
+        // no es necesario cambiarlo)
+        binding.progressSlider.progressBackgroundTintList =
+            android.content.res.ColorStateList.valueOf(color)
+
+        // Cambiar el color de los iconos del menú acordion a la preferencia de tema
+        for (i in 0 until binding.readerToolbar.menu.size()) {
+            val item = binding.readerToolbar.menu.getItem(i)
+            item.icon?.setTint(color)
+        }
     }
 
     // Cuando el usuario pulsa un enlace externo, abrimos el navegador
