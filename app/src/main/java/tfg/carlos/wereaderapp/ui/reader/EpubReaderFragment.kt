@@ -39,7 +39,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
     private var _binding: FragmentEpubReaderBinding? = null
     private val binding get() = _binding!!
     private lateinit var navigator: EpubNavigatorFragment
-
+    private lateinit var navigatorFactory: EpubNavigatorFactory
 
     @OptIn(ExperimentalReadiumApi::class)
     private val _preferences = EpubPreferences(
@@ -54,7 +54,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
     @OptIn(ExperimentalReadiumApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val navigatorFactory = EpubNavigatorFactory(
+        navigatorFactory = EpubNavigatorFactory(
             publication = viewModel.publication,
             configuration = EpubNavigatorFactory.Configuration(
                 defaults = EpubDefaults(
@@ -193,8 +193,19 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         }
     }
 
+
+
     private fun showUserPreferences() {
-        TODO("Not yet implemented")
+        val dialog = ReaderPreferencesFragment(preferences) { newPrefs ->
+            val editor = navigatorFactory.createPreferencesEditor(preferences)
+            editor.apply {
+                fontSize.set(newPrefs.fontSize)
+                scroll.set(newPrefs.scroll)
+                theme.set(newPrefs.theme)
+            }
+            navigator.submitPreferences(editor.preferences)
+        }
+        dialog.show(childFragmentManager, "readerPrefs")
     }
 
     private fun showMoreOptions() {
