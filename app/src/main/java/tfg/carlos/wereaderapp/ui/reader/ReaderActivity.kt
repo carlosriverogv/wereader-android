@@ -66,8 +66,9 @@ class ReaderActivity : AppCompatActivity() {
         }
     }
 
-    //** Método para aplicar el tema del lector a la Activity (Afecta a la barra de estado y
-    // fondos, ya que cambia el color del fragmentContainer completo) */
+    /** Método para aplicar el tema del lector a la Activity (Afecta a la barra de estado y
+     * fondos, ya que cambia el color del fragmentContainer completo)
+     */
     fun applyReaderTheme() {
         // Cargar tema desde preferencias
         val preferences = ReaderPreferencesManager.loadPreferences(this)

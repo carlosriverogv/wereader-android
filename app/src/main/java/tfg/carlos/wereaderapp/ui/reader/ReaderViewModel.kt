@@ -32,6 +32,7 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
 
     var bookId: String = ""
 
+    // Cargar publicación desde un archivo local
     suspend fun loadPublication(filePath: String) {
         val context = getApplication<Application>()
         val httpClient = DefaultHttpClient()
@@ -53,6 +54,7 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
             ?: publication.locateProgression(0.0)
     }
 
+    // Guardar progreso de lectura en la base de datos
     fun saveReadingProgression(locator: Locator, progressPercentage: Double) {
         Log.d("ReaderViewModel", "saveReadingProgression: $locator")
         val json = locator.toJSON().toString()
@@ -65,7 +67,7 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    // Cargar progreso
+    // Cargar progreso almacenado en la base de datos
     private suspend fun loadReadingProgression(): Locator? {
         return try {
             val json = repository.getReadingProgression(bookId)

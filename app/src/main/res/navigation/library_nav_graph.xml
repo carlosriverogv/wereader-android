@@ -2,23 +2,32 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/tab_books"
     android:id="@+id/library_nav_graph">
 
     <fragment
         android:id="@+id/tab_books"
         android:name="tfg.carlos.wereaderapp.ui.library.fragments.library.LibraryFragment"
         android:label="@string/library_me"
-        tools:layout="@layout/fragment_library" />
+        tools:layout="@layout/fragment_library" >
+        <action
+            android:id="@+id/action_tab_books_to_tab_library_friends"
+            app:destination="@id/tab_library_friends" />
+    </fragment>
 
     <fragment
-        android:id="@+id/tab_authors"
+        android:id="@+id/tab_library_friends"
         android:name="tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.SharedLibraryFragment"
         android:label="@string/library_friends"
-        tools:layout="@layout/fragment_shared_library" />
+        tools:layout="@layout/fragment_shared_library" >
+        <action
+            android:id="@+id/action_tab_library_friends_to_tab_collections"
+            app:destination="@id/tab_collections" />
+    </fragment>
 
     <fragment
         android:id="@+id/tab_collections"
         android:name="tfg.carlos.wereaderapp.ui.library.fragments.collection.CollectionsFragment"
-        android:label="Colecciones"
+        android:label="@string/library_tab_collections"
         tools:layout="@layout/fragment_collections" />
 </navigation>

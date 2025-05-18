@@ -30,6 +30,7 @@ import org.readium.r2.shared.util.AbsoluteUrl
 import org.readium.r2.shared.util.Language
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.databinding.FragmentEpubReaderBinding
+import tfg.carlos.wereaderapp.ui.reader.preferences.ReaderPreferencesFragment
 import tfg.carlos.wereaderapp.utils.ReaderPreferencesManager
 
 
@@ -41,18 +42,33 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
     private lateinit var navigator: EpubNavigatorFragment
     private lateinit var navigatorFactory: EpubNavigatorFactory
 
-    // Se cargan las preferencias del lector guardadas en SharedPreferences
+    /**
+     *  Se cargan las preferencias del lector guardadas en SharedPreferences
+     */
     private val _preferences: EpubPreferences by lazy {
         ReaderPreferencesManager.loadPreferences(requireContext())
     }
     private val preferences get() = _preferences
 
-
+    /**
+     * Se utiliza onAttach() para registrar el FragmentFactory personalizado de Readium.
+     *
+     * Esto es necesario porque Android puede recrear automáticamente los fragments tras
+     * un cambio de configuración (como el cambio de tema claro/oscuro del sistema). En ese proceso,
+     * el sistema intenta reinstanciar el fragmento EpubNavigatorFragment sin pasar por
+     * la lógica de creación del onCreate.
+     *
+     * Al registrar la fragmentFactory aquí, me aseguro de que esté disponible antes
+     * de que el sistema intente restaurar cualquier fragmento, evitando el error
+     * "Fragment$InstantiationException".
+     */
     @OptIn(ExperimentalReadiumApi::class)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: android.content.Context) {
+        super.onAttach(context)
 
-        // Se inicializa el navegador con las preferencias por defecto
+        /**
+         * Se inicializa el EpubNavigatorFactory con la publicación y las preferencias por defecto
+         */
         navigatorFactory = EpubNavigatorFactory(
             publication = viewModel.publication,
             configuration = EpubNavigatorFactory.Configuration(
@@ -65,13 +81,15 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             )
         )
 
-        // Se inicializa el navegador con las últimas preferencias guardadas
-        childFragmentManager.fragmentFactory =
-            navigatorFactory.createFragmentFactory(
-                initialLocator = viewModel.initialLocator,
-                listener = this,
-                initialPreferences = preferences
-            )
+        /**
+         *  Se establece la fragmentFactory personalizada para el childFragmentManager y
+         *  se cargan las preferencias del lector guardadas en SharedPreferences.
+         */
+        childFragmentManager.fragmentFactory = navigatorFactory.createFragmentFactory(
+            initialLocator = viewModel.initialLocator,
+            listener = this,
+            initialPreferences = preferences
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -141,6 +159,17 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
                 }
             }
         })
+
+        /*speakerManager = EpubSpeakerManager(
+            context = requireContext(),
+            publication = viewModel.publication,
+            navigator = navigator,
+            scope = viewLifecycleOwner.lifecycleScope
+        )
+
+        speakerManager.initialize {
+            // Opcional: activar botón de lectura
+        }*/
     }
 
     // Se muestra una vista previa del progreso de lectura al mover el SeekBar
@@ -174,6 +203,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         val view = binding.root
         val tag = "EpubNavigatorFragment"
 
+        // Se crea el fragmento del navegador una vez creada la vista
         if (savedInstanceState == null) {
             childFragmentManager.commitNow {
                 add(R.id.navigator_container, EpubNavigatorFragment::class.java, null, tag)
@@ -187,6 +217,9 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         // Se incializa el funcionamiento de la toolbar
         setupToolbar()
 
+        /** Se aplica el tema guardado del lector a la UI (Toolbar, ProgressBar y Menú)
+         *  nada más iniciar el fragmento.
+         */
         applyReaderThemeToUI(preferences.theme ?: Theme.SEPIA)
 
         return view
@@ -236,7 +269,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             // Se guardan las nuevas preferencias en SharedPreferences
             ReaderPreferencesManager.savePreferences(requireContext(), newPrefs)
 
-            // Se aplica el tema del lector a la UI (Toolbar, ProgressBar y Menú)
+            // Se aplica el tema guardado del lector a la UI (Toolbar, ProgressBar y Menú)
             applyReaderThemeToUI(newPrefs.theme ?: Theme.SEPIA)
 
             // Aplicar tema visual completo (barra de estado y fondos)
@@ -288,5 +321,11 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
     override fun onExternalLinkActivated(url: AbsoluteUrl) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
         startActivity(intent)
+    }
+
+    override fun onDestroyView() {
+        //speakerManager.shutdown()
+        super.onDestroyView()
+        _binding = null
     }
 }
