@@ -8,12 +8,27 @@
     <string name="menu_library">Biblioteca</string>
     <string name="menu_discover">Descubrir</string>
     <string name="menu_profile">Perfil</string>
+    <string name="open_book_response">Abriendo libro</string>
+
+    <!-- STRINGS READER -->
+    <string name="reader_title_book">Título del libro</string>
+    <string name="reader_seekbar_placeholder">Página 0 de 100  •  100 restantes</string>
+    <string name="reader_progress_detail">Página %1$d de %2$d  •  %3$d restantes</string>
+    <string name="reader_on_change_progress">Página %1$d  •  %2$d%%</string>
+
+    <!-- STRINGS READER (PREFERENCES) -->
+    <string name="reader_preferences_theme">Temas de lectura</string>
+    <string name="reader_preferences_theme_dark">Tema oscuro</string>
+    <string name="reader_preferences_theme_light">Tema claro</string>
+    <string name="reader_preferences_theme_sepia">Tema sepia</string>
+
+    <string name="reader_preferences_text_size">Tamaño de texto</string>
+    <string name="reader_preferences_scroll">Lectura en scroll</string>
 
     <!-- STRINGS HOME -->
     <string name="home_reading">Leyendo</string>
     <string name="home_reading_empty">No tienes libros en lectura</string>
     <string name="home_pending">Pendientes</string>
-
 
     <!-- STRINGS LIBRARY -->
     <string name="library_title">Biblioteca</string>
@@ -28,14 +43,12 @@
     <string name="library_menu_mark_unread">Marcar como no leído</string>
     <string name="library_menu_read">Leer</string>
     <string name="library_menu_detail">Ver detalles</string>
-    <string name="library_menu_open_book">Abriendo libro</string>
 
     <!-- STRINGS Library Menu LongClick Response -->
     <string name="library_menu_add_pending_response">Añadido a pendientes</string>
     <string name="library_menu_remove_pending_response">Eliminado de pendientes</string>
     <string name="library_menu_mark_read_response">Marcado como leído</string>
     <string name="library_menu_mark_unread_response">Marcado como no leído</string>
-    <string name="library_menu_read_response">Abriendo libro</string>
 
     <!-- STRINGS Library TABS -->
     <string name="library_tab_books">Libros</string>
@@ -48,10 +61,8 @@
     <!-- STRINGS ItemBook -->
     <string name="item_book_title">Título</string>
     <string name="item_book_author">Autor</string>
-    <string name="item_book_progress">0%</string>
-    <string name="reading_progress">%d%%</string>
-    <string name="reading_progress_detail">Página %1$d de %2$d  •  %3$d restantes</string>
-
+    <string name="item_book_progress_zero">0%</string>
+    <string name="item_book_progress">%d%%</string>
 
     <!-- STRINGS LOGIN -->
     <string name="email_hint">Correo Electrónico</string>

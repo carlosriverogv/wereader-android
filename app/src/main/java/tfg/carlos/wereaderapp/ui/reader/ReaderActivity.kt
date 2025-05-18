@@ -66,6 +66,8 @@ class ReaderActivity : AppCompatActivity() {
         }
     }
 
+    //** Método para aplicar el tema del lector a la Activity (Afecta a la barra de estado y
+    // fondos, ya que cambia el color del fragmentContainer completo) */
     fun applyReaderTheme() {
         // Cargar tema desde preferencias
         val preferences = ReaderPreferencesManager.loadPreferences(this)
@@ -81,7 +83,7 @@ class ReaderActivity : AppCompatActivity() {
 
         binding.fragmentContainer.setBackgroundColor(bgColor)
 
-        // Controlar color de iconos de la barra de estado
+        // (CORRIGE ERROR) Controlar color de iconos de la barra de estado
         // Esto es necesario ya que con el tema claro del sistema y el tema oscuro del lector,
         // los iconos de la barra de estado no se ven
         val insetsController = WindowInsetsControllerCompat(window, binding.root)

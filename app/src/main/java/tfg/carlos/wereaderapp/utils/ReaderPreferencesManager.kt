@@ -40,7 +40,7 @@ object ReaderPreferencesManager {
             fontSize = if (fontSize == -1f) 1.0 else fontSize.toDouble(),
             theme = theme?.let { Theme.valueOf(it) } ?: Theme.SEPIA,
             scroll = prefs.getBoolean(KEY_SCROLL, false),
-            language = Language("es")
+            language = Language("es"),
         )
     }
 }

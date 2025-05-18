@@ -3,7 +3,6 @@ package tfg.carlos.wereaderapp.ui.reader
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -43,7 +41,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
     private lateinit var navigator: EpubNavigatorFragment
     private lateinit var navigatorFactory: EpubNavigatorFactory
 
-    // Se cargan las preferencias del lector
+    // Se cargan las preferencias del lector guardadas en SharedPreferences
     private val _preferences: EpubPreferences by lazy {
         ReaderPreferencesManager.loadPreferences(requireContext())
     }
@@ -59,7 +57,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             publication = viewModel.publication,
             configuration = EpubNavigatorFactory.Configuration(
                 defaults = EpubDefaults(
-                    pageMargins = 1.2,
+                    pageMargins = 1.0,
                     fontSize = 1.0,
                     scroll = false,
                     language = Language("es"),
@@ -76,7 +74,6 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             )
     }
 
-    // Guardamos el progreso de lectura en la base de datos
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
@@ -90,22 +87,25 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
                 navigator.currentLocator
                     .onEach { locator ->
 
-                        // Actualiza el SeekBar y texto
+                        // Se obtiene el progreso de lectura
                         val progression = locator.locations.totalProgression ?: 0.0
                         // Se calcula el porcentaje de progreso
                         val progressPercentage = (progression * 100)
 
-                        binding.progressSlider.progress = progressPercentage.toInt()
-
+                        // Se obtiene el número total de páginas, el número de páginas restantes y la
+                        // página actual
                         val totalPages = viewModel.publication.readingOrder.size
                         val pagesRemaining = ((1.0 - progression) * totalPages).toInt()
                         val currentPage = (progression * totalPages).toInt() + 1
+                        // Se crea el texto de progreso
                         val progressText = getString(
-                            R.string.reading_progress_detail,
+                            R.string.reader_progress_detail,
                             currentPage,
                             totalPages,
                             pagesRemaining
                         )
+                        // Se actualiza el SeekBar y el texto de progreso
+                        binding.progressSlider.progress = progressPercentage.toInt()
                         binding.progressText.text = progressText
 
                         // Si el progreso ha cambiado, lo guardamos
@@ -115,12 +115,21 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             }
         }
 
+        // Se inicializa el SeekBar
         binding.progressSlider.max = 100
         binding.progressSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
+            // Acción realizada mientras se mueve el SeekBar: Se muestra una vista en tiempo real
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    lifecycleScope.launch {
+                        showPreviewForProgress(progress)
+                    }
+                }
+            }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
+            // Acción realizada al soltar el SeekBar: Se cambia la página
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 val progress = seekBar?.progress ?: return
                 val target = progress / 100.0
@@ -132,6 +141,26 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
                 }
             }
         })
+    }
+
+    // Se muestra una vista previa del progreso de lectura al mover el SeekBar
+    private suspend fun showPreviewForProgress(progress: Int) {
+        val target = progress / 100.0
+        val locator = viewModel.publication.locateProgression(target) ?: return
+
+        val totalPages = viewModel.publication.readingOrder.size
+        val currentPage = (target * totalPages).toInt() + 1
+        val progression = locator.locations.totalProgression ?: 0.0
+        val progressPercentage = (progression * 100)
+
+        // Se actualiza el SeekBar y el texto de progreso
+        val progressText = getString(
+            R.string.reader_on_change_progress,
+            currentPage,
+            progressPercentage.toInt()
+        )
+
+        binding.progressText.text = progressText
     }
 
     override fun onCreateView(
@@ -203,12 +232,14 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
                 theme.set(newPrefs.theme)
             }
             navigator.submitPreferences(editor.preferences)
-            applyReaderThemeToUI(newPrefs.theme ?: Theme.SEPIA)
 
             // Se guardan las nuevas preferencias en SharedPreferences
             ReaderPreferencesManager.savePreferences(requireContext(), newPrefs)
 
-            // Aplicar tema visual completo
+            // Se aplica el tema del lector a la UI (Toolbar, ProgressBar y Menú)
+            applyReaderThemeToUI(newPrefs.theme ?: Theme.SEPIA)
+
+            // Aplicar tema visual completo (barra de estado y fondos)
             (activity as? ReaderActivity)?.applyReaderTheme()
         }
         // Se muestra el fragmento de preferencias
@@ -219,6 +250,8 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         TODO("Not yet implemented")
     }
 
+    //** Se aplica el tema del lector a la UI (Afecta a Toolbar, ProgressBar y Menú)
+    // Los fondos se cambian desde la ReaderActivity (applyReaderTheme())*/
     private fun applyReaderThemeToUI(theme: Theme) {
         val bgColorRes = when (theme) {
             Theme.LIGHT -> R.color.light_textColorPrimary
@@ -229,7 +262,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
 
         val color = requireContext().getColor(bgColorRes)
 
-        // Se ajusta el color de fondo de la toolbar
+        // Se ajusta el color de título de la toolbar
         binding.readerToolbar.setTitleTextColor(color)
 
         // Se ajusta el color de los iconos de la toolbar

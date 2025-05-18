@@ -88,14 +88,14 @@ object BookMenuHandler {
                     val progress = 100.0
                     updateReadingProgress(progress)
                     // TODO: Poner progreso de lectura a 100%
-                    showToast(context, R.string.library_menu_mark_read)
+                    showToast(context, R.string.library_menu_mark_read_response)
                     true
                 }
                 R.id.action_mark_unread -> {
                     val progress = 0.0
                     updateReadingProgress(progress)
                     // TODO: Poner progreso de lectura a 100%
-                    showToast(context, R.string.library_menu_mark_unread)
+                    showToast(context, R.string.library_menu_mark_unread_response)
                     true
                 }
                 else -> false
