@@ -7,11 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
-import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
@@ -26,10 +24,6 @@ class LibraryFragment : Fragment() {
     private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
     private var clickedItemPosition: Int = RecyclerView.NO_POSITION
-
-    companion object {
-        fun newInstance() = LibraryFragment()
-    }
 
     private val vm: BooksViewModel by viewModels {
         val db = (requireActivity().application as WeReaderApplication).weReaderDB
@@ -125,8 +119,8 @@ class LibraryFragment : Fragment() {
             updateReading = { reading ->
                 vm.updateBookReadingStatus(idBook, reading)
             },
-            updateReadingProgress = { progress ->
-                vm.updateBookReadingProgress(idBook, progress)
+            updateMarkReadOrUnreadBook = { isRead ->
+                vm.updateMarkReadOrUnreadBook(idBook, isRead)
             },
         )
     }

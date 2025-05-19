@@ -11,6 +11,7 @@ class LibraryLocalDataSource(private val dao: BookDao) {
     }
 
     fun getBooksFlow(): Flow<List<BookEntity>> = dao.getAllBooks()
+    private suspend fun getBooksOnce(): List<BookEntity> = dao.getAllBooksOnce()
     fun getMyBooksFlow(): Flow<List<BookEntity>> = dao.getMyBooks(getIdUser())
     fun getSharedBooksFlow(): Flow<List<BookEntity>> = dao.getSharedBooks(getIdUser())
 
@@ -22,8 +23,16 @@ class LibraryLocalDataSource(private val dao: BookDao) {
         dao.insertAll(books)
     }
 
+    /**
+     * Función para cachear los libros de la base de datos local.
+     * Se eliminan los libros existentes y se insertan los nuevos.
+     * Se utiliza para almacenar la biblioteca del usuario autenticado y la biblioteca compartida.
+     *
+     * Para hacer el cacheo sin perder datos como (lastLocator, isReading o isPending),
+     * se hace un merge, copiando estos campos de los libros existentes a los que entran de la API.
+     */
     suspend fun cacheBooks(newBooks: List<BookEntity>) {
-        val existingBooks = dao.getAllBooksOnce()
+        val existingBooks = getBooksOnce()
 
         // Merge de campos locales
         val mergedBooks = newBooks.map { newBook ->
@@ -42,18 +51,22 @@ class LibraryLocalDataSource(private val dao: BookDao) {
         dao.insertAll(mergedBooks)
     }
 
+    // Función general para actualizar un libro
     suspend fun updateBook(book: BookEntity) {
         dao.updateBook(book)
     }
 
+    // Obtiene los libros que están en lectura (isReading = true)
     fun getPendingBooks(): Flow<List<BookEntity>> {
         return dao.getPendingBooks(getIdUser())
     }
 
+    // Obtiene los libros que están pendientes de lectura (isPending = true)
     fun getReadingBooks(): Flow<List<BookEntity>> {
         return dao.getReadingBooks(getIdUser())
     }
 
+    // TODO: Se puede mover a UserDataSource
     // Obtiene el ID de usuario de la sesión
     private fun getIdUser(): String {
         return sessionManager.getUserId()

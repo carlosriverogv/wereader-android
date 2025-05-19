@@ -1,13 +1,11 @@
 package tfg.carlos.wereaderapp.utils
 
 import android.content.Context
-import android.content.Intent
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.StringRes
 import tfg.carlos.wereaderapp.R
-import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 
 object BookMenuHandler {
 
@@ -16,7 +14,7 @@ object BookMenuHandler {
         anchorView: View,
         isPending: Boolean,
         updateReading: (Boolean) -> Unit,
-        updateReadingProgress: (Double) -> Unit,
+        updateMarkReadOrUnreadBook: (Boolean) -> Unit,
         updatePending: (Boolean) -> Unit,
         onRead: (() -> Unit)? = null,
         onDetail: (() -> Unit)? = null
@@ -28,7 +26,7 @@ object BookMenuHandler {
             popupMenu,
             isPending,
             updateReading,
-            updateReadingProgress,
+            updateMarkReadOrUnreadBook,
             updatePending,
             onRead,
             onDetail
@@ -56,7 +54,7 @@ object BookMenuHandler {
         popupMenu: PopupMenu,
         isPending: Boolean,
         updateReading: (Boolean) -> Unit,
-        updateReadingProgress: (Double) -> Unit,
+        updateMarkReadOrUnreadBook: (Boolean) -> Unit,
         updatePending: (Boolean) -> Unit,
         onRead: (() -> Unit)? = null,
         onDetail: (() -> Unit)?
@@ -85,15 +83,15 @@ object BookMenuHandler {
                     true
                 }
                 R.id.action_mark_read -> {
-                    val progress = 100.0
-                    updateReadingProgress(progress)
+                    val isRead = true
+                    updateMarkReadOrUnreadBook(isRead)
                     // TODO: Poner progreso de lectura a 100%
                     showToast(context, R.string.library_menu_mark_read_response)
                     true
                 }
                 R.id.action_mark_unread -> {
-                    val progress = 0.0
-                    updateReadingProgress(progress)
+                    val isRead = false
+                    updateMarkReadOrUnreadBook(isRead)
                     // TODO: Poner progreso de lectura a 100%
                     showToast(context, R.string.library_menu_mark_unread_response)
                     true

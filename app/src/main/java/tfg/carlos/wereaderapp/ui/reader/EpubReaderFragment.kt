@@ -245,6 +245,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
             }
         }
 
+        // Se establece el comportamiento del botón de navegación (botón de retroceso)
         binding.readerToolbar.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }

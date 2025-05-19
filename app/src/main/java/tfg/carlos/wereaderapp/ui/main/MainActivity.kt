@@ -3,8 +3,6 @@ package tfg.carlos.wereaderapp.ui.main
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -200,8 +198,8 @@ class MainActivity : AppCompatActivity() {
             updateReading = { reading ->
                 vm.updateBookReadingStatus(idBook, reading)
             },
-            updateReadingProgress = { progress ->
-                vm.updateBookReadingProgress(idBook, progress)
+            updateMarkReadOrUnreadBook = { isRead ->
+                vm.updateMarkReadOrUnreadBook(idBook, isRead)
             },
         )
     }

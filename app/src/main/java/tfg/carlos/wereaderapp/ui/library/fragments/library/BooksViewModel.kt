@@ -1,61 +1,62 @@
 package tfg.carlos.wereaderapp.ui.library.fragments.library
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import edu.carlosrivero.demo5.utils.checkConnection
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 
 class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
-
-    // Libros desde Room (flujo en tiempo real)
+    // Flujo para obtener todos los libros del usuario autenticado (MINE = true)
     private val _myBooks: Flow<List<BookEntity>> = repository.getMyBooks()
     val myBooks: Flow<List<BookEntity>> get() = _myBooks
 
+    // Flujo para obtener los libros compartidos (MINE = false)
     private val _sharedBooks: Flow<List<BookEntity>> = repository.getSharedBooks()
     val sharedBooks: Flow<List<BookEntity>> get() = _sharedBooks
 
+    // Cargar los libros al iniciar el ViewModel
     init {
-        // Cargar los libros al iniciar el ViewModel
         loadBooks()
     }
 
+    // Función para cargar los libros desde la API y almacenarlos en la base de datos local
     private fun loadBooks() {
         viewModelScope.launch {
             try {
                 repository.fetchAndCacheLibrary()
             } catch (e: Exception) {
-                Log.e("BooksViewModel", "Error al cargar libros: ${e.message}")
+                throw Exception("Error al cargar libros: ${e.message}")
             }
         }
     }
 
+    // Función para obtener un libro por su ID
+    suspend fun getBookById(id: String): BookEntity {
+        return repository.getBookById(id)
+    }
+
+    // Función para actualizar el estado de lectura de un libro
     fun updateBookReadingStatus(id: String, isReading: Boolean) {
         viewModelScope.launch {
             repository.updateBookReadingStatus(id, isReading)
-
-            //TODO: Se actualiza el progreso de lectura aqui
         }
     }
 
+    // Función para actualizar el estado de pendiente de un libro
     fun updateBookPendingStatus(id: String, isPending: Boolean) {
         viewModelScope.launch {
             repository.updateBookPendingStatus(id, isPending)
         }
     }
 
-    fun updateBookReadingProgress(id: String, progress: Double) {
+    // Función para marcar un libro como leído o no leído
+    fun updateMarkReadOrUnreadBook(id: String, isRead: Boolean) {
         viewModelScope.launch {
-            repository.updateBookReadingProgress(id, progress)
+            repository.updateMarkReadOrUnreadBook(id, isRead)
         }
-    }
-
-    suspend fun getBookById(id: String): BookEntity {
-        return repository.getBookById(id)
     }
 }
 
