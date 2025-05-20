@@ -1,6 +1,7 @@
 package tfg.carlos.wereaderapp.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import tfg.carlos.wereaderapp.WeReaderApplication
@@ -35,6 +36,11 @@ class LibraryRepository(
     // Obtiene un libro por su ID
     suspend fun getBookById(id: String): BookEntity {
         return local.getBookById(id)
+    }
+
+    // Obtiene un libro por su ID con LiveData
+    fun getBookLiveById(id: String): LiveData<BookEntity> {
+        return local.getBookLiveById(id)
     }
 
     // Obtiene los libros del usuario autenticado con el valor MINE = true

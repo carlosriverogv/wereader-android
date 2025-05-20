@@ -69,8 +69,6 @@ object BookMenuHandler {
                 }
                 R.id.action_detail -> {
                     onDetail?.invoke()
-                    // TODO: Ir a la vista de detalle del libro
-                    showToast(context, R.string.library_menu_detail)
                     true
                 }
                 R.id.action_toggle_pending -> {

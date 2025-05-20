@@ -1,10 +1,14 @@
 package tfg.carlos.wereaderapp.ui.library.fragments.library
 
+import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 
@@ -28,7 +32,11 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
             try {
                 repository.fetchAndCacheLibrary()
             } catch (e: Exception) {
-                throw Exception("Error al cargar libros: ${e.message}")
+                Log.e("MainViewModel", "Error loading books: ${e.message}")
+                Toast.makeText(
+                    WeReaderApplication.instance,
+                    "Error loading books: ${e.message}",
+                    Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -36,6 +44,11 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
     // Función para obtener un libro por su ID
     suspend fun getBookById(id: String): BookEntity {
         return repository.getBookById(id)
+    }
+
+    // Función para obtener un libro por su ID con LiveData
+    fun getBookLiveById(id: String): LiveData<BookEntity> {
+        return repository.getBookLiveById(id)
     }
 
     // Función para actualizar el estado de lectura de un libro

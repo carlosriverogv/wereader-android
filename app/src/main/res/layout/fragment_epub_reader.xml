@@ -8,14 +8,13 @@
     <!-- Toolbar lector -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/readerToolbar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         app:navigationIcon="@drawable/baseline_arrow_back_24"
         app:title="@string/reader_title_book"
         app:titleCentered="true"
         app:titleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
         app:titleTextColor="@android:color/black"
-        android:background="#00000000"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

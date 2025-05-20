@@ -1,9 +1,10 @@
 package tfg.carlos.wereaderapp.data.local.datasource
 
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
-import tfg.carlos.wereaderapp.data.local.BookDao
+import tfg.carlos.wereaderapp.data.local.interfaces.BookDao
 
 class LibraryLocalDataSource(private val dao: BookDao) {
     private val sessionManager by lazy {
@@ -17,6 +18,10 @@ class LibraryLocalDataSource(private val dao: BookDao) {
 
     suspend fun getBookById(id: String): BookEntity {
         return dao.getBookById(id, getIdUser())
+    }
+
+    fun getBookLiveById(id: String): LiveData<BookEntity> {
+        return dao.getBookLiveById(id, getIdUser())
     }
 
     suspend fun insertBooks(books: List<BookEntity>) {

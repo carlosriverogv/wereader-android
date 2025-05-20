@@ -28,8 +28,8 @@ data class BookEntity(
     // Campos locales ROOM:
     val isPending: Boolean = false,
     val isReading: Boolean = false,
-    val readingProgress: Double = 0.0, // Porcentaje de lectura (0-100)
+    val readingProgress: Double = 0.0,
     val mine: Boolean = true,
     val idUser: String,
-    val lastLocator: String? = null, // Última posición de lectura (JSON de Readium) (null si no se ha leído el libro aún)
+    val lastLocator: String? = null,
 )

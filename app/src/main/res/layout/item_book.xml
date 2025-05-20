@@ -12,7 +12,7 @@
         android:layout_height="150dp"
         android:contentDescription="@string/register_step3_avatar_iv"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_book_placeholder"
+        tools:src="@drawable/ic_book_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

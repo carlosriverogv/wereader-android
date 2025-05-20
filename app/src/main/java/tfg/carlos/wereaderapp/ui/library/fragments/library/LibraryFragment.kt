@@ -1,12 +1,12 @@
 package tfg.carlos.wereaderapp.ui.library.fragments.library
 
 import android.content.Intent
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
@@ -16,6 +16,7 @@ import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.FragmentLibraryBinding
+import tfg.carlos.wereaderapp.ui.bookDetail.BookDetailActivity
 import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 import tfg.carlos.wereaderapp.utils.BookMenuHandler
 
@@ -81,6 +82,7 @@ class LibraryFragment : Fragment() {
         }
     }
 
+    // Se abre la actividad de lectura del libro
     private suspend fun openReaderActivity(idBook: String) {
         vm.getBookById(idBook).let { book ->
             val epubPath = book.epubUrl
@@ -89,6 +91,15 @@ class LibraryFragment : Fragment() {
             intent.putExtra("bookId", book.id)
             startActivity(intent)
         }
+    }
+
+    // Se abre la actividad de detalle del libro
+    private fun openBookDetailActivity(idBook: String) {
+        val intent = Intent(requireContext(), BookDetailActivity::class.java).apply {
+            putExtra(BookDetailActivity.EXTRA_BOOK_ID, idBook)
+            putExtra(BookDetailActivity.EXTRA_IS_STORE_BOOK, false)
+        }
+        startActivity(intent)
     }
 
     // Mostrar el menú de opciones del libro
@@ -110,8 +121,7 @@ class LibraryFragment : Fragment() {
                 }
             },
             onDetail = {
-                // TODO: abrir un detalle del libro
-                // startActivity(Intent(this, BookDetailActivity::class.java))
+                openBookDetailActivity(idBook)
             },
             updatePending = { pending ->
                 vm.updateBookPendingStatus(idBook, pending)

@@ -17,6 +17,7 @@ import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.FragmentSharedLibraryBinding
+import tfg.carlos.wereaderapp.ui.bookDetail.BookDetailActivity
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksAdapter
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModel
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModelFactory
@@ -90,6 +91,7 @@ class SharedLibraryFragment : Fragment() {
         }
     }
 
+    // Se abre la actividad de lectura del libro
     private suspend fun openReaderActivity(idBook: String) {
         vm.getBookById(idBook).let { book ->
             val epubPath = book.epubUrl
@@ -98,6 +100,15 @@ class SharedLibraryFragment : Fragment() {
             intent.putExtra("bookId", book.id)
             startActivity(intent)
         }
+    }
+
+    // Se abre la actividad de detalle del libro
+    private fun openBookDetailActivity(idBook: String) {
+        val intent = Intent(requireContext(), BookDetailActivity::class.java).apply {
+            putExtra(BookDetailActivity.EXTRA_BOOK_ID, idBook)
+            putExtra(BookDetailActivity.EXTRA_IS_STORE_BOOK, false)
+        }
+        startActivity(intent)
     }
 
     // Mostrar el menú de opciones del libro
@@ -120,8 +131,7 @@ class SharedLibraryFragment : Fragment() {
                 }
             },
             onDetail = {
-                // TODO: abrir un detalle del libro
-                // startActivity(Intent(this, BookDetailActivity::class.java))
+                openBookDetailActivity(idBook)
             },
             updatePending = { pending ->
                 vm.updateBookPendingStatus(idBook, pending)
