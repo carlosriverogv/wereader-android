@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_toggle_pending_details"
+        android:title="@string/library_menu_add_pending" />
+    <item
+        android:id="@+id/action_mark_read_details"
+        android:title="@string/library_menu_mark_read" />
+    <item
+        android:id="@+id/action_mark_unread_details"
+        android:title="@string/library_menu_mark_unread" />
+</menu>

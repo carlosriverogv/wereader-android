@@ -22,6 +22,7 @@ tools:context=".ui.bookDetail.BookDetailActivity">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/baseline_arrow_back_24"
+        app:menu="@menu/book_detail_options_menu"
         app:navigationIconTint="?android:attr/textColorPrimary"
         app:titleCentered="true"
         app:titleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
@@ -156,23 +157,103 @@ tools:context=".ui.bookDetail.BookDetailActivity">
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/InformationSec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+        <!-- Sección 1 -->
+        <TextView
+            android:id="@+id/bookCanShare"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:text="@string/book_detail_shared_library_label"
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"
+            app:drawableBottomCompat="@drawable/baseline_check_circle_outline_24" />
+
+        <!-- Separador -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#C2C2C2" />
+
+        <!-- Sección 2 -->
+        <TextView
+            android:id="@+id/bookFormat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:text="@string/book_detail_format_label"
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"/>
+        <!-- Separador -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#C2C2C2" />
+
+        <!-- Sección 3 -->
+        <TextView
+            android:id="@+id/bookLanguage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:text="@string/book_detail_language_label"
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"/>
+        <!-- Separador -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#C2C2C2" />
+
+        <!-- Sección 3 -->
+        <TextView
+            android:id="@+id/bookDatePublication"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:text="@string/book_detail_date_publication_label"
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/actionsUserBookSection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+        app:layout_constraintTop_toBottomOf="@+id/InformationSec">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRead"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="@string/library_menu_read"
             android:backgroundTint="?attr/colorAccent"
+            android:text="@string/library_menu_read"
             android:textColor="@android:color/white"
-            android:textSize="16sp">
-        </com.google.android.material.button.MaterialButton>
+            android:textSize="16sp"/>
         <!--<com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -188,10 +269,10 @@ tools:context=".ui.bookDetail.BookDetailActivity">
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/SynopsisSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal"
@@ -203,10 +284,9 @@ tools:context=".ui.bookDetail.BookDetailActivity">
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Sinopsis"
+            android:text="@string/book_detail_description_label"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="22sp" />
     </LinearLayout>
 
     <ScrollView
@@ -216,11 +296,11 @@ tools:context=".ui.bookDetail.BookDetailActivity">
         android:layout_marginBottom="4dp"
         android:layout_marginTop="10dp"
         android:background="?android:attr/colorBackground"
-        android:padding="0dp"
+        android:padding="5dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/SynopsisSection">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -232,7 +312,7 @@ tools:context=".ui.bookDetail.BookDetailActivity">
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="?android:attr/textColorPrimary"
-                tools:text="Book Synopsis" />
+                android:textStyle="normal"/>
         </LinearLayout>
     </ScrollView>
 
@@ -241,8 +321,41 @@ tools:context=".ui.bookDetail.BookDetailActivity">
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintGuide_percent="0.8" />
 
+    <LinearLayout
+        android:id="@+id/InformationSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/guideline">
+
+        <TextView
+            android:id="@+id/tvTitleInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/book_detail_info_label"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/bookIsbn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/book_detail_isbn_label"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

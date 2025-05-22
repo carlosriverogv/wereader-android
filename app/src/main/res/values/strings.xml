@@ -30,6 +30,15 @@
     <string name="home_reading_empty">No tienes libros en lectura</string>
     <string name="home_pending">Pendientes</string>
 
+    <!-- BOOK DETAIL -->
+    <string name="book_detail_shared_library_label">Biblioteca&#10;Compartida:</string>
+    <string name="book_detail_format_label">Formato:\n\nEPUB</string>
+    <string name="book_detail_language_label">Idioma:\n\nEspañol</string>
+    <string name="book_detail_date_publication_label">Publicado el:\n\n%s</string>
+    <string name="book_detail_info_label">Información adicional</string>
+    <string name="book_detail_description_label">Sinopsis:</string>
+    <string name="book_detail_isbn_label">Isbn:  %s</string>
+
     <!-- STRINGS LIBRARY -->
     <string name="library_title">Biblioteca</string>
     <string name="library_empty">No tienes libros en tu biblioteca</string>
