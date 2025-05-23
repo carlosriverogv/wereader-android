@@ -157,7 +157,12 @@
     <string name="error_login_invalid">"Usuario o contraseña incorrectos"</string>
     <string name="error_register_user_name">"El nombre de usuario ya existe"</string>
     <string name="error_register_email">"El correo electrónico ya existe"</string>
-    <string name="error_loading_books">Error al cargar los libros: %s</string>
+    <string name="error_loading_books">Error al cargar los libros: </string>
+
+    <string name="error_updating_pending_status">Error actualizando el estado pendiente: </string>
+    <string name="error_updating_reading_status">Error actualizando el estado de lectura: </string>
+    <string name="error_updating_mark_status">Error marcando libro: </string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>

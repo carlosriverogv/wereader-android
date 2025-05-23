@@ -1,43 +1,25 @@
-package tfg.carlos.wereaderapp.ui.library.fragments.library
+package tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary
 
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 
-class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
+class BookDetailViewModel(private val repository: LibraryRepository) : ViewModel() {
     companion object {
-        private const val TAG = "BooksViewModel"
-    }
-    // Flujo para obtener todos los libros del usuario autenticado (MINE = true)
-    private val _myBooks: Flow<List<BookEntity>> = repository.getMyBooks()
-    val myBooks: Flow<List<BookEntity>> get() = _myBooks
-
-    // Flujo para obtener los libros compartidos (MINE = false)
-    private val _sharedBooks: Flow<List<BookEntity>> = repository.getSharedBooks()
-    val sharedBooks: Flow<List<BookEntity>> get() = _sharedBooks
-
-    // Cargar los libros al iniciar el ViewModel
-    init {
-        loadBooks()
+        private const val TAG = "BookDetailViewModel"
     }
 
-    // Función para cargar los libros desde la API y almacenarlos en la base de datos local
-    private fun loadBooks() {
-        viewModelScope.launch {
-            try {
-                repository.fetchAndCacheLibrary()
-            } catch (e: Exception) {
-                showToastError(R.string.error_loading_books, e.message)
-            }
-        }
+    // Función para obtener un libro por su ID con LiveData
+    fun getBookLiveById(id: String): LiveData<BookEntity> {
+        return repository.getBookLiveById(id)
     }
 
     // Función para obtener un libro por su ID
@@ -88,9 +70,8 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
 }
 
 @Suppress("UNCHECKED_CAST")
-class BooksViewModelFactory(private val repository: LibraryRepository)
-    : ViewModelProvider.Factory {
+class BookDetailViewModelFactory(private val repository: LibraryRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return BooksViewModel(repository) as T
+        return BookDetailViewModel(repository) as T
     }
 }

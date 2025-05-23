@@ -27,6 +27,8 @@ import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.ActivityBookDetailBinding
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModel
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModelFactory
+import tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.BookDetailViewModel
+import tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.BookDetailViewModelFactory
 import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -40,12 +42,20 @@ class BookDetailActivity : AppCompatActivity() {
     private var currentBook: BookEntity? = null
     private var optionsMenu: Menu? = null
 
-    private val vm: BooksViewModel by viewModels {
+    /*private val vm: BooksViewModel by viewModels {
         val db = (application as WeReaderApplication).weReaderDB
         val localDataSource = LibraryLocalDataSource(db.bookDao())
         val remoteDataSource = LibraryRemoteDadaSource()
         val repository = LibraryRepository(remoteDataSource, localDataSource)
         BooksViewModelFactory(repository)
+    }*/
+
+    private val vm: BookDetailViewModel by viewModels {
+        val db = (application as WeReaderApplication).weReaderDB
+        val localDataSource = LibraryLocalDataSource(db.bookDao())
+        val remoteDataSource = LibraryRemoteDadaSource()
+        val repository = LibraryRepository(remoteDataSource, localDataSource)
+        BookDetailViewModelFactory(repository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
