@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.auth.register
+package tfg.carlos.wereaderapp.ui.avatar
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.model.user.Avatar
 import tfg.carlos.wereaderapp.databinding.ItemAvatarBinding
 

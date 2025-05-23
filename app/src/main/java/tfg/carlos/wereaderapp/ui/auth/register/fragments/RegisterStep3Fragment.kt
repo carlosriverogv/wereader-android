@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.model.user.Avatar
 import tfg.carlos.wereaderapp.databinding.FragmentRegisterStep3Binding
-import tfg.carlos.wereaderapp.ui.auth.register.AvatarAdapter
+import tfg.carlos.wereaderapp.ui.avatar.AvatarAdapter
 import tfg.carlos.wereaderapp.ui.auth.register.RegisterActivity
+import tfg.carlos.wereaderapp.ui.avatar.AvatarProvider
 
 class RegisterStep3Fragment : Fragment() {
     private var _binding: FragmentRegisterStep3Binding? = null
@@ -49,8 +50,9 @@ class RegisterStep3Fragment : Fragment() {
         "Literatura Fantástica", "Literatura Histórica", "Literatura de Viajes", "Literatura de Aventura",
         "Literatura de Ciencia Ficción", "Literatura de Terror", "Literatura de Misterio",
         "Literatura de Suspense", "Literatura de Fantasía Épica", "Literatura de Fantasía Urbana",
-        "Histórica española",
-
+        "Histórica española", "Histórica europea", "Histórica americana", "Histórica asiática",
+        "Fantasía juvenil", "Fantasía adulta", "Ciencia ficción juvenil", "Fantasía infantil",
+        "Ciencia ficción adulta", "Ciencia ficción contemporánea", "Ciencia ficción clásica",
     )
 
     override fun onCreateView(
@@ -69,20 +71,7 @@ class RegisterStep3Fragment : Fragment() {
         binding.authorDropdown.threshold = 1
         binding.genreDropdown.threshold = 1
 
-        val avatarList = listOf(
-            Avatar(1, R.drawable.avatar1),
-            Avatar(2, R.drawable.avatar2),
-            Avatar(3, R.drawable.avatar3),
-            Avatar(4, R.drawable.avatar4),
-            Avatar(5, R.drawable.avatar5),
-            Avatar(6, R.drawable.avatar6),
-            Avatar(7, R.drawable.avatar7),
-            Avatar(8, R.drawable.avatar8),
-            Avatar(9, R.drawable.avatar9),
-            Avatar(10, R.drawable.avatar10),
-            Avatar(11, R.drawable.avatar11),
-            Avatar(12, R.drawable.avatar12),
-        )
+        val avatarList: List<Avatar> = AvatarProvider.getAllAvatars()
 
         var selectedAvatarId = avatarList.first().id
 

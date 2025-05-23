@@ -24,12 +24,179 @@
         android:id="@+id/ivLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:contentDescription="@string/logout_button"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:srcCompat="@drawable/baseline_logout_24" />
+
+    <!-- Avatar -->
+
+
+    <!-- Estadísticas: libros / leídos / pendientes -->
+    <!--<LinearLayout
+        android:id="@+id/statsLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:baselineAligned="false"
+
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profileAvatarImage"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:text="24"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:text="libros"
+                android:textColor="#BBBBBB"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="11"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:text="leídos"
+                android:textColor="#BBBBBB"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="13"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:text="pendientes"
+                android:textColor="#BBBBBB"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout
+
+    <!- Autor favorito
+    <TextView
+        android:id="@+id/labelAuthor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Autor favorito"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@id/statsLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/labelGenre"
+        app:layout_constraintHorizontalWeight="1"
+        android:layout_marginTop="36dp" />
+
+    <TextView
+        android:id="@+id/authorText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Brandon Sanderson"
+        android:textColor="#BBBBBB"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/labelAuthor"
+        app:layout_constraintStart_toStartOf="@id/labelAuthor"
+        app:layout_constraintEnd_toEndOf="@id/labelAuthor" />
+
+    <!- Género favorito
+    <TextView
+        android:id="@+id/labelGenre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Género favorito"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
+        app:layout_constraintTop_toTopOf="@id/labelAuthor"
+        app:layout_constraintStart_toEndOf="@id/labelAuthor"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/genreText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Fantasía"
+        android:textColor="#BBBBBB"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/labelGenre"
+        app:layout_constraintStart_toStartOf="@id/labelGenre"
+        app:layout_constraintEnd_toEndOf="@id/labelGenre" />-->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <ImageView
+            android:id="@+id/profileAvatarImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="Avatar"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Nombre -->
+
+        <!--  TAG -->
+
+        <TextView
+            android:id="@+id/userNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileAvatarImage"
+            android:layout_marginTop="5dp"
+            android:text="Carlos Rivero"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/userTagText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userNameText"
+            android:layout_marginTop="0dp"
+            android:text="carlosrgv_23"
+            android:textColor="#BBBBBB"
+            android:textSize="13sp" />
+    </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
