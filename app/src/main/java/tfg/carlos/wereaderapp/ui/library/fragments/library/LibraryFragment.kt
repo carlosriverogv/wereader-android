@@ -26,7 +26,7 @@ class LibraryFragment : Fragment() {
     private val binding get() = _binding!!
     private var clickedItemPosition: Int = RecyclerView.NO_POSITION
 
-    private val vm: BooksViewModel by viewModels {
+    private val vm: LibraryViewModel by viewModels {
         val db = (requireActivity().application as WeReaderApplication).weReaderDB
         val localDataSource = LibraryLocalDataSource(db.bookDao())
         val remoteDadaSource = LibraryRemoteDadaSource()

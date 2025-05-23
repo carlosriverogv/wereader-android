@@ -12,9 +12,9 @@ import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 
-class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
+class LibraryViewModel(val repository: LibraryRepository) : ViewModel() {
     companion object {
-        private const val TAG = "BooksViewModel"
+        private val TAG = LibraryViewModel::class.java.simpleName
     }
     // Flujo para obtener todos los libros del usuario autenticado (MINE = true)
     private val _myBooks: Flow<List<BookEntity>> = repository.getMyBooks()
@@ -91,6 +91,6 @@ class BooksViewModel(val repository: LibraryRepository) : ViewModel() {
 class BooksViewModelFactory(private val repository: LibraryRepository)
     : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return BooksViewModel(repository) as T
+        return LibraryViewModel(repository) as T
     }
 }

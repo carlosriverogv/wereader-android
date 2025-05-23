@@ -19,7 +19,7 @@ import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.FragmentSharedLibraryBinding
 import tfg.carlos.wereaderapp.ui.bookDetail.BookDetailActivity
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksAdapter
-import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModel
+import tfg.carlos.wereaderapp.ui.library.fragments.library.LibraryViewModel
 import tfg.carlos.wereaderapp.ui.library.fragments.library.BooksViewModelFactory
 import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 import tfg.carlos.wereaderapp.utils.BookMenuHandler
@@ -33,7 +33,7 @@ class SharedLibraryFragment : Fragment() {
         fun newInstance() = SharedLibraryFragment()
     }
 
-    private val vm: BooksViewModel by viewModels {
+    private val vm: LibraryViewModel by viewModels {
         val db = (requireActivity().application as WeReaderApplication).weReaderDB
         val localDataSource = LibraryLocalDataSource(db.bookDao())
         val remoteDadaSource = LibraryRemoteDadaSource()

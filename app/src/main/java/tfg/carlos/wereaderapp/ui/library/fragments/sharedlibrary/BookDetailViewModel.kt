@@ -1,6 +1,6 @@
 package tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary
 
-import android.util.Log
+ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 
 class BookDetailViewModel(private val repository: LibraryRepository) : ViewModel() {
     companion object {
-        private const val TAG = "BookDetailViewModel"
+        private val TAG = BookDetailViewModel::class.java.simpleName
     }
 
     // Función para obtener un libro por su ID con LiveData

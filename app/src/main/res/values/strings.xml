@@ -168,4 +168,9 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <!-- TAGS -->
+    <string name="tag_library_view_model">LibraryViewModel</string>
+    <string name="tag_main_view_model">MainViewModel</string>
+    <string name="tag_book_detail_view_model">BookDetailViewModel</string>
 </resources>

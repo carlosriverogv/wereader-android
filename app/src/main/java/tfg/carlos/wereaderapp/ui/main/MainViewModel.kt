@@ -14,7 +14,7 @@ import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 
 class MainViewModel(val repository: LibraryRepository): ViewModel() {
     companion object {
-        private const val TAG = "MainViewModel"
+        private val TAG = MainViewModel::class.java.simpleName
     }
 
     // Flujo para obtener los libros en estado de lectura (isReading = true)

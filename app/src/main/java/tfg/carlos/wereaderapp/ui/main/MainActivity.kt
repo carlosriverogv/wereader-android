@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var clickedItemPosition: Int = RecyclerView.NO_POSITION
 
-
     private val sessionManager by lazy {
         WeReaderApplication.sessionManager
     }
