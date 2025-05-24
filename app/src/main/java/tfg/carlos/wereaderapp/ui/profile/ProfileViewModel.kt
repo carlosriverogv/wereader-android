@@ -9,25 +9,75 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.data.model.user.User
 import tfg.carlos.wereaderapp.data.repository.AuthRepository
+import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 
-class ProfileViewModel(val repository: AuthRepository) : ViewModel() {
+class ProfileViewModel(
+    private val authRepository: AuthRepository,
+    private val libraryRepository: LibraryRepository
+) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> get() = _user
 
     init {
-        getUser()
+        getProfileUser()
     }
 
-    private fun getUser() {
+    /**
+     * Obtiene el perfil del usuario actual.
+     * Se llama al inicio para cargar los datos del usuario.
+     */
+    private fun getProfileUser() {
         viewModelScope.launch {
             try {
-                val result = repository.getUser()
+                val result = authRepository.getUserProfile()
                 _user.postValue(result)
             } catch (e: Exception) {
                 Log.e("ProfileViewModel", "Error obteniendo el usuario", e)
             }
         }
+    }
+
+    fun getPendingBooksCount(): LiveData<Int> {
+        val pendingBooksCount = MutableLiveData<Int>()
+        viewModelScope.launch {
+            try {
+                val count = libraryRepository.getPendingBooksCount()
+                pendingBooksCount.postValue(count)
+            } catch (e: Exception) {
+                Log.e("ProfileViewModel", "Error obteniendo el conteo de libros pendientes", e)
+                pendingBooksCount.postValue(0) // En caso de error, devolvemos 0
+            }
+        }
+        return pendingBooksCount
+    }
+
+    fun getTotalBooksCount(): LiveData<Int> {
+        val totalBooksCount = MutableLiveData<Int>()
+        viewModelScope.launch {
+            try {
+                val count = libraryRepository.getTotalBooksCount()
+                totalBooksCount.postValue(count)
+            } catch (e: Exception) {
+                Log.e("ProfileViewModel", "Error obteniendo el conteo de libros totales", e)
+                totalBooksCount.postValue(0) // En caso de error, devolvemos 0
+            }
+        }
+        return totalBooksCount
+    }
+
+    fun getFinishedBooksCount(): LiveData<Int> {
+        val finishedBooksCount = MutableLiveData<Int>()
+        viewModelScope.launch {
+            try {
+                val count = libraryRepository.getFinishedBooksCount()
+                finishedBooksCount.postValue(count)
+            } catch (e: Exception) {
+                Log.e("ProfileViewModel", "Error obteniendo el conteo de libros finalizados", e)
+                finishedBooksCount.postValue(0) // En caso de error, devolvemos 0
+            }
+        }
+        return finishedBooksCount
     }
 
     /*fun updateAvatar(avatarId: Int) {
@@ -42,9 +92,11 @@ class ProfileViewModel(val repository: AuthRepository) : ViewModel() {
 }
 
 @Suppress("UNCHECKED_CAST")
-class ProfileViewModelFactory(private val repository: AuthRepository)
+class ProfileViewModelFactory(
+    private val authRepository: AuthRepository,
+    private val libraryRepository: LibraryRepository)
     : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ProfileViewModel(repository) as T
+        return ProfileViewModel(authRepository, libraryRepository) as T
     }
 }

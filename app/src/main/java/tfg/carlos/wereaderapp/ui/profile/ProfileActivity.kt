@@ -4,7 +4,9 @@ import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import edu.carlosrivero.demo5.utils.checkConnection
 import edu.carlosrivero.demo5.utils.isTokenValid
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
@@ -40,10 +43,15 @@ class ProfileActivity : AppCompatActivity() {
         WeReaderApplication.sessionManager
     }
 
-    private val vm: ProfileViewModel by viewModels {
-        val remoteDadaSource = AuthRemoteDataSource()
-        val repository = AuthRepository(remoteDadaSource)
-        ProfileViewModelFactory(repository)
+    private val authViewModel: ProfileViewModel by viewModels {
+        val db = (this.application as WeReaderApplication).weReaderDB
+        val libraryLocalDataSource = LibraryLocalDataSource(db.bookDao())
+        val libraryRemoteDadaSource = LibraryRemoteDadaSource()
+        val libraryRepository = LibraryRepository(libraryRemoteDadaSource, libraryLocalDataSource)
+
+        val authRemoteDadaSource = AuthRemoteDataSource()
+        val authRepository = AuthRepository(authRemoteDadaSource)
+        ProfileViewModelFactory(authRepository, libraryRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,16 +118,42 @@ class ProfileActivity : AppCompatActivity() {
             true
         }
 
-        getUser()
+        showUserProfile()
     }
 
-    private fun getUser() {
-        vm.user.observe(this) { user ->
-            user?.let {
-                binding.userNameText.text = it.name + " " + it.lastname
-                binding.userTagText.text = it.tag
-                setAvatarImage(binding.profileAvatarImage, it.avatar)
+    private fun showUserProfile() {
+        if (checkConnection(this)) {
+            authViewModel.user.observe(this) { user ->
+                user?.let {
+                    binding.userNameText.text = getString(R.string.profile_full_name, it.name, it.lastname)
+                    binding.userTagText.text = it.tag
+                    setAvatarImage(binding.profileAvatarImage, it.avatar)
+
+                    binding.authorFav.text = it.authorFav
+                    binding.genreFav.text = it.genreFav
+
+                    authViewModel.getPendingBooksCount().observe(this) { count ->
+                        binding.pendingBooksCount.text = count.toString()
+                        Log.d("ProfileActivity", "Pending books count: $count")
+                    }
+
+                    authViewModel.getTotalBooksCount().observe(this) { count ->
+                        binding.totalBooksCount.text = count.toString()
+                        Log.d("ProfileActivity", "Total books count: $count")
+                    }
+
+                    authViewModel.getFinishedBooksCount().observe(this) { count ->
+                        binding.finishedBooksCount.text = count.toString()
+                        Log.d("ProfileActivity", "Finished books count: $count")
+                    }
+                }
             }
+        } else {
+            Toast.makeText(
+                this,
+                getString(R.string.error_no_connection),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

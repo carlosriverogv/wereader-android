@@ -35,6 +35,15 @@ interface BookDao {
     @Query("SELECT * FROM books WHERE isPending = 1 AND idUser = :userId")
     fun getPendingBooks(userId: String): Flow<List<BookEntity>>
 
+    @Query("SELECT COUNT(*) FROM books WHERE isPending = 1 AND idUser = :userId")
+    suspend fun getPendingBooksCount(userId: String): Int
+
+    @Query("SELECT COUNT(*) FROM books WHERE idUser = :userId")
+    suspend fun getTotalBooksCount(userId: String): Int
+
+    @Query("SELECT COUNT(*) FROM books WHERE readingProgress == 100.0 AND idUser = :userId")
+    suspend fun getFinishedBooksCount(userId: String): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(books: List<BookEntity>)
 

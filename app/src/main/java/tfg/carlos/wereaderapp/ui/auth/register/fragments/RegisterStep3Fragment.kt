@@ -53,6 +53,7 @@ class RegisterStep3Fragment : Fragment() {
         "Histórica española", "Histórica europea", "Histórica americana", "Histórica asiática",
         "Fantasía juvenil", "Fantasía adulta", "Ciencia ficción juvenil", "Fantasía infantil",
         "Ciencia ficción adulta", "Ciencia ficción contemporánea", "Ciencia ficción clásica",
+        "Divulgación científica",
     )
 
     override fun onCreateView(

@@ -55,6 +55,30 @@ class LibraryRepository(
     // Obtiene los libros que están pendientes de lectura (isPending = true)
     fun getPendingBooks(): Flow<List<BookEntity>> = local.getPendingBooks()
 
+    // Obtiene el número de libros pendientes de lectura
+    suspend fun getPendingBooksCount(): Int {
+        return local.getPendingBooksCount()
+    }
+
+    // Obtiene el número total de libros en la biblioteca
+    suspend fun getTotalBooksCount(): Int {
+        return local.getTotalBooksCount()
+    }
+
+    // Obtiene el número de libros leídos (readingProgress = 100.0)
+    suspend fun getFinishedBooksCount(): Int {
+        return local.getFinishedBooksCount()
+    }
+
+    /**
+     * Devuelve el último localizador del libro
+     */
+    suspend fun getReadingProgression(id: String): String? {
+        val book = local.getBookById(id)
+        Log.d("ReaderViewModel", "loadReadingProgression: ${book.id}, lastLocator: ${book.lastLocator}")
+        return book.lastLocator
+    }
+
     private suspend fun cacheBooks(bookItems: List<BookEntity>) {
         local.cacheBooks(bookItems)
     }
@@ -122,15 +146,6 @@ class LibraryRepository(
         val book = local.getBookById(id)
         val updated = book.copy(lastLocator = lastLocator, readingProgress = progressPercentage)
         local.updateBook(updated)
-    }
-
-    /**
-     * Devuelve el último localizador del libro
-     */
-    suspend fun getReadingProgression(id: String): String? {
-        val book = local.getBookById(id)
-        Log.d("ReaderViewModel", "loadReadingProgression: ${book.id}, lastLocator: ${book.lastLocator}")
-        return book.lastLocator
     }
 
     /**

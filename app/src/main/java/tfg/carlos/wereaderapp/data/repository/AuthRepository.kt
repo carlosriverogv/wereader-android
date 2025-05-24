@@ -11,7 +11,7 @@ class AuthRepository(val dataSource: AuthRemoteDataSource) {
 
     suspend fun register(registerRequest: RegisterRequest) = dataSource.register(registerRequest)
 
-    suspend fun getUser() = dataSource.getUserProfile()
+    suspend fun getUserProfile() = dataSource.getUserProfile()
 
     // ROOM Methods
 }

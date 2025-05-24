@@ -30,6 +30,12 @@
     <string name="home_reading_empty">No tienes libros en lectura</string>
     <string name="home_pending">Pendientes</string>
 
+    <!-- STRINGS PROFILE -->
+    <string name="profile_full_name">%1$s %2$s</string>
+    <string name="profile_author_fav">Autor favorito</string>
+    <string name="profile_genre_fav">Género favorito</string>
+    <string name="profile_avatar">Avatar</string>
+
     <!-- BOOK DETAIL -->
     <string name="book_detail_shared_library_label">Biblioteca&#10;Compartida:</string>
     <string name="book_detail_format_label">Formato:\n\nEPUB</string>

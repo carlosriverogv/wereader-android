@@ -28,6 +28,25 @@ class LibraryLocalDataSource(private val dao: BookDao) {
         dao.insertAll(books)
     }
 
+    // Obtiene los libros que están pendientes de lectura (isPending = true)
+    fun getReadingBooks(): Flow<List<BookEntity>> {
+        return dao.getReadingBooks(getIdUser())
+    }
+
+    // Obtiene el número de libros pendientes de lectura
+    suspend fun getPendingBooksCount(): Int {
+        return dao.getPendingBooksCount(getIdUser())
+    }
+
+    // Obtiene el número total de libros en la biblioteca
+    suspend fun getTotalBooksCount(): Int {
+        return dao.getTotalBooksCount(getIdUser())
+    }
+
+    suspend fun getFinishedBooksCount(): Int {
+        return dao.getFinishedBooksCount(getIdUser())
+    }
+
     /**
      * Función para cachear los libros de la base de datos local.
      * Se eliminan los libros existentes y se insertan los nuevos.
@@ -64,11 +83,6 @@ class LibraryLocalDataSource(private val dao: BookDao) {
     // Obtiene los libros que están en lectura (isReading = true)
     fun getPendingBooks(): Flow<List<BookEntity>> {
         return dao.getPendingBooks(getIdUser())
-    }
-
-    // Obtiene los libros que están pendientes de lectura (isPending = true)
-    fun getReadingBooks(): Flow<List<BookEntity>> {
-        return dao.getReadingBooks(getIdUser())
     }
 
     // TODO: Se puede mover a UserDataSource
