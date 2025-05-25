@@ -19,6 +19,6 @@
         android:id="@+id/selectionBorder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/avatar_selected_border"
+        android:background="@drawable/avatar_selected_thick"
         android:visibility="gone" />
 </FrameLayout>

@@ -21,8 +21,16 @@ class LibraryRepository(
     }
 
     // API Methods
+    /**
+     * Obtiene la biblioteca del usuario autenticado.
+     * @return Flow de LibraryResponse que contiene los libros del usuario autenticado.
+     */
     private suspend fun getAuthUserLibrary() = remote.getAuthUserLibrary()
 
+    /**
+     * Obtiene la biblioteca compartida con el usuario autenticado.
+     * @return Flow de SharedLibraryResponse que contiene los libros compartidos con el usuario autenticado.
+     */
     private suspend fun getSharedLibrary() = remote.getSharedLibrary()
 
     // ROOM Methods

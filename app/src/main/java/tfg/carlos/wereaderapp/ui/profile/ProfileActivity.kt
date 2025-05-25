@@ -169,7 +169,7 @@ class ProfileActivity : AppCompatActivity() {
                     binding.userNameText.text = getString(R.string.profile_full_name,
                         it.name, it.lastname)
                     binding.userTagText.text = it.tag
-                    setAvatarImage(binding.profileAvatarImage, it.avatar)
+                    loadAvatarImage(binding.profileAvatarImage, it.avatar)
 
                     binding.authorFav.text = it.authorFav
                     binding.genreFav.text = it.genreFav
@@ -203,7 +203,7 @@ class ProfileActivity : AppCompatActivity() {
      * @param imageView El ImageView donde se mostrará el avatar.
      * @param avatarId El ID del avatar a mostrar.
      */
-    private fun setAvatarImage(imageView: ImageView, avatarId: Int) {
+    private fun loadAvatarImage(imageView: ImageView, avatarId: Int) {
         val avatar = getAvatarById(avatarId)
         avatar?.let {
             Glide.with(imageView.context)

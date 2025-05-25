@@ -59,7 +59,7 @@
             android:layout_alignTop="@id/profileAvatarImage"
             android:layout_alignEnd="@id/profileAvatarImage"
             android:layout_alignBottom="@id/profileAvatarImage"
-            android:background="@drawable/avatar_selected_border"
+            android:background="@drawable/avatar_border_medium"
             android:visibility="visible" />
 
         <!-- Nombre -->

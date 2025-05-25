@@ -7,6 +7,8 @@ import tfg.carlos.wereaderapp.data.model.sharedlibrary.SharedLibraryResponse
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api
 
 class LibraryRemoteDadaSource {
+
+    // TODO: Revisar NO UTILIZAR flow y usar unicamente suspend
     suspend fun getAuthUserLibrary() = flow<LibraryResponse> {
         val response = Retrofit2Api.libraryApi.getAuthUserLibrary()
         if (response.isSuccessful) {
@@ -16,6 +18,8 @@ class LibraryRemoteDadaSource {
         }
     }
 
+    // TODO: Revisar NO UTILIZAR flow y usar unicamente suspend
+    // TODO: Revisar ELSE
     suspend fun getSharedLibrary() = flow<SharedLibraryResponse> {
         val response = Retrofit2Api.sharedLibraryApi.getSharedLibraryWithMe()
         if (response.isSuccessful) {

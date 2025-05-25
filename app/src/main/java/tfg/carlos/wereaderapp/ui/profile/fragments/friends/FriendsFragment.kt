@@ -5,56 +5,72 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.WeReaderApplication
+import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
+import tfg.carlos.wereaderapp.data.remote.datasource.AuthRemoteDataSource
+import tfg.carlos.wereaderapp.data.remote.datasource.FriendshipRemoteDataSource
+import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
+import tfg.carlos.wereaderapp.data.repository.AuthRepository
+import tfg.carlos.wereaderapp.data.repository.FriendshipRepository
+import tfg.carlos.wereaderapp.data.repository.LibraryRepository
+import tfg.carlos.wereaderapp.databinding.FragmentFriendsBinding
+import tfg.carlos.wereaderapp.databinding.FragmentLibraryBinding
+import tfg.carlos.wereaderapp.ui.profile.ProfileViewModel
+import tfg.carlos.wereaderapp.ui.profile.ProfileViewModelFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FriendsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FriendsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentFriendsBinding? = null
+    private val binding get() = _binding!!
+    private var clickedItemPosition: Int = RecyclerView.NO_POSITION
+
+    private val friendshipViewModel: FriendsViewModel by viewModels {
+        val friendshipRemoteDadaSource = FriendshipRemoteDataSource()
+        val friendshipRepository = FriendshipRepository(friendshipRemoteDadaSource)
+        FriendsViewModelFactory(friendshipRepository)
+    }
+
+    private val adapter = FriendsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends, container, false)
+        _binding = FragmentFriendsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FriendsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FriendsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // TODO: Instanciar el adapter y asignarlo al RecyclerView
+        binding.friendsRecyclerView.adapter = adapter
+
+        // TODO: Cargar la lista de amigos desde el ViewModel
+        getFriends()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    /**
+     * Método para obtener la lista de amigos del ViewModel.
+     * Aquí se debería implementar la lógica para interactuar con el ViewModel
+     * y obtener los datos necesarios.
+     */
+    private fun getFriends() {
+        friendshipViewModel.friends.observe(viewLifecycleOwner) { friendList ->
+            adapter.submitList(friendList)  // friendList ya es un List<UserFriendshipsResponseItem>
+        }
     }
 }

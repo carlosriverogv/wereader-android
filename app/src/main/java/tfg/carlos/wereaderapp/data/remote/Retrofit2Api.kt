@@ -6,6 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.remote.api.AuthService
 import tfg.carlos.wereaderapp.data.local.SessionManager
+import tfg.carlos.wereaderapp.data.remote.api.FriendshipService
 import tfg.carlos.wereaderapp.data.remote.api.LibraryService
 import tfg.carlos.wereaderapp.data.remote.api.SharedLibraryService
 import tfg.carlos.wereaderapp.data.remote.api.UserService
@@ -33,6 +34,10 @@ object Retrofit2Api  {
 
     val userApi: UserService by lazy {
         retrofit.create(UserService::class.java)
+    }
+
+    val friendshipApi: FriendshipService by lazy {
+        retrofit.create(FriendshipService::class.java)
     }
 
     val libraryApi: LibraryService by lazy {
