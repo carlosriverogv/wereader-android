@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.library
+package tfg.carlos.wereaderapp.ui.library.fragments
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

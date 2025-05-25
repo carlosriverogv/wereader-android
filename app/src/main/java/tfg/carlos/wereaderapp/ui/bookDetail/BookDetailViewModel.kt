@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary
+package tfg.carlos.wereaderapp.ui.bookDetail
 
  import android.util.Log
 import android.widget.Toast

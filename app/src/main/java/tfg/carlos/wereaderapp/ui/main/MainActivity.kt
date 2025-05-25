@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         WeReaderApplication.sessionManager
     }
 
+    // ViewModel para la actividad principal
     private val vm: MainViewModel by viewModels {
         val db = (application as WeReaderApplication).weReaderDB
         val localDataSource = LibraryLocalDataSource(db.bookDao())
@@ -46,6 +47,10 @@ class MainActivity : AppCompatActivity() {
         MainViewModelFactory(repository)
     }
 
+    /**
+     * Adaptador para los libros que se están leyendo.
+     * Permite manejar los eventos de clic y clic largo en los elementos de la lista.
+     */
     private val readingBooksAdapter = BooksAdapter(
         onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
@@ -60,6 +65,10 @@ class MainActivity : AppCompatActivity() {
         }
     )
 
+    /**
+     * Adaptador para los libros pendientes.
+     * Permite manejar los eventos de clic y clic largo en los elementos de la lista.
+     */
     private val pendingBooksAdapter = BooksAdapter(
         onClickBookItem = { book: BookEntity, position: Int ->
             clickedItemPosition = position
@@ -95,10 +104,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Configura la interfaz de usuario de la actividad Main.
+     * Se inicializa el binding, se habilita el modo Edge to Edge y se configura el BottomNavigationView
+     * y los RecyclerViews para los libros que se están leyendo y los libros pendientes.
+     */
     private fun setupUI() {
         // Se inicializa la vista
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        // Se habilita el modo Edge to Edge
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -107,6 +122,15 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // Se carga el BottomNavigationView
+        loadBottomNavigation()
+        // Se cargan los libros que se están leyendo
+        loadReadingBooks()
+        // Se cargan los libros pendientes
+        loadPendingBooks()
+    }
+
+    private fun loadBottomNavigation() {
         // Se establece el ID del elemento seleccionado en el BottomNavigationView
         binding.bottomNavigation.selectedItemId = R.id.nav_home
 
@@ -124,13 +148,13 @@ class MainActivity : AppCompatActivity() {
             finish()
             true
         }
-
-        // Se cargan los libros que se están leyendo
-        loadReadingBooks()
-        // Se cargan los libros pendientes
-        loadPendingBooks()
     }
 
+    /**
+     * Carga los libros que se están leyendo en el RecyclerView correspondiente.
+     * Se configura el LayoutManager y el Adapter, y se observa la lista de libros
+     * para actualizar la interfaz cuando cambie.
+     */
     private fun loadReadingBooks() {
         binding.readingBooksRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -145,6 +169,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga los libros pendientes en el RecyclerView correspondiente.
+     * Se configura el LayoutManager y el Adapter, y se observa la lista de libros
+     * para actualizar la interfaz cuando cambie.
+     */
     private fun loadPendingBooks() {
         binding.pendingBooksRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -159,7 +188,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Se abre la actividad de lectura del libro
+    /**
+     * Abre la actividad de lectura con el ID del libro proporcionado.
+     * Se obtiene la URL del libro y se inicia la actividad ReaderActivity.
+     */
     private suspend fun openReaderActivity(idBook: String) {
         vm.getBookById(idBook).let { book ->
             val epubPath = book.epubUrl
@@ -170,7 +202,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Se abre la actividad de detalle del libro
+    /**
+     * Abre la actividad de detalles del libro con el ID del libro proporcionado.
+     * Se pasa el ID del libro y se indica que no es un libro de la tienda.
+     */
     private fun openBookDetailActivity(idBook: String) {
         val intent = Intent(this, BookDetailActivity::class.java).apply {
             putExtra(BookDetailActivity.EXTRA_BOOK_ID, idBook)
@@ -179,7 +214,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    // Mostrar el menú de opciones del libro
+    /**
+     * Muestra el menú de opciones del libro en el RecyclerView correspondiente.
+     * Permite al usuario realizar acciones como leer, ver detalles, actualizar estado de lectura,
+     * y marcar como leído o no leído.
+     */
     private fun showBookOptionsMenu(
         recyclerView: RecyclerView,
         idBook: String,

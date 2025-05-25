@@ -35,6 +35,7 @@ class DiscoverActivity : AppCompatActivity() {
         // Se inicializa la vista
         binding = ActivityDiscoverBinding.inflate(layoutInflater)
 
+        // Se habilita el modo Edge to Edge
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -43,6 +44,11 @@ class DiscoverActivity : AppCompatActivity() {
             insets
         }
 
+        // Se carga el BottomNavigationView
+        loadBottomNavigation()
+    }
+
+    private fun loadBottomNavigation() {
         // Se establece el ID del elemento seleccionado en el BottomNavigationView
         binding.bottomNavigation.selectedItemId = R.id.nav_discover
 

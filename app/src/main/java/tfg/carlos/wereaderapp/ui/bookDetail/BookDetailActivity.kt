@@ -25,8 +25,6 @@ import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.ActivityBookDetailBinding
-import tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.BookDetailViewModel
-import tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.BookDetailViewModelFactory
 import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter

@@ -172,6 +172,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/profilePreferencesLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
@@ -181,12 +182,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
 
+        <!-- Autor favorito -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-            <!-- Nombre -->
             <TextView
                 android:id="@+id/authorFavTitle"
                 android:layout_width="wrap_content"
@@ -196,8 +197,6 @@
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="17sp"
                 android:text="@string/profile_author_fav" />
-
-            <!-- TAG -->
             <TextView
                 android:id="@+id/authorFav"
                 android:layout_width="wrap_content"
@@ -209,12 +208,12 @@
 
         </LinearLayout>
 
+        <!-- Género favorito -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-            <!-- Nombre -->
             <TextView
                 android:id="@+id/genreFavTitle"
                 android:layout_width="wrap_content"
@@ -225,7 +224,6 @@
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="17sp" />
 
-            <!-- TAG -->
             <TextView
                 android:id="@+id/genreFav"
                 android:layout_width="wrap_content"
@@ -235,13 +233,41 @@
                 android:textColor="#BBBBBB"
                 android:textSize="15sp"/>
         </LinearLayout>
-
     </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:background="?android:attr/colorBackground"
+        android:contentDescription="@string/library_me"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePreferencesLayout"
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabIndicatorColor="@color/light_accentColor"
+        app:tabIndicatorFullWidth="true"
+        app:tabSelectedTextColor="@color/light_accentColor"
+        app:tabTextColor="?android:attr/textColorPrimary" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerProfile"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?android:attr/colorBackground"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutProfile" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
         android:background="?attr/bottomNavigationStyle"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"

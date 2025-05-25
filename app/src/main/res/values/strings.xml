@@ -36,6 +36,11 @@
     <string name="profile_genre_fav">Género favorito</string>
     <string name="profile_avatar">Avatar</string>
 
+    <!-- STRINGS Profile TABS -->
+    <string name="profile_tab_friend">Amigos</string>
+    <string name="profile_tab_request">Solicitudes de amistad</string>
+    <string name="profile_tab_add_friend">Añadir amigos</string>
+
     <!-- BOOK DETAIL -->
     <string name="book_detail_shared_library_label">Biblioteca&#10;Compartida:</string>
     <string name="book_detail_format_label">Formato:\n\nEPUB</string>
@@ -66,8 +71,8 @@
     <string name="library_menu_mark_unread_response">Marcado como no leído</string>
 
     <!-- STRINGS Library TABS -->
-    <string name="library_tab_books">Libros</string>
-    <string name="library_tab_shared">Compartidos</string>
+    <string name="library_tab_books">Mis libros</string>
+    <string name="library_tab_shared">Biblioteca compartida</string>
     <string name="library_tab_collections">Colecciones</string>
 
     <!-- STRINGS Library Errors -->

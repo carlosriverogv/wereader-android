@@ -3,7 +3,6 @@ package tfg.carlos.wereaderapp.ui.library
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,6 +13,7 @@ import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.databinding.ActivityLibraryBinding
 import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
+import tfg.carlos.wereaderapp.ui.library.fragments.LibraryPagerAdapter
 import tfg.carlos.wereaderapp.ui.main.MainActivity
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
 
@@ -33,10 +33,16 @@ class LibraryActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Configura la interfaz de usuario de la actividad Library.
+     * Se inicializa el binding, se habilita el modo Edge to Edge y se configura el BottomNavigationView
+     * y el TabLayout.
+     */
     private fun setupUI() {
         // Se inicializa la vista
         binding = ActivityLibraryBinding.inflate(layoutInflater)
 
+        // Se habilita el modo Edge to Edge
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -45,6 +51,17 @@ class LibraryActivity : AppCompatActivity() {
             insets
         }
 
+        // Se carga el BottomNavigationView
+        loadBottomNavigation()
+        // Se carga el TabLayout
+        loadTabLayout()
+    }
+
+    /**
+     * Configura el BottomNavigationView y su comportamiento.
+     * Se establece el listener para manejar los clics en los elementos del menú.
+     */
+    private fun loadBottomNavigation() {
         // Se establece el ID del elemento seleccionado en el BottomNavigationView
         binding.bottomNavigation.selectedItemId = R.id.nav_library
 
@@ -62,7 +79,13 @@ class LibraryActivity : AppCompatActivity() {
             finish()
             true
         }
+    }
 
+    /**
+     * Carga el TabLayout con los títulos de las pestañas y el adaptador.
+     * Se utiliza TabLayoutMediator para vincular el TabLayout con el ViewPager.
+     */
+    private fun loadTabLayout() {
         val tabTitles = listOf(
             getString(R.string.library_tab_books),
             getString(R.string.library_tab_shared),
@@ -70,9 +93,9 @@ class LibraryActivity : AppCompatActivity() {
         )
         val adapter = LibraryPagerAdapter(this)
 
-        binding.viewPager.adapter = adapter
+        binding.viewPagerLibrary.adapter = adapter
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+        TabLayoutMediator(binding.tabLayoutLibrary, binding.viewPagerLibrary) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()
     }
