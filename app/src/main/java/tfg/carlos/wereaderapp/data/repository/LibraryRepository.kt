@@ -10,6 +10,7 @@ import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.model.book.toEntity
 import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
 import tfg.carlos.wereaderapp.data.model.sharedlibrary.CreateSharedLibraryRequest
+import tfg.carlos.wereaderapp.data.model.sharedlibrary.DeleteSharedLibraryRequest
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 
 class LibraryRepository(
@@ -35,12 +36,26 @@ class LibraryRepository(
     private suspend fun getSharedLibrary() = remote.getSharedLibrary()
 
     /**
+     * Obtiene la biblioteca que ha compartido el usuario autenticado con otro usuario.
+     */
+    suspend fun getSharedLibraryByMe() = remote.getSharedLibraryByMe()
+
+    /**
      * Comparte la biblioteca del usuario autenticado con otro usuario.
      * @param idFriendUser ID del usuario con el que se quiere compartir la biblioteca.
      */
     suspend fun shareMyLibraryWithFriend(idFriendUser: String) {
         val sharedLibraryRequest = CreateSharedLibraryRequest(idFriendUser)
         remote.shareMyLibrary(sharedLibraryRequest)
+    }
+
+    /**
+     * Elimina la biblioteca compartida por el usuario autenticado.
+     * @param idFriendUser ID del usuario con el que se ha compartido la biblioteca.
+     */
+    suspend fun stopSharingMyLibrary(idFriendUser: String) {
+        val deleteSharedLibraryRequest = DeleteSharedLibraryRequest(idFriendUser)
+        remote.stopSharingMyLibrary(deleteSharedLibraryRequest)
     }
 
     // ROOM Methods

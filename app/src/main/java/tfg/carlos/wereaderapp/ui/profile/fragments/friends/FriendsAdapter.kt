@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import tfg.carlos.wereaderapp.R
+import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponseItem
 import tfg.carlos.wereaderapp.databinding.ItemFriendBinding
 import tfg.carlos.wereaderapp.ui.avatar.AvatarProvider.getAvatarById
@@ -18,6 +19,10 @@ class FriendsAdapter(
     val onClickFriendOptionsButton: (friend: UserFriendshipsResponseItem, position: Int) -> Unit,
     //val onLongClickBookItem: (book: UserFriendshipsResponseItem, position: Int) -> Unit,
 ) : ListAdapter<UserFriendshipsResponseItem, FriendsAdapter.FriendsViewHolder>(FriendsItemDiffCallback()) {
+
+    private val sessionManager by lazy {
+        WeReaderApplication.sessionManager
+    }
 
     inner class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val bind = ItemFriendBinding.bind(view)
@@ -37,6 +42,13 @@ class FriendsAdapter(
                     onClickFriendOptionsButton(friendItem, bindingAdapterPosition)
                 }
 
+                if (sessionManager.isSharingLibrary()
+                    && sessionManager.getSharedUserId() == friendItem.id) {
+                    friendSharingImage.visibility = View.VISIBLE
+                } else {
+                    friendSharingImage.visibility = View.GONE
+                }
+
                 /*itemView.setOnLongClickListener {
                     // Se pasa el id del amigo y la posición del item seleccionado
                     onLongClickBookItem(friendItem, bindingAdapterPosition)
@@ -46,6 +58,10 @@ class FriendsAdapter(
         }
     }
 
+    /**
+     * Carga la imagen del avatar en el ImageView proporcionado.
+     * Utiliza Glide para cargar la imagen y aplicar un recorte circular.
+     */
     private fun loadAvatarImage(imageView: ImageView, avatarId: Int) {
         val avatar = getAvatarById(avatarId)
         avatar?.let {

@@ -40,7 +40,7 @@
     <color name="light_accentColorBackground">#28F8A5AA</color>
 
     <color name="light_textColorPrimary">#000000</color>
-    <color name="light_textColorSecondary">#3C4950</color>
+    <color name="light_textColorSecondary">#808080</color>
     <color name="light_textColorTertiary">#FFFFFF</color>
     <color name="light_textColorHint">#000000</color>
 
@@ -83,7 +83,7 @@
     <color name="dark_accentColor">#FB6C70</color>
 
     <color name="dark_textColorPrimary">#FFFFFF</color>
-    <color name="dark_textColorSecondary">#FFFFFF</color>
+    <color name="dark_textColorSecondary">#BBBBBB</color>
     <color name="dark_textColorTertiary">#000000</color>
     <color name="dark_textColorHint">#000000</color>
     <color name="light_blue_600">#FF039BE5</color>

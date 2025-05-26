@@ -29,7 +29,6 @@ import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import tfg.carlos.wereaderapp.ui.avatar.AvatarProvider.getAvatarById
 import tfg.carlos.wereaderapp.ui.discover.DiscoverActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
-import tfg.carlos.wereaderapp.ui.library.fragments.LibraryPagerAdapter
 import tfg.carlos.wereaderapp.ui.main.MainActivity
 import tfg.carlos.wereaderapp.ui.profile.fragments.ProfilePagerAdapter
 

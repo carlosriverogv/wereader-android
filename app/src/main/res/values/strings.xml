@@ -64,6 +64,13 @@
     <string name="alert_dialog_share_library_positive">Compartir</string>
     <string name="alert_dialog_share_library_negative">Cancelar</string>
 
+    <!-- STRINGS Friends - AlertDialog(Dejar de compartir biblioteca) -->
+    <string name="alert_dialog_stop_sharing_title">Dejar de compartir biblioteca</string>
+    <string name="alert_dialog_stop_sharing_message">¿Quieres dejar de compartir tu biblioteca con %1$s?</string>
+    <string name="alert_dialog_stop_sharing_positive">Dejar de compartir</string>
+    <string name="alert_dialog_stop_sharing_negative">Cancelar</string>
+
+
     <!-- BOOK DETAIL -->
     <string name="book_detail_shared_library_label">Biblioteca&#10;Compartida:</string>
     <string name="book_detail_format_label">Formato:\n\nEPUB</string>

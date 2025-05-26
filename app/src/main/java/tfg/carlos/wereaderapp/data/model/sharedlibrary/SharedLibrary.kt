@@ -3,7 +3,7 @@ package tfg.carlos.wereaderapp.data.model.sharedlibrary
 
 import com.google.gson.annotations.SerializedName
 
-data class Result(
+data class SharedLibrary(
     @SerializedName("dateAuthorization")
     val dateAuthorization: String,
     @SerializedName("_id")

@@ -17,13 +17,11 @@ object FriendMenuHandler {
         onToggleShare: () -> Unit,
         onDeleteFriend: () -> Unit
     ) {
-        //val sessionManager = WeReaderApplication.sessionManager
-        //val isSharing = sessionManager.isSharingLibrary()
-        //val sharedUserId = sessionManager.getSharedUserId()
+        val sessionManager = WeReaderApplication.sessionManager
+        val isSharing = sessionManager.isSharingLibrary()
+        val friendUserId = sessionManager.getSharedUserId()
 
-        //val isSharingWithThisFriend = isSharing && (friendId == sharedUserId)
-
-        val isSharingWithThisFriend = false
+        val isSharingWithThisFriend = isSharing && (friend.id == friendUserId)
 
         val popupMenu = PopupMenu(context, anchorView)
         popupMenu.menuInflater.inflate(R.menu.friend_options_menu, popupMenu.menu)
@@ -39,11 +37,6 @@ object FriendMenuHandler {
             when (item.itemId) {
                 R.id.action_toggle_share_library -> {
                     onToggleShare()
-                    val msgRes = if (isSharingWithThisFriend)
-                        R.string.friend_menu_stop_sharing_response
-                    else
-                        R.string.friend_menu_share_library_response
-                    //showToast(context, msgRes)
                     true
                 }
                 R.id.action_delete_friend -> {

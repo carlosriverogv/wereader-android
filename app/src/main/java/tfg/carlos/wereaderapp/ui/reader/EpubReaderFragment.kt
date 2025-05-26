@@ -236,11 +236,11 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
                     showUserPreferences()
                     true
                 }
-                R.id.opt_more_options -> {
+                /*R.id.opt_more_options -> {
                     //TODO: Se abre el menú de opciones adicionales
                     showMoreOptions()
                     true
-                }
+                }*/
                 else -> false
             }
         }

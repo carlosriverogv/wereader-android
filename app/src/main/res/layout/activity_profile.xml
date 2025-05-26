@@ -82,8 +82,8 @@
             android:layout_below="@+id/userNameText"
             android:layout_marginTop="0dp"
             android:minWidth="50dp"
-            android:textColor="#BBBBBB"
-            android:textSize="13sp" />
+            android:textColor="?android:textColorSecondary"
+            android:textSize="14sp" />
 
         <!-- Estadísticas: libros / leídos / pendientes -->
         <LinearLayout
@@ -203,7 +203,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:minWidth="50dp"
-                android:textColor="#BBBBBB"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="15sp"/>
 
         </LinearLayout>
@@ -230,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:minWidth="50dp"
-                android:textColor="#BBBBBB"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="15sp"/>
         </LinearLayout>
     </LinearLayout>

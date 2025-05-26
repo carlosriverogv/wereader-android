@@ -9,11 +9,11 @@
         android:title="@string/app_name"
         app:showAsAction="ifRoom" />
 
-    <item
+    <!--<item
         android:id="@+id/opt_more_options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_more_vert_24"
         android:title="@string/app_name"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" /> -->
 </menu>

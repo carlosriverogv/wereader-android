@@ -62,10 +62,24 @@
             android:layout_toEndOf="@+id/friendAvatarImage"
             android:minWidth="50dp"
             android:text="noelsoriano"
-            android:textColor="#BBBBBB"
-            android:textSize="13sp" />
+            android:textColor="?android:textColorSecondary"
+            android:textSize="14sp" />
 
-        <!-- Botón de opciones -->
+        <!-- Simbolo de compartiendo -->
+
+        <ImageView
+            android:id="@+id/friendSharingImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="15dp"
+            android:contentDescription="@string/friend_menu_share_library_response"
+            android:src="@drawable/baseline_share_24"
+            android:visibility="gone"
+            android:layout_toStartOf="@+id/friendOptionsButton">
+
+        </ImageView>
+
         <ImageButton
             android:id="@+id/friendOptionsButton"
             android:layout_width="wrap_content"

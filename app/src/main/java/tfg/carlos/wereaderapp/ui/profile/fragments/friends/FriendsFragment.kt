@@ -31,16 +31,22 @@ class FriendsFragment : Fragment() {
     private val binding get() = _binding!!
     private var clickedItemPosition: Int = RecyclerView.NO_POSITION
 
+    private val sessionManager by lazy {
+        WeReaderApplication.sessionManager
+    }
+
     private val friendshipViewModel: FriendsViewModel by viewModels {
-        val friendshipRemoteDadaSource = FriendshipRemoteDataSource()
+        // Data source y repository para la biblioteca
+        val db = (requireActivity().application as WeReaderApplication).weReaderDB
+        val libraryLocalDataSource = LibraryLocalDataSource(db.bookDao())
         val libraryRemoteDadaSource = LibraryRemoteDadaSource()
-        val libraryLocalDataSource = LibraryLocalDataSource((requireActivity().application as WeReaderApplication).weReaderDB.bookDao())
-        val libraryRepository = LibraryRepository(
-            libraryRemoteDadaSource,
-            libraryLocalDataSource
-        )
+        val libraryRepository = LibraryRepository(libraryRemoteDadaSource, libraryLocalDataSource)
+
+        // Data source y repository para friendships
+        val friendshipRemoteDadaSource = FriendshipRemoteDataSource()
         val friendshipRepository = FriendshipRepository(
             friendshipRemoteDadaSource)
+
         FriendsViewModelFactory(friendshipRepository, libraryRepository)
     }
 
@@ -52,6 +58,15 @@ class FriendsFragment : Fragment() {
         //, onLongClickBookItem = { book, position -> /* TODO: Implement long click action */ }
     )
 
+    /**
+     * Muestra un menú de opciones para el amigo seleccionado.
+     * Este método se encarga de mostrar un menú contextual con las opciones disponibles
+     * para el amigo seleccionado en la lista de amigos.
+     *
+     * @param recyclerView El RecyclerView donde se encuentra el amigo seleccionado.
+     * @param friend El objeto UserFriendshipsResponseItem que representa al amigo seleccionado.
+     * @param position La posición del amigo en la lista del RecyclerView.
+     */
     private fun showFriendOptionsMenu(
         recyclerView: RecyclerView, friend: UserFriendshipsResponseItem, position: Int) {
         val viewHolder = recyclerView.findViewHolderForAdapterPosition(position) ?: return
@@ -61,14 +76,18 @@ class FriendsFragment : Fragment() {
             anchorView = anchorView,
             friend = friend,
             onToggleShare = {
-                AlertDialog.Builder(requireContext())
-                    .setTitle(getString(R.string.alert_dialog_share_library_title))
-                    .setMessage(getString(R.string.alert_dialog_share_library_message, friend.tag))
-                    .setPositiveButton(getString(R.string.alert_dialog_share_library_positive)) { _, _ ->
-                        friendshipViewModel.shareMyLibraryWithFriend(friend.id)
-                    }
-                    .setNegativeButton(getString(R.string.alert_dialog_share_library_negative), null)
-                    .show()
+                // Se obtiene el estado de compartir la biblioteca y el id del amigo
+                val isSharing = sessionManager.isSharingLibrary()
+                val friendUserId = sessionManager.getSharedUserId()
+                val isSharingWithThisFriend = isSharing && (friend.id == friendUserId)
+
+                if (isSharingWithThisFriend) {
+                    // Si ya se está compartiendo la biblioteca con este amigo, se detiene el compartir
+                    stopSharingMyLibrary(friend)
+                } else {
+                    // Si no se está compartiendo, se muestra el diálogo para compartir la biblioteca
+                    shareLibraryWithFriend(friend)
+                }
             },
             onDeleteFriend = {
                 // TODO: Se elimina el amigo y se actualiza la lista
@@ -138,6 +157,68 @@ class FriendsFragment : Fragment() {
                     .show()
                 // Limpiar el mensaje después de mostrarlo
                 friendshipViewModel.clearErrorMessage()
+            }
+        }
+    }
+
+    /**
+     * Método para compartir la biblioteca con un amigo.
+     * Muestra un diálogo de confirmación antes de proceder con el compartir.
+     *
+     * @param friend El amigo con el que se desea compartir la biblioteca.
+     */
+    private fun shareLibraryWithFriend(friend: UserFriendshipsResponseItem) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.alert_dialog_share_library_title))
+            .setMessage(getString(R.string.alert_dialog_share_library_message, friend.tag))
+            .setPositiveButton(getString(R.string.alert_dialog_share_library_positive)) { _, _ ->
+                // Se comparte la biblioteca con el amigo
+                friendshipViewModel.shareMyLibraryWithFriend(friend.id)
+
+                // Se observa el resultado de la operación de compartir
+                checkShareSuccess(friend.id)
+            }
+            .setNegativeButton(getString(R.string.alert_dialog_share_library_negative), null)
+            .show()
+    }
+
+    /**
+     * Método para detener el compartir la biblioteca con un amigo.
+     * TODO: Pasar al ViewModel y eliminar este método del Fragment.
+     */
+    private fun stopSharingMyLibrary(friend: UserFriendshipsResponseItem) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.alert_dialog_stop_sharing_title))
+            .setMessage(getString(R.string.alert_dialog_stop_sharing_message, friend.tag))
+            .setPositiveButton(getString(R.string.alert_dialog_stop_sharing_positive)) { _, _ ->
+                // TODO: Se elimina la biblioteca compartida con el amigo
+                friendshipViewModel.stopSharingMyLibrary(friend.id)
+
+                // Se resetea el cache de la biblioteca compartida
+                sessionManager.clearSharingLibrary()
+
+                // Se notifica al adapter que se ha actualizado el estado de compartir
+                adapter.notifyItemChanged(clickedItemPosition)
+            }
+            .setNegativeButton(getString(R.string.alert_dialog_stop_sharing_negative), null)
+            .show()
+    }
+
+    /**
+     * Método para verificar si la operación de compartir fue exitosa.
+     * Observa el LiveData shareSuccess del ViewModel y actualiza el estado de compartir en SharedPreferences.
+     * TODO: Pasar al ViewModel y eliminar este método del Fragment.
+     * @param friendId El ID del amigo con el que se intentó compartir la biblioteca.
+     */
+    private fun checkShareSuccess(friendId: String) {
+        friendshipViewModel.shareSuccess.observe(viewLifecycleOwner) { success ->
+            // Si la operación fue exitosa, se actualiza el estado de compartir en SharedReferences
+            if (success) {
+                sessionManager.saveSharingLibrary(
+                    isSharing = true,
+                    friendUserId = friendId
+                )
+                adapter.notifyItemChanged(clickedItemPosition)
             }
         }
     }
