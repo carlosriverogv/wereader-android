@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +15,7 @@ import tfg.carlos.wereaderapp.databinding.ItemFriendBinding
 import tfg.carlos.wereaderapp.ui.avatar.AvatarProvider.getAvatarById
 
 class FriendsAdapter(
-    //val onClickBookItem: (book: UserFriendshipsResponseItem, position: Int) -> Unit,
+    val onClickFriendOptionsButton: (friend: UserFriendshipsResponseItem, position: Int) -> Unit,
     //val onLongClickBookItem: (book: UserFriendshipsResponseItem, position: Int) -> Unit,
 ) : ListAdapter<UserFriendshipsResponseItem, FriendsAdapter.FriendsViewHolder>(FriendsItemDiffCallback()) {
 
@@ -33,10 +32,10 @@ class FriendsAdapter(
 
                 loadAvatarImage(friendAvatarImage, friendItem.avatar)
 
-                /*itemView.setOnClickListener {
+                friendOptionsButton.setOnClickListener {
                     // Se pasa el id del amigo y la posición del item seleccionado
-                    onClickBookItem(friendItem, bindingAdapterPosition)
-                }*/
+                    onClickFriendOptionsButton(friendItem, bindingAdapterPosition)
+                }
 
                 /*itemView.setOnLongClickListener {
                     // Se pasa el id del amigo y la posición del item seleccionado

@@ -79,13 +79,13 @@ class ProfileActivity : AppCompatActivity() {
      */
     private fun showLogoutConfirmationDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Cerrar sesión")
-            .setMessage("¿Estás seguro de que deseas cerrar sesión?")
-            .setPositiveButton("Sí") { _, _ ->
+            .setTitle(getString(R.string.alert_dialog_logout_title))
+            .setMessage(getString(R.string.alert_dialog_logout_message))
+            .setPositiveButton(getString(R.string.alert_dialog_logout_positive)) { _, _ ->
                 sessionManager.clearToken()
                 goToLogin()
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.alert_dialog_logout_negative), null)
             .show()
     }
 
@@ -173,6 +173,7 @@ class ProfileActivity : AppCompatActivity() {
 
                     binding.authorFav.text = it.authorFav
                     binding.genreFav.text = it.genreFav
+                    Log.d("ProfileActivity", "User fav genre: ${it.genreFav}")
 
                     authViewModel.getPendingBooksCount().observe(this) { count ->
                         binding.pendingBooksCount.text = count.toString()

@@ -77,7 +77,14 @@ class LibraryFragment : Fragment() {
 
         lifecycleScope.launch {
             vm.myBooks.collect { booksList ->
-                adapter.submitList(booksList)
+                if (booksList.isEmpty()) {
+                    binding.booksRecyclerView.visibility = View.GONE
+                    binding.tvLibraryEmpty.visibility = View.VISIBLE
+                } else {
+                    binding.tvLibraryEmpty.visibility = View.GONE
+                    binding.booksRecyclerView.visibility = View.VISIBLE
+                    adapter.submitList(booksList)
+                }
             }
         }
     }

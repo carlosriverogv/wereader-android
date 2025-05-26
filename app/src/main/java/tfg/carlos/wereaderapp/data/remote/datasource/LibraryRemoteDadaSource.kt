@@ -3,6 +3,8 @@ package tfg.carlos.wereaderapp.data.remote.datasource
 import kotlinx.coroutines.flow.flow
 import org.json.JSONObject
 import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
+import tfg.carlos.wereaderapp.data.model.sharedlibrary.CreateSharedLibraryRequest
+import tfg.carlos.wereaderapp.data.model.sharedlibrary.CreateSharedLibraryResponse
 import tfg.carlos.wereaderapp.data.model.sharedlibrary.SharedLibraryResponse
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api
 
@@ -30,6 +32,21 @@ class LibraryRemoteDadaSource {
                 JSONObject(errorBody).getString("message")
             } catch (e: Exception) {
                 "Error al obtener la biblioteca compartida: ${response.code()}"
+            }
+            throw Exception(errorMessage)
+        }
+    }
+
+    suspend fun shareMyLibrary(request: CreateSharedLibraryRequest): CreateSharedLibraryResponse {
+        val response = Retrofit2Api.sharedLibraryApi.shareMyLibrary(request)
+        if (response.isSuccessful) {
+            return response.body() ?: throw Exception("Respuesta vacía al compartir la biblioteca")
+        } else {
+            val errorBody = response.errorBody()?.string()
+            val errorMessage = try {
+                JSONObject(errorBody).getString("message")
+            } catch (e: Exception) {
+                "Error al compartir la biblioteca: ${response.code()}"
             }
             throw Exception(errorMessage)
         }

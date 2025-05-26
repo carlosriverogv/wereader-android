@@ -3,17 +3,17 @@ package tfg.carlos.wereaderapp.data.model.sharedlibrary
 
 import com.google.gson.annotations.SerializedName
 
-data class SharedLibraryResponse(
+data class Result(
     @SerializedName("dateAuthorization")
     val dateAuthorization: String,
     @SerializedName("_id")
     val id: String,
     @SerializedName("idLibrary")
-    val library: Library,
+    val idLibrary: String,
     @SerializedName("idUserFriend")
     val idUserFriend: String,
     @SerializedName("idUserOwner")
-    val userOwner: UserOwner,
+    val idUserOwner: String,
     @SerializedName("__v")
     val v: Int
 )

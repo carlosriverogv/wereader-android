@@ -85,8 +85,14 @@ class SharedLibraryFragment : Fragment() {
 
         lifecycleScope.launch {
             vm.sharedBooks.collect { booksList ->
-                Log.d("BooksFragment", "Libros recibidos: ${booksList.size}")
-                adapter.submitList(booksList)
+                if (booksList.isEmpty()) {
+                    binding.booksRecyclerView.visibility = View.GONE
+                    binding.tvSharedLibraryEmpty.visibility = View.VISIBLE
+                } else {
+                    binding.booksRecyclerView.visibility = View.VISIBLE
+                    binding.tvSharedLibraryEmpty.visibility = View.GONE
+                    adapter.submitList(booksList)
+                }
             }
         }
     }

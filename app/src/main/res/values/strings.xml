@@ -36,10 +36,33 @@
     <string name="profile_genre_fav">Género favorito</string>
     <string name="profile_avatar">Avatar</string>
 
+    <!-- STRINGS Profile - AlertDialog(Cerrar sesión) -->
+    <string name="alert_dialog_logout_title">Cerrar sesión</string>
+    <string name="alert_dialog_logout_message">¿Estás seguro de que deseas cerrar sesión?</string>
+    <string name="alert_dialog_logout_positive">Sí</string>
+    <string name="alert_dialog_logout_negative">Cancelar</string>
+
     <!-- STRINGS Profile TABS -->
     <string name="profile_tab_friend">Amigos</string>
     <string name="profile_tab_request">Solicitudes de amistad</string>
     <string name="profile_tab_add_friend">Añadir amigos</string>
+
+    <!-- STRINGS Profile Friends -->
+    <string name="profile_friends_empty">Actualmente no hay amistades.</string>
+    <string name="opciones_de_amigo">Opciones de amigo</string>
+
+    <string name="friend_menu_share_library">Compartir biblioteca</string>
+    <string name="friend_menu_stop_sharing">Dejar de compartir biblioteca</string>
+    <string name="friend_menu_delete_friend">Eliminar amigo</string>
+    <string name="friend_menu_delete_friend_response">Amigo eliminado</string>
+    <string name="friend_menu_share_library_response">Biblioteca compartida</string>
+    <string name="friend_menu_stop_sharing_response">Has dejado de compartir tu biblioteca</string>
+
+    <!-- STRINGS Friends - AlertDialog(Compartir biblioteca) -->
+    <string name="alert_dialog_share_library_title">Compartir biblioteca</string>
+    <string name="alert_dialog_share_library_message">¿Quieres compartir tu biblioteca con %1$s?</string>
+    <string name="alert_dialog_share_library_positive">Compartir</string>
+    <string name="alert_dialog_share_library_negative">Cancelar</string>
 
     <!-- BOOK DETAIL -->
     <string name="book_detail_shared_library_label">Biblioteca&#10;Compartida:</string>
@@ -52,7 +75,8 @@
 
     <!-- STRINGS LIBRARY -->
     <string name="library_title">Biblioteca</string>
-    <string name="library_empty">No tienes libros en tu biblioteca</string>
+    <string name="library_empty">No tienes libros en tu biblioteca.</string>
+    <string name="library_empty_shared">No tienes libros en tu biblioteca compartida.</string>
     <string name="library_me">Mi biblioteca</string>
     <string name="library_friends">Biblioteca de amigos</string>
 

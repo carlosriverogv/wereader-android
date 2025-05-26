@@ -35,4 +35,11 @@ class SessionManager(context: Context) {
             ?: throw IllegalStateException()
     }
 
+    fun isSharingLibrary(): Boolean {
+        return prefs.getBoolean("isSharingLibrary", false)
+    }
+
+    fun getSharedUserId(): String? {
+        return prefs.getString("sharedUserId", null)
+    }
 }

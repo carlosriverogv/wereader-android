@@ -9,6 +9,7 @@ import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.model.book.toEntity
 import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
+import tfg.carlos.wereaderapp.data.model.sharedlibrary.CreateSharedLibraryRequest
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 
 class LibraryRepository(
@@ -32,6 +33,15 @@ class LibraryRepository(
      * @return Flow de SharedLibraryResponse que contiene los libros compartidos con el usuario autenticado.
      */
     private suspend fun getSharedLibrary() = remote.getSharedLibrary()
+
+    /**
+     * Comparte la biblioteca del usuario autenticado con otro usuario.
+     * @param idFriendUser ID del usuario con el que se quiere compartir la biblioteca.
+     */
+    suspend fun shareMyLibraryWithFriend(idFriendUser: String) {
+        val sharedLibraryRequest = CreateSharedLibraryRequest(idFriendUser)
+        remote.shareMyLibrary(sharedLibraryRequest)
+    }
 
     // ROOM Methods
 
@@ -119,6 +129,12 @@ class LibraryRepository(
         } catch (e: Exception) {
             emptyList()
         }
+
+        // Eliminar libros compartidos que ya no están en la API
+        // (Necesario por si el dueño de la biblioteca compartida
+        // a dejado de compartir la biblioteca)
+        val sharedIds = sharedBooks.map { it.id }
+        local.deleteSharedBooksNotIn(sharedIds)
 
         // Combinar libros propios y compartidos, asegurando que no haya duplicados
         val entities = (myBooks + sharedBooks)
