@@ -18,13 +18,13 @@ interface FriendshipService {
 
     @POST("friendship/deleteMyFriendship")
     suspend fun deleteMyFriendship(@Body request: FriendshipRequest)
-    : Response<FriendshipResponse>
-
-    @PATCH("friendship/reject")
-    suspend fun rejectFriendshipRequest(@Body request: FriendshipRequest)
-    : Response<FriendshipResponse>
+        : Response<FriendshipResponse>
 
     @PATCH("friendship/accept")
     suspend fun acceptFriendshipRequest(@Body request: FriendshipRequest)
-    : Response<FriendshipResponse>
+        : Response<FriendshipResponse>
+
+    @PATCH("friendship/reject")
+    suspend fun rejectFriendshipRequest(@Body request: FriendshipRequest)
+        : Response<FriendshipResponse>
 }

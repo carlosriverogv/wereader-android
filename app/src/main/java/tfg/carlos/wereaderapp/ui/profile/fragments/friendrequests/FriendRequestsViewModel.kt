@@ -44,6 +44,46 @@ class FriendRequestsViewModel(
             }
         }
     }
+
+    fun reloadFriendRequests() {
+        loadFriendRequests()
+    }
+
+    /**
+     * Acepta una solicitud de amistad.
+     * @param idFriendUser ID del usuario amigo a aceptar.
+     */
+    fun acceptFriendRequest(idFriendUser: String) {
+        viewModelScope.launch {
+            try {
+                friendshipRepository.acceptFriendshipRequest(idFriendUser)
+                // Recargar las solicitudes de amistad después de aceptar
+                reloadFriendRequests()
+            } catch (e: Exception) {
+                _errorMessage.postValue(
+                    e.message ?: "Error al aceptar la solicitud de amistad"
+                )
+            }
+        }
+    }
+
+    /**
+     * Rechaza una solicitud de amistad.
+     * @param idFriendUser ID del usuario amigo a rechazar.
+     */
+    fun rejectFriendRequest(idFriendUser: String) {
+        viewModelScope.launch {
+            try {
+                friendshipRepository.rejectFriendshipRequest(idFriendUser)
+                // Recargar las solicitudes de amistad después de rechazar
+                reloadFriendRequests()
+            } catch (e: Exception) {
+                _errorMessage.postValue(
+                    e.message ?: "Error al rechazar la solicitud de amistad"
+                )
+            }
+        }
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

@@ -41,7 +41,6 @@ object FriendMenuHandler {
                 }
                 R.id.action_delete_friend -> {
                     onDeleteFriend()
-                    showToast(context, R.string.friend_menu_delete_friend_response)
                     true
                 }
                 else -> false

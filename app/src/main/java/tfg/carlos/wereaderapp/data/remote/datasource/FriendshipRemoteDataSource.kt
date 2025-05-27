@@ -24,6 +24,24 @@ class FriendshipRemoteDataSource {
         }
     }
 
+    suspend fun acceptFriendshipRequest(idFriendUser: String) {
+        val response = Retrofit2Api.friendshipApi.acceptFriendshipRequest(
+            FriendshipRequest(idFriendUser)
+        )
+        if (!response.isSuccessful) {
+            throw Exception("Error al aceptar la solicitud de amistad: ${response.code()}")
+        }
+    }
+
+    suspend fun rejectFriendshipRequest(idFriendUser: String) {
+        val response = Retrofit2Api.friendshipApi.rejectFriendshipRequest(
+            FriendshipRequest(idFriendUser)
+        )
+        if (!response.isSuccessful) {
+            throw Exception("Error al rechazar la solicitud de amistad: ${response.code()}")
+        }
+    }
+
     suspend fun deleteMyFriendship(idFriendUser: String) {
         val response = Retrofit2Api.friendshipApi.deleteMyFriendship(
             FriendshipRequest(idFriendUser)

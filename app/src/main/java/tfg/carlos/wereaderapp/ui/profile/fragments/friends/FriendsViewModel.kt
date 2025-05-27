@@ -63,6 +63,10 @@ class FriendsViewModel(
         }
     }
 
+    fun reloadFriendsList() {
+        loadFriends()
+    }
+
     /**
      * Carga la biblioteca compartida por el usuario autenticado.
      * Se llama al iniciar el ViewModel

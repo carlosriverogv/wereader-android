@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import tfg.carlos.wereaderapp.R
@@ -18,6 +19,7 @@ import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.FriendshipRepository
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.FragmentFriendsBinding
+import tfg.carlos.wereaderapp.ui.profile.ProfileViewModel
 import tfg.carlos.wereaderapp.ui.profile.fragments.FriendshipAdapter
 import tfg.carlos.wereaderapp.utils.FriendMenuHandler
 
@@ -30,7 +32,7 @@ class FriendsFragment : Fragment() {
         WeReaderApplication.sessionManager
     }
 
-    private val friendshipViewModel: FriendsViewModel by viewModels {
+    private val friendsViewModel: FriendsViewModel by viewModels {
         // Data source y repository para la biblioteca
         val db = (requireActivity().application as WeReaderApplication).weReaderDB
         val libraryLocalDataSource = LibraryLocalDataSource(db.bookDao())
@@ -67,6 +69,10 @@ class FriendsFragment : Fragment() {
         // Se establece el adaptador del RecyclerView
         binding.friendsRecyclerView.adapter = adapter
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            friendsViewModel.reloadFriendsList()
+        }
+
         // Se obtiene la lista de amigos del ViewModel
         getFriends()
 
@@ -86,12 +92,15 @@ class FriendsFragment : Fragment() {
      */
     private fun getFriends() {
         adapter.submitList(null)
-        friendshipViewModel.friends.observe(viewLifecycleOwner) { friendList ->
+        friendsViewModel.friends.observe(viewLifecycleOwner) { friendList ->
+            binding.swipeRefreshLayout.isRefreshing = false
             /** Actualiza el RecyclerView con la lista de amigos obtenida del ViewModel.
              * Si la lista está vacía, se muestra un mensaje de "Actualmente no hay amistades".
              * Si la lista contiene amigos, se actualiza el RecyclerView con los datos.
              */
             if (friendList.isNotEmpty()) {
+                binding.friendsRecyclerView.visibility = View.VISIBLE
+                binding.tvFriendsEmpty.visibility = View.GONE
                 adapter.submitList(friendList)
             } else {
                 binding.friendsRecyclerView.visibility = View.GONE
@@ -149,7 +158,7 @@ class FriendsFragment : Fragment() {
             .setMessage(getString(R.string.alert_dialog_share_library_message, friend.tag))
             .setPositiveButton(getString(R.string.alert_dialog_share_library_positive)) { _, _ ->
                 // Se comparte la biblioteca con el amigo
-                friendshipViewModel.shareMyLibraryWithFriend(friend.id)
+                friendsViewModel.shareMyLibraryWithFriend(friend.id)
 
                 // Se observa el resultado de la operación de compartir
                 checkShareSuccess(friend.id)
@@ -170,7 +179,7 @@ class FriendsFragment : Fragment() {
             .setMessage(getString(R.string.alert_dialog_stop_sharing_message, friend.tag))
             .setPositiveButton(getString(R.string.alert_dialog_stop_sharing_positive)) { _, _ ->
                 // Se elimina la biblioteca compartida con el amigo
-                friendshipViewModel.stopSharingMyLibrary(friend.id)
+                friendsViewModel.stopSharingMyLibrary(friend.id)
 
                 // Se resetea el cache de la biblioteca compartida
                 sessionManager.clearSharingLibrary()
@@ -194,7 +203,7 @@ class FriendsFragment : Fragment() {
             .setMessage(getString(R.string.alert_dialog_delete_friend_message, friend.tag))
             .setPositiveButton(getString(R.string.alert_dialog_delete_friend_positive)) { _, _ ->
                 // Se elimina la amistad del ViewModel
-                friendshipViewModel.deleteMyFriendship(friend.id)
+                friendsViewModel.deleteMyFriendship(friend.id)
             }
             .setNegativeButton(getString(R.string.alert_dialog_delete_friend_negative), null)
             .show()
@@ -206,7 +215,7 @@ class FriendsFragment : Fragment() {
      * @param friendId El ID del amigo con el que se intentó compartir la biblioteca.
      */
     private fun checkShareSuccess(friendId: String) {
-        friendshipViewModel.shareSuccess.observe(viewLifecycleOwner) { success ->
+        friendsViewModel.shareSuccess.observe(viewLifecycleOwner) { success ->
             // Si la operación fue exitosa, se actualiza el estado de compartir en SharedReferences
             if (success) {
                 sessionManager.saveSharingLibrary(
@@ -223,12 +232,13 @@ class FriendsFragment : Fragment() {
      * Observa el mensaje de error del ViewModel y lo muestra si está presente.
      */
     private fun showError() {
-        friendshipViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+        friendsViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            binding.swipeRefreshLayout.isRefreshing = false
             message?.let {
                 Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
                     .show()
                 // Limpiar el mensaje después de mostrarlo
-                friendshipViewModel.clearErrorMessage()
+                friendsViewModel.clearErrorMessage()
             }
         }
     }

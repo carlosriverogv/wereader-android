@@ -59,6 +59,9 @@
     <string name="friend_menu_share_library_response">Biblioteca compartida</string>
     <string name="friend_menu_stop_sharing_response">Has dejado de compartir tu biblioteca</string>
 
+    <string name="friend_request_menu_accept">Aceptar</string>
+    <string name="friend_request_menu_reject">Rechazar</string>
+
     <!-- STRINGS Friends - AlertDialog(Compartir biblioteca) -->
     <string name="alert_dialog_share_library_title">Compartir biblioteca</string>
     <string name="alert_dialog_share_library_message">¿Quieres compartir tu biblioteca con %1$s?</string>
@@ -76,6 +79,18 @@
     <string name="alert_dialog_delete_friend_message">¿Estás seguro de que deseas eliminar a %1$s de tu lista de amigos?</string>
     <string name="alert_dialog_delete_friend_positive">Eliminar</string>
     <string name="alert_dialog_delete_friend_negative">Cancelar</string>
+
+    <!-- STRINGS Profile - AlertDialog(Aceptar solicitud de amistad) -->
+    <string name="alert_dialog_accept_friend_request_title">Aceptar solicitud de amistad</string>
+    <string name="alert_dialog_accept_friend_request_message">¿Quieres aceptar la solicitud de amistad de %1$s?</string>
+    <string name="alert_dialog_accept_friend_request_positive">Aceptar</string>
+    <string name="alert_dialog_accept_friend_request_negative">Cancelar</string>
+
+    <!-- STRINGS Profile - AlertDialog(Rechazar solicitud de amistad) -->
+    <string name="alert_dialog_reject_friend_request_title">Rechazar solicitud de amistad</string>
+    <string name="alert_dialog_reject_friend_request_message">¿Estás seguro de que deseas rechazar la solicitud de amistad de %1$s?</string>
+    <string name="alert_dialog_reject_friend_request_positive">Rechazar</string>
+    <string name="alert_dialog_reject_friend_request_negative">Cancelar</string>
 
     <!-- BOOK DETAIL -->
     <string name="book_detail_shared_library_label">Biblioteca&#10;Compartida:</string>

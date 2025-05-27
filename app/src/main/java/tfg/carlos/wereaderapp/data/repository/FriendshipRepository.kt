@@ -21,6 +21,20 @@ class FriendshipRepository(
         friendshipRemoteDataSource.getReceivedFriendshipRequests()
 
     /**
+     * Acepta una solicitud de amistad del usuario autenticado.
+     * @param idFriendUser ID del usuario amigo a aceptar.
+     */
+    suspend fun acceptFriendshipRequest(idFriendUser: String) =
+        friendshipRemoteDataSource.acceptFriendshipRequest(idFriendUser)
+
+    /**
+     * Rechaza una solicitud de amistad del usuario autenticado.
+     * @param idFriendUser ID del usuario amigo a rechazar.
+     */
+    suspend fun rejectFriendshipRequest(idFriendUser: String) =
+        friendshipRemoteDataSource.rejectFriendshipRequest(idFriendUser)
+
+    /**
      * Elimina una amistad del usuario autenticado.
      * @param idFriendUser ID del usuario amigo a eliminar.
      */
