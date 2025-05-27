@@ -1,4 +1,4 @@
-package tfg.carlos.wereaderapp.ui.profile.fragments.friends
+package tfg.carlos.wereaderapp.ui.profile.fragments
 
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +15,12 @@ import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponseItem
 import tfg.carlos.wereaderapp.databinding.ItemFriendBinding
 import tfg.carlos.wereaderapp.ui.avatar.AvatarProvider.getAvatarById
 
-class FriendsAdapter(
+class FriendshipAdapter(
     val onClickFriendOptionsButton: (friend: UserFriendshipsResponseItem, position: Int) -> Unit,
     //val onLongClickBookItem: (book: UserFriendshipsResponseItem, position: Int) -> Unit,
-) : ListAdapter<UserFriendshipsResponseItem, FriendsAdapter.FriendsViewHolder>(FriendsItemDiffCallback()) {
+) : ListAdapter<UserFriendshipsResponseItem, FriendshipAdapter.FriendsViewHolder>(
+    FriendsItemDiffCallback()
+) {
 
     private val sessionManager by lazy {
         WeReaderApplication.sessionManager

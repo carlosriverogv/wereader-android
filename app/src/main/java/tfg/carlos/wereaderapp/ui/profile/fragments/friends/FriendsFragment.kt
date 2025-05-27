@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -14,16 +13,12 @@ import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponseItem
-import tfg.carlos.wereaderapp.data.remote.datasource.AuthRemoteDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.FriendshipRemoteDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
-import tfg.carlos.wereaderapp.data.repository.AuthRepository
 import tfg.carlos.wereaderapp.data.repository.FriendshipRepository
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.FragmentFriendsBinding
-import tfg.carlos.wereaderapp.databinding.FragmentLibraryBinding
-import tfg.carlos.wereaderapp.ui.profile.ProfileViewModel
-import tfg.carlos.wereaderapp.ui.profile.ProfileViewModelFactory
+import tfg.carlos.wereaderapp.ui.profile.fragments.FriendshipAdapter
 import tfg.carlos.wereaderapp.utils.FriendMenuHandler
 
 class FriendsFragment : Fragment() {
@@ -50,13 +45,60 @@ class FriendsFragment : Fragment() {
         FriendsViewModelFactory(friendshipRepository, libraryRepository)
     }
 
-    private val adapter = FriendsAdapter(
+    private val adapter = FriendshipAdapter(
         onClickFriendOptionsButton = { friend: UserFriendshipsResponseItem, position: Int ->
             clickedItemPosition = position
             showFriendOptionsMenu(binding.friendsRecyclerView, friend, position)
         }
         //, onLongClickBookItem = { book, position -> /* TODO: Implement long click action */ }
     )
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        _binding = FragmentFriendsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Se establece el adaptador del RecyclerView
+        binding.friendsRecyclerView.adapter = adapter
+
+        // Se obtiene la lista de amigos del ViewModel
+        getFriends()
+
+        // Se observa el mensaje de error del ViewModel
+        showError()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    /**
+     * Método para obtener la lista de amigos del ViewModel.
+     * Aquí se debería implementar la lógica para interactuar con el ViewModel
+     * y obtener los datos necesarios.
+     */
+    private fun getFriends() {
+        adapter.submitList(null)
+        friendshipViewModel.friends.observe(viewLifecycleOwner) { friendList ->
+            /** Actualiza el RecyclerView con la lista de amigos obtenida del ViewModel.
+             * Si la lista está vacía, se muestra un mensaje de "Actualmente no hay amistades".
+             * Si la lista contiene amigos, se actualiza el RecyclerView con los datos.
+             */
+            if (friendList.isNotEmpty()) {
+                adapter.submitList(friendList)
+            } else {
+                binding.friendsRecyclerView.visibility = View.GONE
+                binding.tvFriendsEmpty.visibility = View.VISIBLE
+            }
+        }
+    }
 
     /**
      * Muestra un menú de opciones para el amigo seleccionado.
@@ -90,75 +132,9 @@ class FriendsFragment : Fragment() {
                 }
             },
             onDeleteFriend = {
-                // TODO: Se elimina el amigo y se actualiza la lista
-
+                deleteFriend(friend)
             }
         )
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        _binding = FragmentFriendsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Se establece el adaptador del RecyclerView
-        binding.friendsRecyclerView.adapter = adapter
-
-        // Se obtiene la lista de amigos del ViewModel
-        getFriends()
-
-        // Se observa el mensaje de error del ViewModel
-        showError()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    /**
-     * Método para obtener la lista de amigos del ViewModel.
-     * Aquí se debería implementar la lógica para interactuar con el ViewModel
-     * y obtener los datos necesarios.
-     */
-    private fun getFriends() {
-        adapter.submitList(null)
-        friendshipViewModel.friends.observe(viewLifecycleOwner) { friendList ->
-            /** Actualiza el RecyclerView con la lista de amigos obtenida del ViewModel.
-             * Si la lista está vacía, se muestra un mensaje de "Actualmente no hay amistades".
-             * Si la lista contiene amigos, se actualiza el RecyclerView con los datos.
-             */
-            if (friendList.isEmpty()) {
-                binding.friendsRecyclerView.visibility = View.GONE
-                binding.tvFriendsEmpty.visibility = View.VISIBLE
-            } else {
-                binding.friendsRecyclerView.visibility = View.VISIBLE
-                binding.tvFriendsEmpty.visibility = View.GONE
-                adapter.submitList(friendList)  // friendList ya es un List<UserFriendshipsResponseItem>
-            }
-        }
-    }
-
-    /**
-     * Método para mostrar un mensaje de error utilizando Snackbar.
-     * Observa el mensaje de error del ViewModel y lo muestra si está presente.
-     */
-    private fun showError() {
-        friendshipViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            message?.let {
-                Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
-                    .show()
-                // Limpiar el mensaje después de mostrarlo
-                friendshipViewModel.clearErrorMessage()
-            }
-        }
     }
 
     /**
@@ -184,14 +160,16 @@ class FriendsFragment : Fragment() {
 
     /**
      * Método para detener el compartir la biblioteca con un amigo.
-     * TODO: Pasar al ViewModel y eliminar este método del Fragment.
+     * Muestra un diálogo de confirmación antes de proceder con el detener compartir.
+     *
+     * @param friend El amigo con el que se está compartiendo la biblioteca.
      */
     private fun stopSharingMyLibrary(friend: UserFriendshipsResponseItem) {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.alert_dialog_stop_sharing_title))
             .setMessage(getString(R.string.alert_dialog_stop_sharing_message, friend.tag))
             .setPositiveButton(getString(R.string.alert_dialog_stop_sharing_positive)) { _, _ ->
-                // TODO: Se elimina la biblioteca compartida con el amigo
+                // Se elimina la biblioteca compartida con el amigo
                 friendshipViewModel.stopSharingMyLibrary(friend.id)
 
                 // Se resetea el cache de la biblioteca compartida
@@ -205,9 +183,26 @@ class FriendsFragment : Fragment() {
     }
 
     /**
+     * Método para eliminar un amigo de la lista de amistades.
+     * Muestra un diálogo de confirmación antes de proceder con la eliminación.
+     *
+     * @param friend El amigo que se desea eliminar.
+     */
+    private fun deleteFriend(friend: UserFriendshipsResponseItem) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.alert_dialog_delete_friend_title))
+            .setMessage(getString(R.string.alert_dialog_delete_friend_message, friend.tag))
+            .setPositiveButton(getString(R.string.alert_dialog_delete_friend_positive)) { _, _ ->
+                // Se elimina la amistad del ViewModel
+                friendshipViewModel.deleteMyFriendship(friend.id)
+            }
+            .setNegativeButton(getString(R.string.alert_dialog_delete_friend_negative), null)
+            .show()
+    }
+
+    /**
      * Método para verificar si la operación de compartir fue exitosa.
      * Observa el LiveData shareSuccess del ViewModel y actualiza el estado de compartir en SharedPreferences.
-     * TODO: Pasar al ViewModel y eliminar este método del Fragment.
      * @param friendId El ID del amigo con el que se intentó compartir la biblioteca.
      */
     private fun checkShareSuccess(friendId: String) {
@@ -219,6 +214,21 @@ class FriendsFragment : Fragment() {
                     friendUserId = friendId
                 )
                 adapter.notifyItemChanged(clickedItemPosition)
+            }
+        }
+    }
+
+    /**
+     * Método para mostrar un mensaje de error utilizando Snackbar.
+     * Observa el mensaje de error del ViewModel y lo muestra si está presente.
+     */
+    private fun showError() {
+        friendshipViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
+                    .show()
+                // Limpiar el mensaje después de mostrarlo
+                friendshipViewModel.clearErrorMessage()
             }
         }
     }

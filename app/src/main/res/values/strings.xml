@@ -49,6 +49,7 @@
 
     <!-- STRINGS Profile Friends -->
     <string name="profile_friends_empty">Actualmente no hay amistades.</string>
+    <string name="profile_friend_requests_empty">Actualmente no hay solicitudes pendientes.</string>
     <string name="opciones_de_amigo">Opciones de amigo</string>
 
     <string name="friend_menu_share_library">Compartir biblioteca</string>
@@ -70,6 +71,11 @@
     <string name="alert_dialog_stop_sharing_positive">Dejar de compartir</string>
     <string name="alert_dialog_stop_sharing_negative">Cancelar</string>
 
+    <!-- STRINGS Profile - AlertDialog(Eliminar amigo) -->
+    <string name="alert_dialog_delete_friend_title">Eliminar amigo</string>
+    <string name="alert_dialog_delete_friend_message">¿Estás seguro de que deseas eliminar a %1$s de tu lista de amigos?</string>
+    <string name="alert_dialog_delete_friend_positive">Eliminar</string>
+    <string name="alert_dialog_delete_friend_negative">Cancelar</string>
 
     <!-- BOOK DETAIL -->
     <string name="book_detail_shared_library_label">Biblioteca&#10;Compartida:</string>

@@ -126,6 +126,22 @@ class FriendsViewModel(
         }
     }
 
+    /**
+     * Elimina una amistad del usuario autenticado.
+     * @param idFriendUser El ID del usuario amigo a eliminar.
+     */
+    fun deleteMyFriendship(idFriendUser: String) {
+        viewModelScope.launch {
+            try {
+                friendshipRepository.deleteMyFriendship(idFriendUser)
+                // Recargar la lista de amigos después de eliminar
+                loadFriends()
+            } catch (e: Exception) {
+                _errorMessage.postValue(e.message ?: "Error inesperado al eliminar la amistad")
+            }
+        }
+    }
+
 
     fun clearErrorMessage() {
         _errorMessage.value = null
