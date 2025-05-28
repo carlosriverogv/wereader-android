@@ -7,13 +7,13 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponseItem
+import tfg.carlos.wereaderapp.data.model.user.User
 
 object FriendMenuHandler {
     fun show(
         context: Context,
         anchorView: View,
-        friend: UserFriendshipsResponseItem, // ID del amigo actual
+        friend: User, // ID del amigo actual
         onToggleShare: () -> Unit,
         onDeleteFriend: () -> Unit
     ) {

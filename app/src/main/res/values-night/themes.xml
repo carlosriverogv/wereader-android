@@ -38,6 +38,8 @@
         <item name="colorSurfaceVariant">@color/dark_surfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/dark_onSurfaceVariant</item>
 
+        <item name="colorOnSurfaceInverse">@color/dark_inverseOnSurface</item>
+
         <!-- Otros -->
         <item name="colorOutline">@color/dark_outline</item>
         <item name="colorOutlineVariant">@color/dark_outlineVariant</item>

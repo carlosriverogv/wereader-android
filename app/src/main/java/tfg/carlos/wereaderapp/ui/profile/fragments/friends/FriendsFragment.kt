@@ -7,20 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponseItem
+import tfg.carlos.wereaderapp.data.model.user.User
 import tfg.carlos.wereaderapp.data.remote.datasource.FriendshipRemoteDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
 import tfg.carlos.wereaderapp.data.repository.FriendshipRepository
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.FragmentFriendsBinding
-import tfg.carlos.wereaderapp.ui.profile.ProfileViewModel
 import tfg.carlos.wereaderapp.ui.profile.fragments.FriendshipAdapter
+import tfg.carlos.wereaderapp.ui.profile.fragments.FriendshipAdapterMode
 import tfg.carlos.wereaderapp.utils.FriendMenuHandler
 
 class FriendsFragment : Fragment() {
@@ -48,7 +47,8 @@ class FriendsFragment : Fragment() {
     }
 
     private val adapter = FriendshipAdapter(
-        onClickFriendOptionsButton = { friend: UserFriendshipsResponseItem, position: Int ->
+        mode = FriendshipAdapterMode.FRIEND_LIST,
+        onClickFriendOptionsButton = { friend: User, position: Int ->
             clickedItemPosition = position
             showFriendOptionsMenu(binding.friendsRecyclerView, friend, position)
         }
@@ -119,7 +119,7 @@ class FriendsFragment : Fragment() {
      * @param position La posición del amigo en la lista del RecyclerView.
      */
     private fun showFriendOptionsMenu(
-        recyclerView: RecyclerView, friend: UserFriendshipsResponseItem, position: Int) {
+        recyclerView: RecyclerView, friend: User, position: Int) {
         val viewHolder = recyclerView.findViewHolderForAdapterPosition(position) ?: return
         val anchorView = viewHolder.itemView.findViewById<View>(R.id.friendOptionsButton)
         FriendMenuHandler.show(
@@ -152,7 +152,7 @@ class FriendsFragment : Fragment() {
      *
      * @param friend El amigo con el que se desea compartir la biblioteca.
      */
-    private fun shareLibraryWithFriend(friend: UserFriendshipsResponseItem) {
+    private fun shareLibraryWithFriend(friend: User) {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.alert_dialog_share_library_title))
             .setMessage(getString(R.string.alert_dialog_share_library_message, friend.tag))
@@ -173,7 +173,7 @@ class FriendsFragment : Fragment() {
      *
      * @param friend El amigo con el que se está compartiendo la biblioteca.
      */
-    private fun stopSharingMyLibrary(friend: UserFriendshipsResponseItem) {
+    private fun stopSharingMyLibrary(friend: User) {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.alert_dialog_stop_sharing_title))
             .setMessage(getString(R.string.alert_dialog_stop_sharing_message, friend.tag))
@@ -197,7 +197,7 @@ class FriendsFragment : Fragment() {
      *
      * @param friend El amigo que se desea eliminar.
      */
-    private fun deleteFriend(friend: UserFriendshipsResponseItem) {
+    private fun deleteFriend(friend: User) {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.alert_dialog_delete_friend_title))
             .setMessage(getString(R.string.alert_dialog_delete_friend_message, friend.tag))
@@ -236,6 +236,7 @@ class FriendsFragment : Fragment() {
             binding.swipeRefreshLayout.isRefreshing = false
             message?.let {
                 Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
+                    .setAnchorView(R.id.bottom_navigation)
                     .show()
                 // Limpiar el mensaje después de mostrarlo
                 friendsViewModel.clearErrorMessage()

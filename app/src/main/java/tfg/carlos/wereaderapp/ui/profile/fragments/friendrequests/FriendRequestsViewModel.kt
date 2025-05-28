@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponse
+import tfg.carlos.wereaderapp.data.model.user.UserListResponse
 import tfg.carlos.wereaderapp.data.repository.FriendshipRepository
 
 class FriendRequestsViewModel(
@@ -17,8 +17,8 @@ class FriendRequestsViewModel(
     }
 
     // LiveData para almacenar las solicitudes de amistad del usuario autenticado
-    private val _friendRequests = MutableLiveData<UserFriendshipsResponse>()
-    val friendRequests: LiveData<UserFriendshipsResponse> get() = _friendRequests
+    private val _friendRequests = MutableLiveData<UserListResponse>()
+    val friendRequests: LiveData<UserListResponse> get() = _friendRequests
 
     // LiveData para manejar mensajes de error
     private val _errorMessage = MutableLiveData<String?>()

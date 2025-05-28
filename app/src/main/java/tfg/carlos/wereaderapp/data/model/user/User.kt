@@ -10,7 +10,7 @@ data class User(
     val avatar: Int,
     @SerializedName("email")
     val email: String,
-    @SerializedName("genreFav")
+    @SerializedName("genderFav")
     val genreFav: String,
     @SerializedName("_id")
     val id: String,

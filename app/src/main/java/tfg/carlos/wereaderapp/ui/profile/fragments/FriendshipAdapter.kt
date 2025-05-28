@@ -11,14 +11,20 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponseItem
+import tfg.carlos.wereaderapp.data.model.user.User
 import tfg.carlos.wereaderapp.databinding.ItemFriendBinding
 import tfg.carlos.wereaderapp.ui.avatar.AvatarProvider.getAvatarById
 
+enum class FriendshipAdapterMode {
+    FRIEND_LIST,
+    SEARCH
+}
+
 class FriendshipAdapter(
-    val onClickFriendOptionsButton: (friend: UserFriendshipsResponseItem, position: Int) -> Unit,
+    private val mode: FriendshipAdapterMode,
+    val onClickFriendOptionsButton: (friend: User, position: Int) -> Unit,
     //val onLongClickBookItem: (book: UserFriendshipsResponseItem, position: Int) -> Unit,
-) : ListAdapter<UserFriendshipsResponseItem, FriendshipAdapter.FriendsViewHolder>(
+) : ListAdapter<User, FriendshipAdapter.FriendsViewHolder>(
     FriendsItemDiffCallback()
 ) {
 
@@ -29,7 +35,7 @@ class FriendshipAdapter(
     inner class FriendsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val bind = ItemFriendBinding.bind(view)
 
-        fun bind(friendItem: UserFriendshipsResponseItem) {
+        fun bind(friendItem: User) {
             bind.apply {
                 friendNameText.text = itemView.context.getString(
                     R.string.profile_full_name,
@@ -49,6 +55,12 @@ class FriendshipAdapter(
                     friendSharingImage.visibility = View.VISIBLE
                 } else {
                     friendSharingImage.visibility = View.GONE
+                }
+
+                if (mode == FriendshipAdapterMode.FRIEND_LIST) {
+                    friendOptionsButton.setImageResource(R.drawable.baseline_more_vert_24)
+                } else {
+                    friendOptionsButton.setImageResource(R.drawable.round_person_add_24)
                 }
 
                 /*itemView.setOnLongClickListener {
@@ -90,17 +102,17 @@ class FriendshipAdapter(
     }
 }
 
-class FriendsItemDiffCallback : DiffUtil.ItemCallback<UserFriendshipsResponseItem>() {
+class FriendsItemDiffCallback : DiffUtil.ItemCallback<User>() {
     override fun areItemsTheSame(
-        oldItem: UserFriendshipsResponseItem,
-        newItem: UserFriendshipsResponseItem
+        oldItem: User,
+        newItem: User
     ): Boolean {
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: UserFriendshipsResponseItem,
-        newItem: UserFriendshipsResponseItem
+        oldItem: User,
+        newItem: User
     ): Boolean {
         return oldItem == newItem
     }

@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.data.model.user.User
-import tfg.carlos.wereaderapp.data.repository.AuthRepository
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
+import tfg.carlos.wereaderapp.data.repository.UserRepository
 
 class ProfileViewModel(
-    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
     private val libraryRepository: LibraryRepository
 ) : ViewModel() {
 
@@ -30,7 +30,7 @@ class ProfileViewModel(
     private fun getProfileUser() {
         viewModelScope.launch {
             try {
-                val result = authRepository.getUserProfile()
+                val result = userRepository.getUserProfile()
                 _user.postValue(result)
             } catch (e: Exception) {
                 Log.e("ProfileViewModel", "Error obteniendo el usuario", e)
@@ -93,10 +93,10 @@ class ProfileViewModel(
 
 @Suppress("UNCHECKED_CAST")
 class ProfileViewModelFactory(
-    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
     private val libraryRepository: LibraryRepository)
     : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ProfileViewModel(authRepository, libraryRepository) as T
+        return ProfileViewModel(userRepository, libraryRepository) as T
     }
 }

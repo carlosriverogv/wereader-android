@@ -7,14 +7,18 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import tfg.carlos.wereaderapp.data.model.friendship.FriendshipResponse
 import tfg.carlos.wereaderapp.data.model.friendship.FriendshipRequest
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponse
+import tfg.carlos.wereaderapp.data.model.user.UserListResponse
 
 interface FriendshipService {
+    @POST("friendship")
+    suspend fun createFriendship(@Body request: FriendshipRequest)
+        : Response<FriendshipResponse>
+
     @GET("friendship/myFriends")
-    suspend fun getAllFriends(): Response<UserFriendshipsResponse>
+    suspend fun getAllFriends(): Response<UserListResponse>
 
     @GET("friendship/receivedRequestFriendships")
-    suspend fun getReceivedFriendshipRequests(): Response<UserFriendshipsResponse>
+    suspend fun getReceivedFriendshipRequests(): Response<UserListResponse>
 
     @POST("friendship/deleteMyFriendship")
     suspend fun deleteMyFriendship(@Body request: FriendshipRequest)

@@ -20,10 +20,10 @@ import edu.carlosrivero.demo5.utils.isTokenValid
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
-import tfg.carlos.wereaderapp.data.remote.datasource.AuthRemoteDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
-import tfg.carlos.wereaderapp.data.repository.AuthRepository
+import tfg.carlos.wereaderapp.data.remote.datasource.UserRemoteDataSource
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
+import tfg.carlos.wereaderapp.data.repository.UserRepository
 import tfg.carlos.wereaderapp.databinding.ActivityProfileBinding
 import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import tfg.carlos.wereaderapp.ui.avatar.AvatarProvider.getAvatarById
@@ -45,9 +45,9 @@ class ProfileActivity : AppCompatActivity() {
         val libraryRemoteDadaSource = LibraryRemoteDadaSource()
         val libraryRepository = LibraryRepository(libraryRemoteDadaSource, libraryLocalDataSource)
 
-        val authRemoteDadaSource = AuthRemoteDataSource()
-        val authRepository = AuthRepository(authRemoteDadaSource)
-        ProfileViewModelFactory(authRepository, libraryRepository)
+        val userRemoteDadaSource = UserRemoteDataSource()
+        val userRepository = UserRepository(userRemoteDadaSource)
+        ProfileViewModelFactory(userRepository, libraryRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

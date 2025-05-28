@@ -32,6 +32,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.profile.ProfileActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.discover.DiscoverActivity"

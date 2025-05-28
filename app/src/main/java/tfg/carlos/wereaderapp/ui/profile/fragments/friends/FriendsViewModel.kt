@@ -1,6 +1,5 @@
 package tfg.carlos.wereaderapp.ui.profile.fragments.friends
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.WeReaderApplication
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponse
+import tfg.carlos.wereaderapp.data.model.user.UserListResponse
 import tfg.carlos.wereaderapp.data.model.sharedlibrary.SharedLibrary
 import tfg.carlos.wereaderapp.data.repository.FriendshipRepository
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
@@ -26,8 +25,8 @@ class FriendsViewModel(
     }
 
     // LiveData para almacenar la lista de amigos del usuario autenticado
-    private val _friends = MutableLiveData<UserFriendshipsResponse>()
-    val friends: LiveData<UserFriendshipsResponse> get() = _friends
+    private val _friends = MutableLiveData<UserListResponse>()
+    val friends: LiveData<UserListResponse> get() = _friends
 
     // LiveData para almacenar la biblioteca compartida por el usuario autenticado
     private val _sharedLibraryByMe = MutableLiveData<SharedLibrary?>()

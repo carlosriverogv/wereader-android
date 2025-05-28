@@ -6,8 +6,6 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.StringRes
 import tfg.carlos.wereaderapp.R
-import tfg.carlos.wereaderapp.WeReaderApplication
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponseItem
 
 object FriendRequestsMenuHandler {
     fun show(

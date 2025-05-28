@@ -38,6 +38,8 @@
         <item name="colorSurfaceVariant">@color/light_surfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/light_onSurfaceVariant</item>
 
+        <item name="colorOnSurfaceInverse">@color/light_inverseOnSurface</item>
+
         <!-- Otros -->
         <item name="colorOutline">@color/light_outline</item>
         <item name="colorOutlineVariant">@color/light_outlineVariant</item>

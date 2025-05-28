@@ -1,12 +1,32 @@
 package tfg.carlos.wereaderapp.data.remote.datasource
 
+import org.json.JSONObject
 import tfg.carlos.wereaderapp.data.model.friendship.FriendshipRequest
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponse
+import tfg.carlos.wereaderapp.data.model.user.UserListResponse
 import tfg.carlos.wereaderapp.data.remote.Retrofit2Api
 
 class FriendshipRemoteDataSource {
 
-    suspend fun getFriendships(): UserFriendshipsResponse {
+    /**
+     * Crea una solicitud de amistad para el usuario autenticado.
+     * @param idFriendUser ID del usuario amigo al que se le envía la solicitud.
+     */
+    suspend fun createFriendship(idFriendUser: String) {
+        val response = Retrofit2Api.friendshipApi.createFriendship(
+            FriendshipRequest(idFriendUser)
+        )
+        if (!response.isSuccessful) {
+            val errorBody = response.errorBody()?.string()
+            val errorMessage = try {
+                JSONObject(errorBody).getString("message")
+        } catch (e: Exception) {
+                "Error al crear la solicitud de amistad: ${response.code()}"
+            }
+            throw Exception(errorMessage)
+        }
+    }
+
+    suspend fun getFriendships(): UserListResponse {
         val response = Retrofit2Api.friendshipApi.getAllFriends()
         if (response.isSuccessful) {
             return response.body()!!
@@ -15,7 +35,7 @@ class FriendshipRemoteDataSource {
         }
     }
 
-    suspend fun getReceivedFriendshipRequests(): UserFriendshipsResponse {
+    suspend fun getReceivedFriendshipRequests(): UserListResponse {
         val response = Retrofit2Api.friendshipApi.getReceivedFriendshipRequests()
         if (response.isSuccessful) {
             return response.body()!!

@@ -2,22 +2,19 @@ package tfg.carlos.wereaderapp.ui.profile.fragments.friendrequests
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import tfg.carlos.wereaderapp.R
-import tfg.carlos.wereaderapp.data.model.friendship.UserFriendshipsResponseItem
+import tfg.carlos.wereaderapp.data.model.user.User
 import tfg.carlos.wereaderapp.data.remote.datasource.FriendshipRemoteDataSource
 import tfg.carlos.wereaderapp.data.repository.FriendshipRepository
 import tfg.carlos.wereaderapp.databinding.FragmentFriendRequestBinding
-import tfg.carlos.wereaderapp.ui.profile.ProfileViewModel
 import tfg.carlos.wereaderapp.ui.profile.fragments.FriendshipAdapter
-import tfg.carlos.wereaderapp.ui.profile.fragments.friends.FriendsViewModel
+import tfg.carlos.wereaderapp.ui.profile.fragments.FriendshipAdapterMode
 import tfg.carlos.wereaderapp.utils.FriendRequestsMenuHandler
 
 class FriendRequestFragment : Fragment() {
@@ -38,7 +35,8 @@ class FriendRequestFragment : Fragment() {
     }
 
     private val adapter = FriendshipAdapter(
-        onClickFriendOptionsButton = { friend: UserFriendshipsResponseItem, position: Int ->
+        mode = FriendshipAdapterMode.FRIEND_LIST,
+        onClickFriendOptionsButton = { friend: User, position: Int ->
             clickedItemPosition = position
             showFriendRequestOptionsMenu(binding.friendRequestsRecyclerView, friend, position)
         }
@@ -102,7 +100,7 @@ class FriendRequestFragment : Fragment() {
      * @param position La posición del elemento en el RecyclerView.
      */
     private fun showFriendRequestOptionsMenu(
-        recyclerView: RecyclerView, friend: UserFriendshipsResponseItem, position: Int) {
+        recyclerView: RecyclerView, friend: User, position: Int) {
         val viewHolder = recyclerView.findViewHolderForAdapterPosition(position) ?: return
         val anchorView = viewHolder.itemView.findViewById<View>(R.id.friendOptionsButton)
 
@@ -129,7 +127,7 @@ class FriendRequestFragment : Fragment() {
      * Si se acepta, se llama al método correspondiente del ViewModel.
      * @param friend El objeto UserFriendshipsResponseItem que representa la solicitud de amistad.
      */
-    private fun acceptFriendRequest(friend: UserFriendshipsResponseItem) {
+    private fun acceptFriendRequest(friend: User) {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.alert_dialog_accept_friend_request_title))
             .setMessage(getString(R.string.alert_dialog_accept_friend_request_message, friend.tag))
@@ -148,7 +146,7 @@ class FriendRequestFragment : Fragment() {
      * Si se rechaza, se llama al método correspondiente del ViewModel.
      * @param friend El objeto UserFriendshipsResponseItem que representa la solicitud de amistad.
      */
-    private fun rejectFriendRequest(friend: UserFriendshipsResponseItem) {
+    private fun rejectFriendRequest(friend: User) {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.alert_dialog_reject_friend_request_title))
             .setMessage(getString(R.string.alert_dialog_reject_friend_request_message, friend.tag))

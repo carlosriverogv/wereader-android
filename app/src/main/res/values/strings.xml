@@ -92,6 +92,12 @@
     <string name="alert_dialog_reject_friend_request_positive">Rechazar</string>
     <string name="alert_dialog_reject_friend_request_negative">Cancelar</string>
 
+    <!-- STRINGS Profile - AlertDialog(Añadir amigo) -->
+    <string name="alert_dialog_add_friend_title">Añadir amigo</string>
+    <string name="alert_dialog_add_friend_message">¿Quieres enviar una solicitud de amistad a %1$s?</string>
+    <string name="alert_dialog_add_friend_positive">Enviar solicitud</string>
+    <string name="alert_dialog_add_friend_negative">Cancelar</string>
+
     <!-- BOOK DETAIL -->
     <string name="book_detail_shared_library_label">Biblioteca&#10;Compartida:</string>
     <string name="book_detail_format_label">Formato:\n\nEPUB</string>
