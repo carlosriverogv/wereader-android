@@ -1,6 +1,5 @@
 package tfg.carlos.wereaderapp.ui.library.fragments.library
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,13 +52,11 @@ class BooksAdapter(
                 itemView.setOnClickListener {
                     // Se pasa el id del book y la posición del item seleccionado
                     onClickBookItem(bookEntity, bindingAdapterPosition)
-                    Log.d("BooksAdapter", "Item clicked: ${bookEntity.id}")
                 }
 
                 itemView.setOnLongClickListener {
                     // Se pasa el id del book y la posición del item seleccionado
                     onLongClickBookItem(bookEntity.id, bindingAdapterPosition, bookEntity.isPending)
-                    Log.d("BooksAdapter", "Item long clicked: ${bookEntity.id}")
                     true
                 }
             }

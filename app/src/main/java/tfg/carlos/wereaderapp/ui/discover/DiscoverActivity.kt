@@ -4,15 +4,26 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import edu.carlosrivero.demo5.utils.isTokenValid
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
+import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
+import tfg.carlos.wereaderapp.data.remote.datasource.BookRemoteDataSource
+import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
+import tfg.carlos.wereaderapp.data.repository.DiscoverRepository
+import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.ActivityDiscoverBinding
+import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
+import tfg.carlos.wereaderapp.ui.bookDetail.BookDetailActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
 import tfg.carlos.wereaderapp.ui.main.MainActivity
+import tfg.carlos.wereaderapp.ui.main.MainViewModel
+import tfg.carlos.wereaderapp.ui.main.MainViewModelFactory
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
 
 class DiscoverActivity : AppCompatActivity() {
@@ -21,6 +32,31 @@ class DiscoverActivity : AppCompatActivity() {
     private val sessionManager by lazy {
         WeReaderApplication.sessionManager
     }
+
+    private val discoverViewModel: DiscoverViewModel by viewModels {
+        val bookRemoteDadaSource = BookRemoteDataSource()
+        val discoverRepository = DiscoverRepository(bookRemoteDadaSource)
+        DiscoverViewModelFactory(discoverRepository)
+    }
+
+
+    private val bestsellersAdapter = BooksDiscoverAdapter(
+        onClickBookItem = { book, position ->
+            openBookDetailActivity(book.id)
+        }
+    )
+
+    private val newReleasesAdapter = BooksDiscoverAdapter(
+        onClickBookItem = { book, position ->
+            openBookDetailActivity(book.id)
+        }
+    )
+
+    private val recommendedBooksAdapter = BooksDiscoverAdapter(
+        onClickBookItem = { book, position ->
+            openBookDetailActivity(book.id)
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +82,22 @@ class DiscoverActivity : AppCompatActivity() {
 
         // Se carga el BottomNavigationView
         loadBottomNavigation()
+
+        // Se cargan los libros más vendidos
+        loadBestsellers()
+        // Se cargan los nuevos lanzamientos
+        loadNewReleases()
+        // Se cargan los libros recomendados
+        loadRecommendedBooks()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val token = sessionManager.getToken()
+
+        if (!isTokenValid(token)) {
+            goToLogin()
+        }
     }
 
     private fun loadBottomNavigation() {
@@ -66,5 +118,71 @@ class DiscoverActivity : AppCompatActivity() {
             finish()
             true
         }
+    }
+
+    /**
+     * Cargar los libros más vendidos
+     *
+     */
+    private fun loadBestsellers() {
+        binding.bestSellersRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.bestSellersRecyclerView.adapter = bestsellersAdapter
+
+        bestsellersAdapter.submitList(null)
+
+        discoverViewModel.bestsellersBooks.observe(this) { bookList ->
+            bestsellersAdapter.submitList(bookList)
+        }
+    }
+
+    /**
+     * Cargar los nuevos lanzamientos
+     */
+    private fun loadNewReleases() {
+        binding.newReleasesRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.newReleasesRecyclerView.adapter = newReleasesAdapter
+
+        newReleasesAdapter.submitList(null)
+
+        discoverViewModel.newReleasesBooks.observe(this) { bookList ->
+            newReleasesAdapter.submitList(bookList)
+        }
+    }
+
+    /**
+     * Cargar los libros recomendados
+     */
+    private fun loadRecommendedBooks() {
+        binding.recommendedRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.recommendedRecyclerView.adapter = recommendedBooksAdapter
+
+        recommendedBooksAdapter.submitList(null)
+
+        // PROVISIONAL: Aquí se debería obtener la lista de libros recomendados
+        discoverViewModel.newReleasesBooks.observe(this) { bookList ->
+            recommendedBooksAdapter.submitList(bookList)
+        }
+    }
+
+    /**
+     * Abre la actividad de detalle del libro.
+     * @param idBook El ID del libro a mostrar.
+     */
+    private fun openBookDetailActivity(idBook: String) {
+        val intent = Intent(this, BookDetailActivity::class.java).apply {
+            putExtra(BookDetailActivity.EXTRA_BOOK_ID, idBook)
+            putExtra(BookDetailActivity.EXTRA_IS_STORE_BOOK, true)
+        }
+        startActivity(intent)
+    }
+
+    private fun goToLogin() {
+        // Redirigir a la pantalla de inicio de sesión
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

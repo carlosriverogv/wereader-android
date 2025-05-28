@@ -38,14 +38,6 @@ class BookDetailActivity : AppCompatActivity() {
     private var currentBook: BookEntity? = null
     private var optionsMenu: Menu? = null
 
-    /*private val vm: BooksViewModel by viewModels {
-        val db = (application as WeReaderApplication).weReaderDB
-        val localDataSource = LibraryLocalDataSource(db.bookDao())
-        val remoteDataSource = LibraryRemoteDadaSource()
-        val repository = LibraryRepository(remoteDataSource, localDataSource)
-        BooksViewModelFactory(repository)
-    }*/
-
     private val vm: BookDetailViewModel by viewModels {
         val db = (application as WeReaderApplication).weReaderDB
         val localDataSource = LibraryLocalDataSource(db.bookDao())
