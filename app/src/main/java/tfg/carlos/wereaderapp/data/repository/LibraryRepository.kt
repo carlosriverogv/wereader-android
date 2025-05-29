@@ -8,6 +8,8 @@ import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.model.book.toEntity
+import tfg.carlos.wereaderapp.data.model.library.AddBookRequest
+import tfg.carlos.wereaderapp.data.model.library.AddBookResponse
 import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
 import tfg.carlos.wereaderapp.data.model.sharedlibrary.CreateSharedLibraryRequest
 import tfg.carlos.wereaderapp.data.model.sharedlibrary.DeleteSharedLibraryRequest
@@ -28,6 +30,16 @@ class LibraryRepository(
      * @return Flow de LibraryResponse que contiene los libros del usuario autenticado.
      */
     private suspend fun getAuthUserLibrary() = remote.getAuthUserLibrary()
+
+    /**
+     * Añade un libro a la biblioteca del usuario autenticado. (MÉTODO DE COMPRA)
+     * @param bookId ID del libro a añadir.
+     * @return AddBookResponse que contiene el resultado de la operación.
+     */
+    suspend fun buyBook(bookId: String): AddBookResponse {
+        val addBookRequest = AddBookRequest(bookId)
+        return remote.addBookToLibrary(addBookRequest)
+    }
 
     /**
      * Obtiene la biblioteca compartida con el usuario autenticado.

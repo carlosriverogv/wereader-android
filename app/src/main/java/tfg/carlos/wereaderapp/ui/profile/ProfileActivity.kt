@@ -72,7 +72,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    /** TODO: Añadir los textos a los strings.xml
+    /**
      * Muestra un diálogo de confirmación para cerrar sesión.
      * Si el usuario confirma, se limpia el token de sesión y se redirige a la pantalla de inicio de sesión.
      */
@@ -235,6 +235,4 @@ class ProfileActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
-
 }

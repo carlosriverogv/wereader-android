@@ -76,10 +76,10 @@ Novedades, éxitos y recomendaciones pensadas para ti."
                 android:layout_height="wrap_content"
                 android:text="Novedades"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="30dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/newReleasesRecyclerView"
@@ -97,10 +97,10 @@ Novedades, éxitos y recomendaciones pensadas para ti."
                 android:layout_height="wrap_content"
                 android:text="Más vendidos"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="20dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bestSellersRecyclerView"
@@ -118,10 +118,10 @@ Novedades, éxitos y recomendaciones pensadas para ti."
                 android:layout_height="wrap_content"
                 android:text="Recomendado para ti"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="20dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recommendedRecyclerView"

@@ -12,18 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import edu.carlosrivero.demo5.utils.isTokenValid
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
-import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.BookRemoteDataSource
-import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
-import tfg.carlos.wereaderapp.data.repository.DiscoverRepository
-import tfg.carlos.wereaderapp.data.repository.LibraryRepository
+import tfg.carlos.wereaderapp.data.repository.BookRepository
 import tfg.carlos.wereaderapp.databinding.ActivityDiscoverBinding
 import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import tfg.carlos.wereaderapp.ui.bookDetail.BookDetailActivity
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
 import tfg.carlos.wereaderapp.ui.main.MainActivity
-import tfg.carlos.wereaderapp.ui.main.MainViewModel
-import tfg.carlos.wereaderapp.ui.main.MainViewModelFactory
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
 
 class DiscoverActivity : AppCompatActivity() {
@@ -35,8 +30,8 @@ class DiscoverActivity : AppCompatActivity() {
 
     private val discoverViewModel: DiscoverViewModel by viewModels {
         val bookRemoteDadaSource = BookRemoteDataSource()
-        val discoverRepository = DiscoverRepository(bookRemoteDadaSource)
-        DiscoverViewModelFactory(discoverRepository)
+        val bookRepository = BookRepository(bookRemoteDadaSource)
+        DiscoverViewModelFactory(bookRepository)
     }
 
 
@@ -162,7 +157,7 @@ class DiscoverActivity : AppCompatActivity() {
         recommendedBooksAdapter.submitList(null)
 
         // PROVISIONAL: Aquí se debería obtener la lista de libros recomendados
-        discoverViewModel.newReleasesBooks.observe(this) { bookList ->
+        discoverViewModel.recommendedBooks.observe(this) { bookList ->
             recommendedBooksAdapter.submitList(bookList)
         }
     }

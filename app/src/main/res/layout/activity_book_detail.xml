@@ -134,25 +134,22 @@ tools:context=".ui.bookDetail.BookDetailActivity">
             android:layout_below="@+id/commonInfoSection"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="185dp"
+            android:layout_marginStart="175dp"
             android:layout_marginTop="90dp"
             android:layout_toEndOf="@+id/ivCover"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/progress_percent"
+                android:id="@+id/progressPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:ellipsize="end"
+                android:gravity="end"
                 android:maxLines="1"
-                android:text="@string/item_book_progress"
-                android:textAlignment="textEnd"
+                android:text="@string/book_detail_progress"
                 android:textColor="@color/dark_accentColor"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/authorName" />
+                android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
 

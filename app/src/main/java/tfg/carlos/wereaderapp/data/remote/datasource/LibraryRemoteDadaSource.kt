@@ -2,6 +2,8 @@ package tfg.carlos.wereaderapp.data.remote.datasource
 
 import kotlinx.coroutines.flow.flow
 import org.json.JSONObject
+import tfg.carlos.wereaderapp.data.model.library.AddBookRequest
+import tfg.carlos.wereaderapp.data.model.library.AddBookResponse
 import tfg.carlos.wereaderapp.data.model.library.LibraryResponse
 import tfg.carlos.wereaderapp.data.model.sharedlibrary.CreateSharedLibraryRequest
 import tfg.carlos.wereaderapp.data.model.sharedlibrary.CreateSharedLibraryResponse
@@ -14,6 +16,7 @@ import tfg.carlos.wereaderapp.data.remote.Retrofit2Api
 
 class LibraryRemoteDadaSource {
 
+    // Métodos de la biblioteca del usuario autenticado
     // TODO: Revisar NO UTILIZAR flow y usar unicamente suspend
     suspend fun getAuthUserLibrary() = flow<LibraryResponse> {
         val response = Retrofit2Api.libraryApi.getAuthUserLibrary()
@@ -24,6 +27,25 @@ class LibraryRemoteDadaSource {
         }
     }
 
+    /**
+     * Añade un libro a la biblioteca del usuario autenticado.
+     */
+    suspend fun addBookToLibrary(request: AddBookRequest): AddBookResponse {
+        val response = Retrofit2Api.libraryApi.addBookToLibrary(request)
+        return if (response.isSuccessful) {
+            response.body()!!
+        } else {
+            val errorBody = response.errorBody()?.string()
+            val errorMessage = try {
+                JSONObject(errorBody).getString("message")
+            } catch (e: Exception) {
+                "Error al añadir el libro a la biblioteca: ${response.code()}"
+            }
+            throw Exception(errorMessage)
+        }
+    }
+
+    // Métodos de la biblioteca compartida
     // TODO: Revisar NO UTILIZAR flow y usar unicamente suspend
     // TODO: Revisar ELSE
     suspend fun getSharedLibrary() = flow<SharedLibraryResponse> {

@@ -2,7 +2,7 @@ package tfg.carlos.wereaderapp.data.repository
 
 import tfg.carlos.wereaderapp.data.remote.datasource.BookRemoteDataSource
 
-class DiscoverRepository(
+class BookRepository(
     private val bookRemoteDataSource: BookRemoteDataSource,
 ) {
 
@@ -15,4 +15,14 @@ class DiscoverRepository(
      * Obtiene los nuevos lanzamientos de libros.
      */
     suspend fun getNewReleasesBooks() = bookRemoteDataSource.getNewReleasesBooks()
+
+    /**
+     * Obtiene los libros recomendados.
+     */
+    suspend fun getRecommendedBooks() = bookRemoteDataSource.getRecommendedBooks()
+
+    /**
+     * Obtiene un libro por su ID.
+     */
+    suspend fun getStoreBookById(id: String) = bookRemoteDataSource.getBookById(id)
 }

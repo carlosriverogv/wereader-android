@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:hint="Busca un amigo"
+            android:hint="@string/profile_add_friend_search"
             android:inputType="text"
             android:importantForAutofill="no"
             android:autofillHints=""

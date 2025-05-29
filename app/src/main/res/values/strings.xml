@@ -50,7 +50,7 @@
     <!-- STRINGS Profile Friends -->
     <string name="profile_friends_empty">Actualmente no hay amistades.</string>
     <string name="profile_friend_requests_empty">Actualmente no hay solicitudes pendientes.</string>
-    <string name="opciones_de_amigo">Opciones de amigo</string>
+    <string name="profile_add_friend_search">Busca amigos por su tag</string>
 
     <string name="friend_menu_share_library">Compartir biblioteca</string>
     <string name="friend_menu_stop_sharing">Dejar de compartir biblioteca</string>
@@ -106,6 +106,10 @@
     <string name="book_detail_info_label">Información adicional</string>
     <string name="book_detail_description_label">Sinopsis:</string>
     <string name="book_detail_isbn_label">Isbn:  %s</string>
+
+    <string name="book_detail_progress">%d%%</string>
+    <string name="book_detail_price">%.2f€</string>
+    <string name="book_detail_buy_button">Comprar</string>
 
     <!-- STRINGS LIBRARY -->
     <string name="library_title">Biblioteca</string>
@@ -231,15 +235,12 @@
     <string name="error_updating_pending_status">Error actualizando el estado pendiente: </string>
     <string name="error_updating_reading_status">Error actualizando el estado de lectura: </string>
     <string name="error_updating_mark_status">Error marcando libro: </string>
+    <string name="error_loading_book_details">Error al cargar los detalles del libro: </string>
+    <string name="error_buying_book">Error al realizar la compra del libro: </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-
-    <!-- TAGS -->
-    <string name="tag_library_view_model">LibraryViewModel</string>
-    <string name="tag_main_view_model">MainViewModel</string>
-    <string name="tag_book_detail_view_model">BookDetailViewModel</string>
 </resources>

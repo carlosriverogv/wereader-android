@@ -89,7 +89,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginEnd="13dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/opciones_de_amigo"
+            android:contentDescription="Más opciones"
             android:src="@drawable/baseline_more_vert_24" />
 
     </RelativeLayout>

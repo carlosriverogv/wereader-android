@@ -17,14 +17,20 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
+import edu.carlosrivero.demo5.utils.isTokenValid
 import kotlinx.coroutines.launch
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.WeReaderApplication
 import tfg.carlos.wereaderapp.data.entity.BookEntity
 import tfg.carlos.wereaderapp.data.local.datasource.LibraryLocalDataSource
+import tfg.carlos.wereaderapp.data.model.book.BookItem
+import tfg.carlos.wereaderapp.data.model.book.toEntity
+import tfg.carlos.wereaderapp.data.remote.datasource.BookRemoteDataSource
 import tfg.carlos.wereaderapp.data.remote.datasource.LibraryRemoteDadaSource
+import tfg.carlos.wereaderapp.data.repository.BookRepository
 import tfg.carlos.wereaderapp.data.repository.LibraryRepository
 import tfg.carlos.wereaderapp.databinding.ActivityBookDetailBinding
+import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import tfg.carlos.wereaderapp.ui.reader.ReaderActivity
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -32,24 +38,53 @@ import java.time.format.DateTimeFormatter
 class BookDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBookDetailBinding
 
+    private val sessionManager by lazy {
+        WeReaderApplication.sessionManager
+    }
+
     private val storage = Firebase.storage
     private val downloadUrlCache = mutableMapOf<String, String>()
 
     private var currentBook: BookEntity? = null
     private var optionsMenu: Menu? = null
 
+    private var isStoreBook: Boolean = false
+
     private val vm: BookDetailViewModel by viewModels {
         val db = (application as WeReaderApplication).weReaderDB
         val localDataSource = LibraryLocalDataSource(db.bookDao())
         val remoteDataSource = LibraryRemoteDadaSource()
-        val repository = LibraryRepository(remoteDataSource, localDataSource)
-        BookDetailViewModelFactory(repository)
+        val libraryRepository = LibraryRepository(remoteDataSource, localDataSource)
+
+        val bookRemoteDataSource = BookRemoteDataSource()
+        val bookRepository = BookRepository(bookRemoteDataSource)
+        BookDetailViewModelFactory(libraryRepository, bookRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val token = sessionManager.getToken()
+
+        if (isTokenValid(token)) {
+            setupIU()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val token = sessionManager.getToken()
+
+        if (!isTokenValid(token)) {
+            goToLogin()
+        }
+    }
+
+    private fun setupIU() {
+        // Se inicializa la vista
         binding = ActivityBookDetailBinding.inflate(layoutInflater)
 
+        // Se habilita el modo Edge to Edge
         enableEdgeToEdge()
         setContentView(binding.root)
         setSupportActionBar(binding.readerToolbar)
@@ -58,6 +93,8 @@ class BookDetailActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        isStoreBook = intent.getBooleanExtra(EXTRA_IS_STORE_BOOK, false)
 
         // Se establece el comportamiento del botón de navegación (botón de retroceso)
         binding.readerToolbar.setNavigationOnClickListener {
@@ -70,6 +107,9 @@ class BookDetailActivity : AppCompatActivity() {
 
     // Se crea el menú de opciones
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Si el libro es de la tienda, no se muestran las opciones de menú
+        if (isStoreBook) return false
+
         menuInflater.inflate(R.menu.book_detail_options_menu, menu)
         optionsMenu = menu
         currentBook?.let { setupMenuItems(it) }
@@ -124,6 +164,7 @@ class BookDetailActivity : AppCompatActivity() {
 
     private fun setupMenuItems(book: BookEntity) {
         val menu = optionsMenu ?: return
+
         val toggleItem = menu.findItem(R.id.action_toggle_pending_details)
         toggleItem.title = if (book.isPending) {
             getString(R.string.library_menu_remove_pending)
@@ -136,27 +177,44 @@ class BookDetailActivity : AppCompatActivity() {
     private fun renderBook() {
         // Se obtiene el ID del libro y si es de la tienda o no del intent
         val bookId = intent.getStringExtra(EXTRA_BOOK_ID) ?: return
-        val isStoreBook = intent.getBooleanExtra(EXTRA_IS_STORE_BOOK, false)
 
-        // Se renderiza el libro con liveData
-        vm.getBookLiveById(bookId).observe(this) { book ->
-            currentBook = book
-            setupMenuItems(book)
-            renderCommonElementsBook(book)
-            if (isStoreBook) {
-                renderStoreElementsBook(book)
-            } else {
+        // Si es un libro de la tienda, se obtiene el libro de la API
+        if (isStoreBook) {
+            lifecycleScope.launch {
+                try {
+                    val bookItem = vm.getStoreBookById(bookId) ?: run {
+                        Toast.makeText(this@BookDetailActivity,
+                            "Libro no encontrado", Toast.LENGTH_LONG).show()
+                        finish() // Cerrar la actividad si no se encuentra el libro
+                        return@launch
+                    }
+
+                    // Convertir BookItem a BookEntity para usar lógica común
+                    val bookAsEntity = bookItem.toEntity(mine = false, idUser = "")
+
+                    // Reutilizar renderizado común
+                    renderCommonElementsBook(bookAsEntity)
+                    renderStoreElementsBook(bookAsEntity)
+
+                } catch (e: Exception) {
+                    throw Exception("Error al obtener el libro de la tienda: ${e.message}", e)
+                }
+            }
+        } else {
+            // Si no es un libro de la tienda, se obtiene el libro de la base de datos local
+            vm.getBookLiveById(bookId).observe(this) { book ->
+                currentBook = book
+                renderCommonElementsBook(book)
+                setupMenuItems(book)
                 renderUserElementsBook(book)
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-    // Se abre la actividad de lectura del libro
+    /**
+     * Abre la actividad de lectura del libro con el ID proporcionado.
+     * Se obtiene la URL del libro y se inicia la actividad de lectura.
+     */
     private suspend fun openReaderActivity(idBook: String) {
         vm.getBookById(idBook).let { book ->
             val epubPath = book.epubUrl
@@ -167,7 +225,10 @@ class BookDetailActivity : AppCompatActivity() {
         }
     }
 
-    // Se renderizan los elementos comunes del libro
+    /**
+     * Renderiza los elementos comunes del libro, como título, autor, descripción, género,
+     * icono de compartibilidad y fecha de publicación.
+     */
     private fun renderCommonElementsBook(book: BookEntity) {
         binding.bookTitle.text = book.title
         binding.bookAuthor.text = book.author
@@ -213,6 +274,11 @@ class BookDetailActivity : AppCompatActivity() {
             }
         }
     }
+
+    /*
+     * Carga la imagen de la portada del libro utilizando Glide.
+     * Se aplica un placeholder y transformaciones para el ajuste y esquinas redondeadas.
+     */
     private fun loadImage(url: String) {
         Glide.with(this)
             .load(url)
@@ -222,11 +288,18 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
 
-    // Se renderizan los elementos de usuario
+    /*
+     * Renderiza los elementos específicos del usuario para el libro.
+     * Muestra el progreso de lectura y el botón de leer.
+     */
     private fun renderUserElementsBook(book: BookEntity) {
+        // Se carga el progreso de lectura del libro
         val progress = book.readingProgress.toInt()
-        binding.progressPercent.text = binding.progressPercent.context.getString(
-            R.string.item_book_progress, progress)
+        binding.progressPrice.text = binding.progressPrice.context.getString(
+            R.string.book_detail_progress, progress)
+
+        // Cuando se pulsa el botón de leer,
+        // se actualiza el estado del libro a leyendo y se abre la actividad de lectura
         binding.btnRead.setOnClickListener() {
             vm.updateBookReadingStatus(book.id, true)
             lifecycleScope.launch {
@@ -235,9 +308,59 @@ class BookDetailActivity : AppCompatActivity() {
         }
     }
 
-    // Se renderizan los elementos de la tienda
+    /**
+     * Renderiza los elementos específicos de la tienda para el libro.
+     * Muestra el precio y el botón de compra.
+     */
     private fun renderStoreElementsBook(book: BookEntity) {
-        // todo: lógica para renderizar elementos de la tienda
+        // Se carga el precio del libro
+        val price = book.price
+        binding.progressPrice.text = binding.progressPrice.context.getString(
+            R.string.book_detail_price, price)
+
+        binding.btnRead.text = getString(R.string.book_detail_buy_button)
+        binding.btnRead.setOnClickListener {
+            // COMPRAR EL LIBRO
+            buyBook(book)
+        }
+    }
+
+    /**
+     *  Función para realizar la compra del libro.
+     */
+    private fun buyBook(book: BookEntity) {
+        lifecycleScope.launch {
+            try {
+                // Se añade el libro a la biblioteca del usuario autenticado
+                vm.buyBook(book.id)
+
+                // Se muestra un mensaje de éxito
+                Toast.makeText(
+                    this@BookDetailActivity,
+                    "Compra realizada con éxito: ${book.title}",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            } catch (e: Exception) {
+                // Se muestra un mensaje de error
+                Toast.makeText(
+                    this@BookDetailActivity,
+                    "Error al comprar el libro: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    /**
+     * Redirige al usuario a la pantalla de inicio de sesión.
+     * Se utiliza cuando el token de sesión no es válido.
+     */
+    private fun goToLogin() {
+        // Redirigir a la pantalla de inicio de sesión
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     companion object {
