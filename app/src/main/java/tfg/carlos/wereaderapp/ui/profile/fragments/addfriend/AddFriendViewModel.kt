@@ -61,7 +61,7 @@ class AddFriendViewModel(
             try {
                 val result: UserListResponse = userRepository.searchUserByTag(tag)
                 _searchResults.postValue(result)
-                _errorMessage.postValue(null) // limpiar error anterior si hubo
+                _errorMessage.postValue(null)
             } catch (e: Exception) {
                 _searchResults.postValue(UserListResponse())
                 _errorMessage.postValue(e.message ?: "Error inesperado al buscar usuario")

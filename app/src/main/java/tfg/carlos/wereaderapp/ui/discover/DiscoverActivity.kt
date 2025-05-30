@@ -3,11 +3,18 @@ package tfg.carlos.wereaderapp.ui.discover
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commitNow
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.carlosrivero.demo5.utils.isTokenValid
 import tfg.carlos.wereaderapp.R
@@ -17,6 +24,7 @@ import tfg.carlos.wereaderapp.data.repository.BookRepository
 import tfg.carlos.wereaderapp.databinding.ActivityDiscoverBinding
 import tfg.carlos.wereaderapp.ui.auth.login.LoginActivity
 import tfg.carlos.wereaderapp.ui.bookDetail.BookDetailActivity
+import tfg.carlos.wereaderapp.ui.discover.search.BookSearchFragment
 import tfg.carlos.wereaderapp.ui.library.LibraryActivity
 import tfg.carlos.wereaderapp.ui.main.MainActivity
 import tfg.carlos.wereaderapp.ui.profile.ProfileActivity
@@ -59,6 +67,14 @@ class DiscoverActivity : AppCompatActivity() {
 
         if (isTokenValid(token)) {
             setupUI()
+            val activeFragment = supportFragmentManager.findFragmentById(R.id.fragment_search_container)
+            if (activeFragment is BookSearchFragment) {
+                binding.fragmentSearchContainer.visibility = View.VISIBLE
+                binding.scrollView.visibility = View.GONE
+                binding.toolbarDiscover.visibility = View.GONE
+                binding.bottomNavigation.visibility = View.GONE
+            }
+            handleBackPressed()
         }
     }
 
@@ -68,13 +84,13 @@ class DiscoverActivity : AppCompatActivity() {
 
         // Se habilita el modo Edge to Edge
         enableEdgeToEdge()
+        setSupportActionBar(binding.toolbarDiscover)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         // Se carga el BottomNavigationView
         loadBottomNavigation()
 
@@ -84,6 +100,66 @@ class DiscoverActivity : AppCompatActivity() {
         loadNewReleases()
         // Se cargan los libros recomendados
         loadRecommendedBooks()
+    }
+
+    /*
+     * Configura el menú de opciones de la actividad.
+     */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.discover_toolbar_menu, menu)
+        return true
+    }
+
+    /**
+     * Maneja la selección de elementos del menú de opciones.
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            R.id.opt_search -> {
+                // Mostrar el contenedor del fragmento
+                binding.fragmentSearchContainer.visibility = View.VISIBLE
+                // Ocultar el scrollView principal
+                binding.scrollView.visibility = View.GONE
+                binding.toolbarDiscover.visibility = View.GONE
+                binding.bottomNavigation.visibility = View.GONE
+
+                // Se inicia el fragmento de búsqueda de libros
+                supportFragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+                    .replace(R.id.fragment_search_container, BookSearchFragment())
+                    .addToBackStack(null)
+                    .commit()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * Maneja el evento de retroceso del sistema.
+     * Si hay un fragmento de búsqueda activo, lo cierra y muestra el contenido principal.
+     * Si no hay fragmento activo, permite que el sistema maneje el retroceso normalmente.
+     */
+    private fun handleBackPressed() {
+        onBackPressedDispatcher.addCallback(this) {
+            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_search_container)
+            if (fragment is BookSearchFragment) {
+                // Cierra el fragmento y muestra el contenido principal
+                supportFragmentManager.beginTransaction().remove(fragment).commit()
+                binding.fragmentSearchContainer.visibility = View.GONE
+                binding.scrollView.visibility = View.VISIBLE
+                binding.toolbarDiscover.visibility = View.VISIBLE
+                binding.bottomNavigation.visibility = View.VISIBLE
+            } else {
+                // Si no hay fragmento activo, permite que el sistema maneje el back normalmente
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
     }
 
     override fun onResume() {

@@ -50,20 +50,6 @@ class AddFriendFragment : Fragment() {
         //, onLongClickBookItem = { book, position -> /* TODO: Implement long click action */ }
     )
 
-    private fun sendRequestFriend(friend: User) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.alert_dialog_add_friend_title))
-            .setMessage(getString(R.string.alert_dialog_add_friend_message, friend.tag))
-            .setPositiveButton(getString(R.string.alert_dialog_add_friend_positive)) { _, _ ->
-                // Se comparte la biblioteca con el amigo
-                addFriendViewModel.createFriendship(friend.id)
-            }
-            .setNegativeButton(getString(R.string.alert_dialog_add_friend_negative), null)
-            .show()
-
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -132,6 +118,23 @@ class AddFriendFragment : Fragment() {
         addFriendViewModel.searchResults.observe(viewLifecycleOwner) { userList ->
             adapter.submitList(userList) // actualiza el RecyclerView
         }
+    }
+
+    /**
+     * Método para enviar una solicitud de amistad.
+     * Muestra un diálogo de confirmación antes de enviar la solicitud.
+     * @param friend El usuario al que se le enviará la solicitud de amistad.
+     */
+    private fun sendRequestFriend(friend: User) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.alert_dialog_add_friend_title))
+            .setMessage(getString(R.string.alert_dialog_add_friend_message, friend.tag))
+            .setPositiveButton(getString(R.string.alert_dialog_add_friend_positive)) { _, _ ->
+                // Se comparte la biblioteca con el amigo
+                addFriendViewModel.createFriendship(friend.id)
+            }
+            .setNegativeButton(getString(R.string.alert_dialog_add_friend_negative), null)
+            .show()
     }
 
     /**

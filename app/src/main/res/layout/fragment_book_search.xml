@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.discover.search.BookSearchFragment">
+
+    <!-- Toolbar con botón de volver -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_book_search"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="@drawable/icon_arrow_back_search"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:titleTextColor="?android:attr/textColorPrimary">
+
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:hint="Busca libros por título, autor o género"
+            android:inputType="text"
+            android:importantForAutofill="no"
+            android:autofillHints=""
+            android:drawableStart="@drawable/outline_search_24"
+            android:drawablePadding="8dp"
+            android:background="@drawable/search_edittext_background"
+            android:padding="12dp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textColorHint="?android:attr/textColorHint" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+
+
+    <!-- EditText para la búsqueda -->
+
+
+    <!-- RecyclerView para mostrar resultados -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchResultsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="781dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="1" />
+
+</LinearLayout>

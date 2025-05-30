@@ -227,7 +227,7 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
 
     // Función para inicializar la MarterialToolbar
     private fun setupToolbar() {
-        binding.readerToolbar.inflateMenu(R.menu.read_options_menu)
+        binding.readerToolbar.inflateMenu(R.menu.read_toolbar_menu)
         binding.readerToolbar.title = viewModel.publication.metadata.title
         binding.readerToolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -278,10 +278,6 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
         }
         // Se muestra el fragmento de preferencias
         dialog.show(childFragmentManager, "readerPrefs")
-    }
-
-    private fun showMoreOptions() {
-        TODO("Not yet implemented")
     }
 
     //** Se aplica el tema del lector a la UI (Afecta a Toolbar, ProgressBar y Menú)

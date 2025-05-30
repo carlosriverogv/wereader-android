@@ -53,4 +53,16 @@ class BookRemoteDataSource {
 
         }
     }
+
+    /**
+     * Busca libros por una consulta.
+     */
+    suspend fun searchBooks(query: String): BookList {
+        val response = Retrofit2Api.bookApi.searchBooks(query)
+        if (response.isSuccessful) {
+            return response.body() ?: BookList()
+        } else {
+            throw Exception("Error al buscar libros: ${response.code()}")
+        }
+    }
 }

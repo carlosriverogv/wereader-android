@@ -25,4 +25,9 @@ class BookRepository(
      * Obtiene un libro por su ID.
      */
     suspend fun getStoreBookById(id: String) = bookRemoteDataSource.getBookById(id)
+
+    /**
+     * Busca libros por una consulta.
+     */
+    suspend fun searchBooks(query: String) = bookRemoteDataSource.searchBooks(query)
 }

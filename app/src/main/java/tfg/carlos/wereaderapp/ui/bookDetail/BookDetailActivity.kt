@@ -105,7 +105,10 @@ class BookDetailActivity : AppCompatActivity() {
         renderBook()
     }
 
-    // Se crea el menú de opciones
+    /*
+     * Se crea el menú de opciones de la actividad.
+     * Si el libro es de la tienda, no se muestran las opciones de menú.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Si el libro es de la tienda, no se muestran las opciones de menú
         if (isStoreBook) return false
@@ -116,7 +119,9 @@ class BookDetailActivity : AppCompatActivity() {
         return true
     }
 
-    // Se maneja la selección de opciones del menú
+    /*
+     * Se maneja la selección de los elementos del menú.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val book = currentBook ?: return false
         val isStoreBook = intent.getBooleanExtra(EXTRA_IS_STORE_BOOK, false)
@@ -162,6 +167,10 @@ class BookDetailActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Configura los elementos del menú según el estado del libro.
+     * Cambia el título del elemento de menú para agregar o eliminar de pendientes.
+     */
     private fun setupMenuItems(book: BookEntity) {
         val menu = optionsMenu ?: return
 
