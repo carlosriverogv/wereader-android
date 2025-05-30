@@ -11,17 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.data.remote.datasource.BookRemoteDataSource
-import tfg.carlos.wereaderapp.data.remote.datasource.FriendshipRemoteDataSource
-import tfg.carlos.wereaderapp.data.remote.datasource.UserRemoteDataSource
 import tfg.carlos.wereaderapp.data.repository.BookRepository
-import tfg.carlos.wereaderapp.data.repository.FriendshipRepository
-import tfg.carlos.wereaderapp.data.repository.UserRepository
 import tfg.carlos.wereaderapp.databinding.FragmentBookSearchBinding
 import tfg.carlos.wereaderapp.ui.bookDetail.BookDetailActivity
-import tfg.carlos.wereaderapp.ui.profile.fragments.addfriend.AddFriendViewModel
-import tfg.carlos.wereaderapp.ui.profile.fragments.addfriend.AddFriendViewModelFactory
 
 class BookSearchFragment : Fragment() {
     private var _binding: FragmentBookSearchBinding? = null

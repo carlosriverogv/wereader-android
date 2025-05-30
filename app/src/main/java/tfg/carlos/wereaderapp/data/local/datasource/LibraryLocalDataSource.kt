@@ -89,6 +89,11 @@ class LibraryLocalDataSource(private val dao: BookDao) {
         dao.deleteSharedBooksNotIn(sharedIds, getIdUser())
     }
 
+    // Eliminar los libros que no están en la lista de IDs proporcionada
+    suspend fun deleteMyBooksNotIn(ids: List<String>) {
+        dao.deleteMyBooksNotIn(ids, getIdUser())
+    }
+
     // TODO: Se puede mover a UserDataSource
     // Obtiene el ID de usuario de la sesión
     private fun getIdUser(): String {

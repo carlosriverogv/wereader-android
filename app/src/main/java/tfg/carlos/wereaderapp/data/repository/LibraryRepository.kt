@@ -163,6 +163,11 @@ class LibraryRepository(
         val sharedIds = sharedBooks.map { it.id }
         local.deleteSharedBooksNotIn(sharedIds)
 
+        // Eliminar libros propios que ya no están en la API
+        // (Necesario por si se ha retirado un libro)
+        val myIds = myBooks.map { it.id }
+        local.deleteMyBooksNotIn(myIds)
+
         // Combinar libros propios y compartidos, asegurando que no haya duplicados
         val entities = (myBooks + sharedBooks)
             .groupBy { it.id }

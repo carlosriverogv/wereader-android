@@ -105,7 +105,7 @@
     <string name="book_detail_date_publication_label">Publicado el:\n\n%s</string>
     <string name="book_detail_info_label">Información adicional</string>
     <string name="book_detail_description_label">Sinopsis:</string>
-    <string name="book_detail_isbn_label">Isbn:  %s</string>
+    <string name="book_detail_isbn_label">ISBN:  %s</string>
 
     <string name="book_detail_progress">%d%%</string>
     <string name="book_detail_price">%.2f€</string>

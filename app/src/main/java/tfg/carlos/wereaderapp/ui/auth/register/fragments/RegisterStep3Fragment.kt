@@ -26,7 +26,7 @@ class RegisterStep3Fragment : Fragment() {
         "Jane Austen", "Mark Twain", "Ernest Hemingway",
         "F. Scott Fitzgerald", "Harper Lee", "Virginia Woolf",
         "Ray Bradbury", "H.G. Wells", "Arthur C. Clarke",
-        "Paul Pen", "Carlos Ruiz Zafón", "Mario Vargas Llosa",
+        "Paul Pen", "Mario Vargas Llosa",
         "Julio Cortázar", "Gabriel García Márquez", "Javier Marías",
         "Mario Benedetti", "Pablo Neruda", "Jorge Luis Borges",
         "Miguel de Cervantes", "Lope de Vega", "Antonio Machado",
@@ -35,7 +35,8 @@ class RegisterStep3Fragment : Fragment() {
         "Michael Ende", "Philip Pullman", "Neil Gaiman",
         "Terry Pratchett", "Douglas Adams", "Isaac Asimov",
         "Arthur Conan Doyle", "Raymond Chandler", "Arturo Pérez-Reverte",
-        "Jules Verne", "Herman Melville", "Jack London",
+        "Jules Verne", "Herman Melville", "Jack London", "Javier Castillo",
+        "Arturo del Burgo", "Eloy Moreno"
     )
 
     private val genres = listOf(
@@ -53,7 +54,7 @@ class RegisterStep3Fragment : Fragment() {
         "Histórica española", "Histórica europea", "Histórica americana", "Histórica asiática",
         "Fantasía juvenil", "Fantasía adulta", "Ciencia ficción juvenil", "Fantasía infantil",
         "Ciencia ficción adulta", "Ciencia ficción contemporánea", "Ciencia ficción clásica",
-        "Divulgación científica",
+        "Divulgación científica", "Ficción", "Ficción militar histórica",
     )
 
     override fun onCreateView(

@@ -53,6 +53,9 @@ interface BookDao {
     @Query("DELETE FROM books WHERE mine = 0 AND idUser = :idUser AND id NOT IN (:ids)")
     suspend fun deleteSharedBooksNotIn(ids: List<String>, idUser: String)
 
+    @Query("DELETE FROM books WHERE mine = 1 AND idUser = :idUser AND id NOT IN (:ids)")
+    suspend fun deleteMyBooksNotIn(ids: List<String>, idUser: String)
+
     @Update
     suspend fun updateBook(book: BookEntity)
 }
