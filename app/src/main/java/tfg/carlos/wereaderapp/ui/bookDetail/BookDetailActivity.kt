@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import edu.carlosrivero.demo5.utils.isTokenValid
@@ -103,6 +104,9 @@ class BookDetailActivity : AppCompatActivity() {
 
         // Se carga la renderización del libro
         renderBook()
+
+        // Se muestra el error si hay alguno
+        showError()
     }
 
     /*
@@ -339,24 +343,33 @@ class BookDetailActivity : AppCompatActivity() {
      */
     private fun buyBook(book: BookEntity) {
         lifecycleScope.launch {
-            try {
-                // Se añade el libro a la biblioteca del usuario autenticado
-                vm.buyBook(book.id)
+            // Se añade el libro a la biblioteca del usuario autenticado
+            vm.buyBook(book.id)
 
-                // Se muestra un mensaje de éxito
+            // Se muestra un mensaje de éxito
+            checkBuySuccess()
+        }
+    }
+
+    private fun checkBuySuccess() {
+        vm.buySuccess.observe(this) { success ->
+            if (success) {
                 Toast.makeText(
-                    this@BookDetailActivity,
-                    "Compra realizada con éxito: ${book.title}",
+                    this,
+                    getString(R.string.book_detail_buy_success),
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
+    }
 
-            } catch (e: Exception) {
-                // Se muestra un mensaje de error
-                Toast.makeText(
-                    this@BookDetailActivity,
-                    "Error al comprar el libro: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
+    private fun showError() {
+        vm.errorMessage.observe(this) { message ->
+            message?.let {
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG)
+                    .show()
+                // Limpiar el mensaje después de mostrarlo
+                vm.clearErrorMessage()
             }
         }
     }

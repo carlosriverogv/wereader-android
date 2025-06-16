@@ -89,7 +89,7 @@ class LibraryActivity : AppCompatActivity() {
         val tabTitles = listOf(
             getString(R.string.library_tab_books),
             getString(R.string.library_tab_shared),
-            getString(R.string.library_tab_collections)
+            //getString(R.string.library_tab_collections)
         )
         val adapter = LibraryPagerAdapter(this)
 

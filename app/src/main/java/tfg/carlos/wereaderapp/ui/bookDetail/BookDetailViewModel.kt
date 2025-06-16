@@ -3,7 +3,8 @@ package tfg.carlos.wereaderapp.ui.bookDetail
  import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+ import androidx.lifecycle.MutableLiveData
+ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -22,6 +23,14 @@ class BookDetailViewModel(
         private val TAG = BookDetailViewModel::class.java.simpleName
     }
 
+    // LiveData para manejar mensajes de error
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> get() = _errorMessage
+
+    // LiveData para manejar el éxito de la acción de compartir la biblioteca
+    private val _buySuccess = MutableLiveData<Boolean>()
+    val buySuccess: LiveData<Boolean> get() = _buySuccess
+
     // API Methods
     suspend fun getStoreBookById(bookId: String): BookItem? {
         return bookRepository.getStoreBookById(bookId)
@@ -32,8 +41,11 @@ class BookDetailViewModel(
         viewModelScope.launch {
             try {
                 libraryRepository.buyBook(bookId)
+                // Si la compra es exitosa, puedes actualizar el estado del libro o notificar al usuario
+                _buySuccess.postValue(true)
             } catch (e: Exception) {
-                showToastError(R.string.error_buying_book, e.message)
+                //showToastError(R.string.error_buying_book, e.message)
+                _errorMessage.postValue(e.message)
             }
         }
     }
@@ -88,6 +100,14 @@ class BookDetailViewModel(
         val message = context.getString(stringResId) + (detail ?: "")
         Log.e(TAG, message)
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    fun clearErrorMessage() {
+        _errorMessage.value = null
+    }
+
+    private fun clearShareSuccess() {
+        _buySuccess.value = false
     }
 }
 

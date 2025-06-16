@@ -8,13 +8,13 @@ import tfg.carlos.wereaderapp.ui.library.fragments.collection.CollectionsFragmen
 import tfg.carlos.wereaderapp.ui.library.fragments.sharedlibrary.SharedLibraryFragment
 
 class LibraryPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
-    override fun getItemCount() = 3
+    override fun getItemCount() = 2 // Cambiado a 2 para reflejar solo Library y SharedLibrary, 3 para Collections si se descomenta
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> LibraryFragment()
             1 -> SharedLibraryFragment()
-            2 -> CollectionsFragment()
+            //2 -> CollectionsFragment()
             else -> throw IllegalStateException()
         }
     }

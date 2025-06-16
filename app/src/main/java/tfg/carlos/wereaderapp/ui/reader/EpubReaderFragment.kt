@@ -253,30 +253,28 @@ class EpubReaderFragment : Fragment(), EpubNavigatorFragment.Listener {
 
     // Función que muestra el menú de preferencias del lector
     private fun showUserPreferences() {
-        // Se vuelve a cargar las preferencias para asegurarse de que están actualizadas
         val latestPreferences = ReaderPreferencesManager.loadPreferences(requireContext())
 
-        // Se crea el fragmento de preferencias
-        val dialog = ReaderPreferencesFragment(latestPreferences) { newPrefs ->
-            // Se actualizan las preferencias en el navegador
-            val editor = navigatorFactory.createPreferencesEditor(latestPreferences)
-            editor.apply {
-                fontSize.set(newPrefs.fontSize)
-                scroll.set(newPrefs.scroll)
-                theme.set(newPrefs.theme)
+        val dialog = ReaderPreferencesFragment.newInstance(latestPreferences).apply {
+            setOnPreferencesChangedListener { newPrefs ->
+                // Actualizar preferencias en el navegador
+                val editor = navigatorFactory.createPreferencesEditor(latestPreferences)
+                editor.apply {
+                    fontSize.set(newPrefs.fontSize)
+                    scroll.set(newPrefs.scroll)
+                    theme.set(newPrefs.theme)
+                }
+                navigator.submitPreferences(editor.preferences)
+
+                // Guardar en SharedPreferences
+                ReaderPreferencesManager.savePreferences(requireContext(), newPrefs)
+
+                // Aplicar cambios visuales en la UI
+                applyReaderThemeToUI(newPrefs.theme ?: Theme.SEPIA)
+                (activity as? ReaderActivity)?.applyReaderTheme()
             }
-            navigator.submitPreferences(editor.preferences)
-
-            // Se guardan las nuevas preferencias en SharedPreferences
-            ReaderPreferencesManager.savePreferences(requireContext(), newPrefs)
-
-            // Se aplica el tema guardado del lector a la UI (Toolbar, ProgressBar y Menú)
-            applyReaderThemeToUI(newPrefs.theme ?: Theme.SEPIA)
-
-            // Aplicar tema visual completo (barra de estado y fondos)
-            (activity as? ReaderActivity)?.applyReaderTheme()
         }
-        // Se muestra el fragmento de preferencias
+
         dialog.show(childFragmentManager, "readerPrefs")
     }
 

@@ -26,7 +26,8 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:button="@drawable/theme_light_selector"
+            android:button="@null"
+            android:background="@drawable/theme_light_selector"
             android:contentDescription="@string/reader_preferences_theme_light" />
 
         <RadioButton
@@ -34,7 +35,8 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:button="@drawable/theme_dark_selector"
+            android:button="@null"
+            android:background="@drawable/theme_dark_selector"
             android:contentDescription="@string/reader_preferences_theme_dark" />
 
         <RadioButton
@@ -42,7 +44,8 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:button="@drawable/theme_sepia_selector"
+            android:button="@null"
+            android:background="@drawable/theme_sepia_selector"
             android:contentDescription="@string/reader_preferences_theme_sepia" />
     </RadioGroup>
 

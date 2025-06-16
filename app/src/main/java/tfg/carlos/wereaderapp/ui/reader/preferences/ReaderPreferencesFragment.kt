@@ -11,16 +11,35 @@ import org.readium.r2.shared.ExperimentalReadiumApi
 import tfg.carlos.wereaderapp.R
 import tfg.carlos.wereaderapp.databinding.FragmentReaderPreferencesBinding
 
-class ReaderPreferencesFragment(
-    initialPreferences: EpubPreferences,
-    private val onPreferencesChanged: (EpubPreferences) -> Unit
-) : BottomSheetDialogFragment() {
+class ReaderPreferencesFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentReaderPreferencesBinding? = null
     private val binding get() = _binding!!
 
-    // Estado mutable de preferencias
-    private var currentPreferences: EpubPreferences = initialPreferences
+    @OptIn(ExperimentalReadiumApi::class)
+    private var currentPreferences: EpubPreferences = EpubPreferences()
+    private var onPreferencesChanged: ((EpubPreferences) -> Unit)? = null
+
+    companion object {
+        private const val ARG_FONT_SIZE = "font_size"
+        private const val ARG_SCROLL = "scroll"
+        private const val ARG_THEME = "theme"
+
+        fun newInstance(preferences: EpubPreferences): ReaderPreferencesFragment {
+            val fragment = ReaderPreferencesFragment()
+            val args = Bundle().apply {
+                putDouble(ARG_FONT_SIZE, preferences.fontSize ?: 1.0)
+                putBoolean(ARG_SCROLL, preferences.scroll ?: false)
+                putString(ARG_THEME, preferences.theme?.name)
+            }
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    fun setOnPreferencesChangedListener(listener: (EpubPreferences) -> Unit) {
+        onPreferencesChanged = listener
+    }
 
     @OptIn(ExperimentalReadiumApi::class)
     override fun onCreateView(
@@ -30,7 +49,28 @@ class ReaderPreferencesFragment(
     ): View {
         _binding = FragmentReaderPreferencesBinding.inflate(inflater, container, false)
 
-        // Inicializa controles con las preferencias actuales
+        loadPreferencesFromArguments()
+        initializeUI()
+        setupListeners()
+
+        return binding.root
+    }
+
+    @OptIn(ExperimentalReadiumApi::class)
+    private fun loadPreferencesFromArguments() {
+        val fontSize = arguments?.getDouble(ARG_FONT_SIZE, 1.0) ?: 1.0
+        val scroll = arguments?.getBoolean(ARG_SCROLL, false) ?: false
+        val themeValue = arguments?.getString(ARG_THEME)
+        val theme = themeValue?.let { Theme.valueOf(it) } ?: Theme.SEPIA
+
+        currentPreferences = EpubPreferences(
+            fontSize = fontSize,
+            scroll = scroll,
+            theme = theme
+        )
+    }
+
+    private fun initializeUI() {
         binding.textSizeSlider.value = (currentPreferences.fontSize ?: 1.0).toFloat()
         binding.scrollSwitch.isChecked = currentPreferences.scroll ?: false
 
@@ -41,11 +81,16 @@ class ReaderPreferencesFragment(
             else -> R.id.theme_sepia
         }
         binding.themeGroup.check(checkedTheme)
+    }
 
-        // Listeners que modifican el estado actual
+    @OptIn(ExperimentalReadiumApi::class)
+    private fun setupListeners() {
         binding.textSizeSlider.addOnChangeListener { _, value, _ ->
-            currentPreferences = currentPreferences.copy(fontSize = value.toDouble())
-            onPreferencesChanged(currentPreferences)
+            updatePreferences(currentPreferences.copy(fontSize = value.toDouble()))
+        }
+
+        binding.scrollSwitch.setOnCheckedChangeListener { _, isChecked ->
+            updatePreferences(currentPreferences.copy(scroll = isChecked))
         }
 
         binding.themeGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -55,16 +100,13 @@ class ReaderPreferencesFragment(
                 R.id.theme_sepia -> Theme.SEPIA
                 else -> Theme.SEPIA
             }
-            currentPreferences = currentPreferences.copy(theme = newTheme)
-            onPreferencesChanged(currentPreferences)
+            updatePreferences(currentPreferences.copy(theme = newTheme))
         }
+    }
 
-        binding.scrollSwitch.setOnCheckedChangeListener { _, isChecked ->
-            currentPreferences = currentPreferences.copy(scroll = isChecked)
-            onPreferencesChanged(currentPreferences)
-        }
-
-        return binding.root
+    private fun updatePreferences(updated: EpubPreferences) {
+        currentPreferences = updated
+        onPreferencesChanged?.invoke(currentPreferences)
     }
 
     override fun onDestroyView() {
