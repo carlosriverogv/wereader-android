@@ -1,4 +1,4 @@
-package edu.carlosrivero.demo5.utils
+package tfg.carlos.wereaderapp.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
