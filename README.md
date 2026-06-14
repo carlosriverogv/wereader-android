@@ -6,29 +6,27 @@ La app consume una API externa y usa Firebase Storage para descargar portadas y 
 
 El proyecto esta construido con Kotlin, Android Views, ViewBinding, Room, Retrofit, Firebase y Readium Kotlin Toolkit.
 
-<<<<<<< HEAD
+
 ## Vista previa
 
-[Video de ejecucion de la app](https://drive.google.com/file/d/13_eyR4fqAnS9hY2ukw5AWpcFcIuBLRBw/view?usp=sharing)
+▶️ [Video de ejecucion de la app](https://drive.google.com/file/d/13_eyR4fqAnS9hY2ukw5AWpcFcIuBLRBw/view?usp=sharing)
 
 <p align="center">
   <img src="img/logo.png" alt="Logo de WeReader" width="220">
 </p>
 
-| Login | Registro 1 | Registro 2 | Registro 3 |
-| --- | --- | --- | --- |
-| <img src="img/login_oscuro.jpg" alt="Login en modo oscuro" width="180"> | <img src="img/registro1.jpg" alt="Registro paso 1" width="180"> | <img src="img/registro2.jpg" alt="Registro paso 2" width="180"> | <img src="img/registro3.jpg" alt="Registro paso 3" width="180"> |
+| Login | Registro 1 | Registro 2 | Registro 3 | Perfil
+| --- | --- | --- | --- | --- |
+| <img src="img/login_oscuro.jpg" alt="Login en modo oscuro" width="180"> | <img src="img/registro1.jpg" alt="Registro paso 1" width="180"> | <img src="img/registro2.jpg" alt="Registro paso 2" width="180"> | <img src="img/registro3.jpg" alt="Registro paso 3" width="180"> | <img src="img/perfil.jpg" alt="Registro paso 3" width="180"> |
 
-| Inicio | Tienda | Detalle | Lectura |
-| --- | --- | --- | --- |
-| <img src="img/inicio_blanco.jpg" alt="Pantalla de inicio" width="180"> | <img src="img/tienda.jpg" alt="Pantalla de tienda" width="180"> | <img src="img/detalle_libro_claro.jpg" alt="Detalle de libro" width="180"> | <img src="img/pantalla_lectura.jpg" alt="Pantalla de lectura" width="180"> |
+| Inicio | Tienda | Detalle | Lectura | Opciones Lectura |
+| --- | --- | --- | --- | --- |
+| <img src="img/inicio_blanco.jpg" alt="Pantalla de inicio" width="180"> | <img src="img/tienda.jpg" alt="Pantalla de tienda" width="180"> | <img src="img/detalle_libro_claro.jpg" alt="Detalle de libro" width="180"> | <img src="img/pantalla_lectura.jpg" alt="Pantalla de lectura" width="180"> | <img src="img/lector_opciones_lectura.jpg" alt="Pantalla de lectura ajustes" width="180"> |
 
-| Biblioteca | Biblioteca compartida |
-| --- | --- |
-| <img src="img/biblioteca_oscuro.jpg" alt="Biblioteca en modo oscuro" width="180"> | <img src="img/biblioteca_compartida.jpg" alt="Biblioteca compartida" width="180"> |
+| Biblioteca | Biblioteca compartida | Solicitudes | Compartir biblioteca | Buscar amigos
+| --- | --- | --- | --- | --- |
+| <img src="img/biblioteca_oscuro.jpg" alt="Biblioteca en modo oscuro" width="180"> | <img src="img/biblioteca_compartida.jpg" alt="Biblioteca compartida" width="180"> | <img src="img/solicitudes.jpg" alt="Biblioteca compartida" width="180"> | <img src="img/perfil_compartir_biblioteca.jpg" alt="Biblioteca compartida" width="180"> | <img src="img/buscar_amigos.jpg" alt="Biblioteca compartida" width="180"> |
 
-=======
->>>>>>> f992107e4a7fa65c2d6b51c89768020bd7a761ba
 ## Tabla de contenidos
 
 - [Funcionalidades](#funcionalidades)
