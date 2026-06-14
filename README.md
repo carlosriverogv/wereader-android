@@ -1,15 +1,16 @@
+<div align="center">
 <p align="center">
   <img src="img/logo.png" alt="Logo de WeReader" width="120">
 </p>
 
-# WeReader Android
+# WeReader Android App
 
 WeReader es una aplicacion Android para descubrir, comprar, organizar y leer libros en formato EPUB. Este README documenta el cliente Android de forma independiente: pantallas, flujos, arquitectura interna, componentes, persistencia local, configuracion y ejecucion.
 
 La app consume una API externa y usa Firebase Storage para descargar portadas y archivos EPUB, pero el foco de esta documentacion es el front Android.
 
 El proyecto esta construido con Kotlin, Android Views, ViewBinding, Room, Retrofit, Firebase y Readium Kotlin Toolkit.
-
+</div>
 
 ## Vista previa
 
@@ -780,7 +781,3 @@ Si el EPUB ya existe localmente, se reutiliza y no se vuelve a descargar.
 - `FullscreenActivity` parece ser una pantalla generada de ejemplo y no forma parte del flujo principal.
 - `EpubSpeakerManager` contiene una implementacion comentada de lectura por voz con TextToSpeech; no esta activa actualmente.
 - Las pruebas incluidas son las plantillas iniciales; faltan pruebas especificas de repositorios, ViewModels, validaciones y flujos principales.
-<<<<<<< HEAD
-=======
-
->>>>>>> f992107e4a7fa65c2d6b51c89768020bd7a761ba
