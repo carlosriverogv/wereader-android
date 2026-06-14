@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="img/logo.png" alt="Logo de WeReader" width="120">
+</p>
+
 # WeReader Android
 
 WeReader es una aplicacion Android para descubrir, comprar, organizar y leer libros en formato EPUB. Este README documenta el cliente Android de forma independiente: pantallas, flujos, arquitectura interna, componentes, persistencia local, configuracion y ejecucion.
@@ -10,10 +14,6 @@ El proyecto esta construido con Kotlin, Android Views, ViewBinding, Room, Retrof
 ## Vista previa
 
 ▶️ [Video de ejecucion de la app](https://drive.google.com/file/d/13_eyR4fqAnS9hY2ukw5AWpcFcIuBLRBw/view?usp=sharing)
-
-<p align="center">
-  <img src="img/logo.png" alt="Logo de WeReader" width="220">
-</p>
 
 | Login | Registro 1 | Registro 2 | Registro 3 | Perfil
 | --- | --- | --- | --- | --- |
