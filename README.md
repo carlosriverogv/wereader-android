@@ -6,6 +6,7 @@ La app consume una API externa y usa Firebase Storage para descargar portadas y 
 
 El proyecto esta construido con Kotlin, Android Views, ViewBinding, Room, Retrofit, Firebase y Readium Kotlin Toolkit.
 
+<<<<<<< HEAD
 ## Vista previa
 
 [Video de ejecucion de la app](https://drive.google.com/file/d/13_eyR4fqAnS9hY2ukw5AWpcFcIuBLRBw/view?usp=sharing)
@@ -26,6 +27,8 @@ El proyecto esta construido con Kotlin, Android Views, ViewBinding, Room, Retrof
 | --- | --- |
 | <img src="img/biblioteca_oscuro.jpg" alt="Biblioteca en modo oscuro" width="180"> | <img src="img/biblioteca_compartida.jpg" alt="Biblioteca compartida" width="180"> |
 
+=======
+>>>>>>> f992107e4a7fa65c2d6b51c89768020bd7a761ba
 ## Tabla de contenidos
 
 - [Funcionalidades](#funcionalidades)
@@ -779,3 +782,7 @@ Si el EPUB ya existe localmente, se reutiliza y no se vuelve a descargar.
 - `FullscreenActivity` parece ser una pantalla generada de ejemplo y no forma parte del flujo principal.
 - `EpubSpeakerManager` contiene una implementacion comentada de lectura por voz con TextToSpeech; no esta activa actualmente.
 - Las pruebas incluidas son las plantillas iniciales; faltan pruebas especificas de repositorios, ViewModels, validaciones y flujos principales.
+<<<<<<< HEAD
+=======
+
+>>>>>>> f992107e4a7fa65c2d6b51c89768020bd7a761ba
